@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ImagePlus } from "lucide-react";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import type { Post } from "@/lib/types";
 
 const IMAGE_OPTIONS = [
@@ -35,10 +35,6 @@ export default function PostForm({ mode, initialData }: Props) {
   const [customFile, setCustomFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [insertingImage, setInsertingImage] = useState(false);
-
-  const contentRef = useRef<HTMLTextAreaElement>(null);
-  const inlineImageInputRef = useRef<HTMLInputElement>(null);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -48,50 +44,6 @@ export default function PostForm({ mode, initialData }: Props) {
     const file = e.target.files?.[0] ?? null;
     setCustomFile(file);
     setPreviewUrl(file ? URL.createObjectURL(file) : null);
-  }
-
-  async function handleInsertImage(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-    e.target.value = "";
-    if (!file) return;
-
-    setInsertingImage(true);
-    setError(null);
-    try {
-      const uploadForm = new FormData();
-      uploadForm.append("file", file);
-      uploadForm.append("folder", "Blog");
-      const uploadRes = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: uploadForm,
-      });
-      const uploadData = await uploadRes.json().catch(() => ({}));
-      if (!uploadRes.ok) {
-        setError(uploadData.error ?? "Gagal mengunggah gambar.");
-        setInsertingImage(false);
-        return;
-      }
-
-      const textarea = contentRef.current;
-      const snippet = `\n\n![](${uploadData.url})\n\n`;
-
-      if (textarea) {
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const nextValue = form.content.slice(0, start) + snippet + form.content.slice(end);
-        update("content", nextValue);
-        const cursorPos = start + snippet.length;
-        requestAnimationFrame(() => {
-          textarea.focus();
-          textarea.setSelectionRange(cursorPos, cursorPos);
-        });
-      } else {
-        update("content", form.content + snippet);
-      }
-    } catch {
-      setError("Terjadi kesalahan jaringan saat mengunggah gambar.");
-    }
-    setInsertingImage(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -255,39 +207,12 @@ export default function PostForm({ mode, initialData }: Props) {
         />
       </Field>
 
-      <Field
-        label="Isi Berita (pisahkan paragraf dengan baris kosong)"
-        htmlFor="content"
-      >
-        <div className="mb-2 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => inlineImageInputRef.current?.click()}
-            disabled={insertingImage}
-            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--color-dark-green)] hover:bg-[var(--color-muted)] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            <ImagePlus size={14} />
-            {insertingImage ? "Mengunggah..." : "Sisipkan Gambar"}
-          </button>
-          <input
-            ref={inlineImageInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleInsertImage}
-            className="hidden"
-          />
-          <p className="text-xs text-[var(--color-muted-foreground)]">
-            Gambar disisipkan di posisi kursor.
-          </p>
-        </div>
-        <textarea
-          id="content"
-          ref={contentRef}
-          required
-          rows={10}
+      <Field label="Isi Berita" htmlFor="content">
+        <RichTextEditor
           value={form.content}
-          onChange={(e) => update("content", e.target.value)}
-          className={inputClass}
+          onChange={(html) => update("content", html)}
+          uploadFolder="Blog"
+          placeholder="Tulis isi berita di sini... bisa tebal, miring, garis bawah, penomoran, dan sisip gambar (tempel langsung atau tombol gambar)."
         />
       </Field>
 
@@ -300,7 +225,7 @@ export default function PostForm({ mode, initialData }: Props) {
       <div className="flex gap-3">
         <button
           type="submit"
-          disabled={loading || uploading || insertingImage}
+          disabled={loading || uploading}
           className="cursor-pointer rounded-full bg-[var(--color-dark-green)] px-6 py-3 text-sm font-semibold text-[var(--color-beige)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {uploading ? "Mengunggah foto..." : loading ? "Menyimpan..." : "Simpan Berita"}
