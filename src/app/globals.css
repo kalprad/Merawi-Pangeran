@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  /* Merawi Pangeran 2026 brand palette (see Master Design.png) */
+  --color-dark-green: #0a3323;
+  --color-moss-green: #839958;
+  --color-beige: #f7f4d5;
+  --color-rosy-brown: #d3968c;
+  --color-midnight-teal: #105666;
+
+  --color-background: var(--color-beige);
+  --color-foreground: var(--color-dark-green);
+  --color-primary: var(--color-dark-green);
+  --color-primary-foreground: var(--color-beige);
+  --color-secondary: var(--color-midnight-teal);
+  --color-secondary-foreground: var(--color-beige);
+  --color-accent: var(--color-rosy-brown);
+  --color-accent-foreground: var(--color-dark-green);
+  --color-muted: #ece7c4;
+  --color-muted-foreground: #4a5a3f;
+  --color-border: #ddd6a3;
+  --color-surface: #ffffff;
+  --color-ring: var(--color-midnight-teal);
+}
+
+@theme inline {
+  --color-dark-green: var(--color-dark-green);
+  --color-moss-green: var(--color-moss-green);
+  --color-beige: var(--color-beige);
+  --color-rosy-brown: var(--color-rosy-brown);
+  --color-midnight-teal: var(--color-midnight-teal);
+
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-border: var(--color-border);
+  --color-surface: var(--color-surface);
+  --color-ring: var(--color-ring);
+
+  --font-display: var(--font-display), "Georgia", serif;
+  --font-sans: var(--font-sans), "Neue Montreal", Arial, sans-serif;
+  --font-body: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--color-rosy-brown);
+  color: var(--color-dark-green);
+}
+
+/* Leaflet map container base sizing */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-body);
+}

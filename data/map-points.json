@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "category": "irigasi",
+    "name": "Saluran Irigasi Blok Sawah Utara",
+    "description": "Dinding saluran retak dan mengalami kebocoran pada sisi kiri, menyebabkan aliran air ke sawah tidak optimal.",
+    "status": "Rusak Berat",
+    "lat": -7.2168,
+    "lng": 110.3255
+  },
+  {
+    "id": "2",
+    "category": "irigasi",
+    "name": "Saluran Irigasi Dukuh Krajan",
+    "description": "Sedimentasi lumpur cukup tinggi sehingga debit air berkurang saat musim kemarau.",
+    "status": "Rusak Ringan",
+    "lat": -7.2201,
+    "lng": 110.3298
+  },
+  {
+    "id": "3",
+    "category": "irigasi",
+    "name": "Pintu Air Blok Kebonan",
+    "description": "Pintu air sudah berkarat dan sulit dibuka-tutup secara manual.",
+    "status": "Perlu Perbaikan",
+    "lat": -7.2139,
+    "lng": 110.3221
+  },
+  {
+    "id": "4",
+    "category": "umkm",
+    "name": "Warung Kopi Bu Sri",
+    "description": "Usaha kuliner rumahan yang menjual kopi dan camilan tradisional khas Bandungan.",
+    "status": "Aktif",
+    "lat": -7.2183,
+    "lng": 110.3274
+  },
+  {
+    "id": "5",
+    "category": "umkm",
+    "name": "Kerajinan Anyaman Bambu Pak Darto",
+    "description": "Usaha kerajinan anyaman bambu untuk keperluan rumah tangga dan dekorasi.",
+    "status": "Aktif",
+    "lat": -7.2214,
+    "lng": 110.3247
+  },
+  {
+    "id": "6",
+    "category": "umkm",
+    "name": "Olahan Hasil Kebun Bu Wati",
+    "description": "Produksi keripik dan olahan hasil kebun sekitar Bandungan.",
+    "status": "Aktif",
+    "lat": -7.2152,
+    "lng": 110.3312
+  },
+  {
+    "id": "7",
+    "category": "fasilitas",
+    "name": "Balai Desa Jetis",
+    "description": "Pusat pemerintahan dan kegiatan administrasi Desa Jetis.",
+    "status": "Baik",
+    "lat": -7.2178,
+    "lng": 110.3266
+  },
+  {
+    "id": "8",
+    "category": "fasilitas",
+    "name": "Posyandu Melati",
+    "description": "Fasilitas kesehatan untuk pemeriksaan ibu dan anak tingkat dusun.",
+    "status": "Baik",
+    "lat": -7.2196,
+    "lng": 110.3231
+  }
+]
