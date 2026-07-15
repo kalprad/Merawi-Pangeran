@@ -74,6 +74,7 @@ export default function AdminTeamPage() {
                 </p>
                 <p className="truncate text-xs text-[var(--color-muted-foreground)]">
                   {member.role}
+                  {member.prodi ? ` · ${member.prodi}` : ""}
                 </p>
               </div>
               <div className="flex shrink-0 gap-2">

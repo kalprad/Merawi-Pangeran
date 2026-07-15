@@ -125,6 +125,11 @@ export default async function TentangPage() {
                 <div className="flex flex-1 flex-col p-4 text-center">
                   <p className="font-medium text-[var(--color-dark-green)]">{member.name}</p>
                   <p className="text-xs text-[var(--color-muted-foreground)]">{member.role}</p>
+                  {member.prodi && (
+                    <p className="text-[11px] text-[var(--color-muted-foreground)]/80">
+                      {member.prodi}
+                    </p>
+                  )}
                   {member.instagram && (
                     <a
                       href={

@@ -14,6 +14,7 @@ export default function TeamForm({ mode, initialData }: Props) {
   const router = useRouter();
   const [name, setName] = useState(initialData?.name ?? "");
   const [role, setRole] = useState(initialData?.role ?? "");
+  const [prodi, setProdi] = useState(initialData?.prodi ?? "");
   const [instagram, setInstagram] = useState(initialData?.instagram ?? "");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
@@ -69,7 +70,7 @@ export default function TeamForm({ mode, initialData }: Props) {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role, photo, instagram }),
+        body: JSON.stringify({ name, role, prodi, photo, instagram }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -110,6 +111,19 @@ export default function TeamForm({ mode, initialData }: Props) {
           value={role}
           onChange={(e) => setRole(e.target.value)}
           placeholder="contoh: Koordinator Divisi Infrastruktur"
+          className={inputClass}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="prodi" className="block text-sm font-medium text-[var(--color-dark-green)]">
+          Jurusan / Program Studi (opsional)
+        </label>
+        <input
+          id="prodi"
+          value={prodi}
+          onChange={(e) => setProdi(e.target.value)}
+          placeholder="contoh: Teknik Sipil"
           className={inputClass}
         />
       </div>

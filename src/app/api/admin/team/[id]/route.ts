@@ -7,7 +7,7 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { name, role, photo, instagram } = body ?? {};
+  const { name, role, prodi, photo, instagram } = body ?? {};
 
   if (!name || !role) {
     return NextResponse.json(
@@ -26,6 +26,7 @@ export async function PUT(
     ...team[index],
     name,
     role,
+    prodi: prodi ?? team[index].prodi ?? "",
     photo: photo || team[index].photo,
     instagram: instagram ?? team[index].instagram ?? "",
   };
