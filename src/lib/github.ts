@@ -1,6 +1,8 @@
-const TOKEN = process.env.GITHUB_TOKEN;
-const OWNER_REPO = process.env.GITHUB_REPO; // format: "namaakun/nama-repo"
-const BRANCH = process.env.GITHUB_BRANCH || "main";
+// .trim() jaga-jaga kalau ada spasi/tab nyempil waktu isi Environment
+// Variables di Vercel (copy-paste dari tempat lain sering kebawa spasi).
+const TOKEN = process.env.GITHUB_TOKEN?.trim();
+const OWNER_REPO = process.env.GITHUB_REPO?.trim(); // format: "namaakun/nama-repo"
+const BRANCH = process.env.GITHUB_BRANCH?.trim() || "main";
 
 export function githubRawUrl(filePath: string): string {
   const encodedPath = filePath
