@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Ruler, FolderInput, ShieldCheck, Download } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
+import PageOrnaments from "@/components/PageOrnaments";
 import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -40,8 +41,9 @@ export default async function SiBeningPage() {
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <section className="relative overflow-hidden">
+        <PageOrnaments />
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <Reveal>
             <SectionHeading
               eyebrow="Aplikasi Resmi"
@@ -90,7 +92,7 @@ export default async function SiBeningPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--color-muted)]/60 py-20">
+      <section className="batik-motif bg-[var(--color-muted)]/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionHeading

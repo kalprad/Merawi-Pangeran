@@ -87,21 +87,31 @@ h1, h2, h3, h4, .font-display {
   animation: page-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Ambient gradient blobs used for depth on hero/CTA sections */
+/* Ambient gradient blobs used for depth on hero/section headers.
+   Radial gradient yang memudar ke transparan — bukan lingkaran solid + blur —
+   supaya tepinya selalu halus walau terpotong overflow-hidden, dan lebih
+   ringan dirender (tanpa filter pass). Warna diatur lewat kelas varian. */
 .aurora-blob {
   position: absolute;
-  border-radius: 9999px;
-  filter: blur(60px);
   pointer-events: none;
-  opacity: 0.55;
+  background: radial-gradient(closest-side, var(--blob-color), transparent 72%);
   animation: drift 16s ease-in-out infinite alternate;
+}
+.aurora-rosy {
+  --blob-color: rgba(211, 150, 140, 0.38);
+}
+.aurora-teal {
+  --blob-color: rgba(16, 86, 102, 0.16);
+}
+.aurora-moss {
+  --blob-color: rgba(131, 153, 88, 0.22);
 }
 @keyframes drift {
   from {
     transform: translate(0, 0) scale(1);
   }
   to {
-    transform: translate(3%, 4%) scale(1.08);
+    transform: translate(4%, 5%) scale(1.12);
   }
 }
 
@@ -131,6 +141,20 @@ h1, h2, h3, h4, .font-display {
   to {
     transform: rotate(720deg) scale(1);
   }
+}
+
+/* Maskot melayang pelan terus-menerus (see Mascot.tsx) */
+@keyframes mascot-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+}
+.mascot-float {
+  animation: mascot-float 3.6s ease-in-out infinite;
 }
 
 /* Maskot "kegelian" saat diklik (see Mascot.tsx) */
@@ -171,6 +195,37 @@ h1, h2, h3, h4, .font-display {
   animation: mascot-wiggle 700ms ease-in-out;
 }
 
+/* Motif batik tipis (kawung yang disederhanakan) — tekstur dekoratif sangat
+   samar untuk mengurangi kesan polos pada blok latar polos. Satu definisi
+   SVG dipakai ulang lewat CSS mask, warnanya diatur lewat --batik-color
+   supaya cocok baik di latar terang maupun gelap. */
+.batik-motif {
+  position: relative;
+}
+.batik-motif::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--batik-color, var(--color-dark-green));
+  opacity: var(--batik-opacity, 0.05);
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2796%27%20height=%2796%27%20viewBox=%270%200%2096%2096%27%3E%3Cg%20fill=%27none%27%20stroke=%27white%27%20stroke-width=%271.6%27%3E%3Cellipse%20cx=%2758%27%20cy=%2748%27%20rx=%2716%27%20ry=%278%27/%3E%3Cellipse%20cx=%2748%27%20cy=%2758%27%20rx=%278%27%20ry=%2716%27/%3E%3Cellipse%20cx=%2738%27%20cy=%2748%27%20rx=%2716%27%20ry=%278%27/%3E%3Cellipse%20cx=%2748%27%20cy=%2738%27%20rx=%278%27%20ry=%2716%27/%3E%3C/g%3E%3Cg%20fill=%27white%27%3E%3Ccircle%20cx=%2748%27%20cy=%2748%27%20r=%272.2%27/%3E%3Ccircle%20cx=%270%27%20cy=%270%27%20r=%272.2%27/%3E%3Ccircle%20cx=%2796%27%20cy=%270%27%20r=%272.2%27/%3E%3Ccircle%20cx=%270%27%20cy=%2796%27%20r=%272.2%27/%3E%3Ccircle%20cx=%2796%27%20cy=%2796%27%20r=%272.2%27/%3E%3C/g%3E%3C/svg%3E");
+  mask-repeat: repeat;
+  mask-size: 96px 96px;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2796%27%20height=%2796%27%20viewBox=%270%200%2096%2096%27%3E%3Cg%20fill=%27none%27%20stroke=%27white%27%20stroke-width=%271.6%27%3E%3Cellipse%20cx=%2758%27%20cy=%2748%27%20rx=%2716%27%20ry=%278%27/%3E%3Cellipse%20cx=%2748%27%20cy=%2758%27%20rx=%278%27%20ry=%2716%27/%3E%3Cellipse%20cx=%2738%27%20cy=%2748%27%20rx=%2716%27%20ry=%278%27/%3E%3Cellipse%20cx=%2748%27%20cy=%2738%27%20rx=%278%27%20ry=%2716%27/%3E%3C/g%3E%3Cg%20fill=%27white%27%3E%3Ccircle%20cx=%2748%27%20cy=%2748%27%20r=%272.2%27/%3E%3Ccircle%20cx=%270%27%20cy=%270%27%20r=%272.2%27/%3E%3Ccircle%20cx=%2796%27%20cy=%270%27%20r=%272.2%27/%3E%3Ccircle%20cx=%270%27%20cy=%2796%27%20r=%272.2%27/%3E%3Ccircle%20cx=%2796%27%20cy=%2796%27%20r=%272.2%27/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat;
+  -webkit-mask-size: 96px 96px;
+}
+.batik-motif > * {
+  position: relative;
+  z-index: 1;
+}
+.batik-motif-invert {
+  --batik-color: var(--color-beige);
+  --batik-opacity: 0.07;
+}
+
 /* Sticky navbar gains depth once the page has scrolled (see Navbar.tsx) */
 .nav-scrolled {
   box-shadow: 0 8px 30px rgba(10, 51, 35, 0.1);
@@ -193,6 +248,7 @@ h1, h2, h3, h4, .font-display {
   .aurora-blob,
   .sakura-spin,
   .sakura-spin-boost,
+  .mascot-float,
   .mascot-wiggle {
     animation: none !important;
   }

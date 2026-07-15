@@ -95,7 +95,7 @@ export default async function BlogDetailPage({
         />
       </div>
 
-      <div className="mt-8 rounded-3xl bg-white p-6 shadow-sm sm:p-10">
+      <div className="glass-card mt-8 rounded-3xl p-6 sm:p-10">
         {isHtmlContent(post.content) ? (
           <div
             className="prose-content text-base leading-relaxed text-[var(--color-foreground)]"

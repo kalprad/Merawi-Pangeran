@@ -43,12 +43,12 @@ export default async function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-dark-green)]/90 via-[var(--color-dark-green)]/75 to-[var(--color-beige)]" />
           <div
-            className="aurora-blob h-72 w-72 bg-[var(--color-rosy-brown)]/40 sm:h-96 sm:w-96"
-            style={{ top: "-4rem", left: "-4rem" }}
+            className="aurora-blob aurora-rosy h-80 w-80 sm:h-[30rem] sm:w-[30rem]"
+            style={{ top: "-6rem", left: "-8rem" }}
           />
           <div
-            className="aurora-blob h-72 w-72 bg-[var(--color-midnight-teal)]/40 sm:h-96 sm:w-96"
-            style={{ bottom: "-6rem", right: "-4rem", animationDelay: "-8s" }}
+            className="aurora-blob aurora-teal h-80 w-80 sm:h-[30rem] sm:w-[30rem]"
+            style={{ bottom: "-8rem", right: "-8rem", animationDelay: "-8s" }}
           />
         </div>
 
@@ -164,7 +164,7 @@ export default async function Home() {
       </section>
 
       {/* ABOUT + MASCOT */}
-      <section className="bg-[var(--color-muted)]/60 py-24">
+      <section className="batik-motif bg-[var(--color-muted)]/60 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <Reveal>
             <SectionHeading

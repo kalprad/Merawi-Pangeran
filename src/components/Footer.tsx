@@ -6,7 +6,7 @@ import { navLinks } from "@/lib/nav-links";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+    <footer className="batik-motif batik-motif-invert relative mt-24 overflow-hidden bg-[var(--color-dark-green)] text-[var(--color-beige)]">
       <svg
         aria-hidden="true"
         viewBox="0 0 1440 60"

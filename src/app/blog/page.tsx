@@ -5,6 +5,7 @@ import { getPosts } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import CategoryTags from "@/components/CategoryTags";
 import Reveal from "@/components/Reveal";
+import PageOrnaments from "@/components/PageOrnaments";
 
 export const metadata: Metadata = {
   title: "Blog Kegiatan",
@@ -26,7 +27,9 @@ export default async function BlogPage() {
   const posts = await getPosts();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="relative overflow-hidden">
+      <PageOrnaments />
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <Reveal>
         <SectionHeading
           eyebrow="Blog"
@@ -81,6 +84,7 @@ export default async function BlogPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

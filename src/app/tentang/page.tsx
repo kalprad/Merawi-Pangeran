@@ -1,10 +1,10 @@
-import Image from "next/image";
 import type { Metadata } from "next";
-import { Stethoscope, Scale, Cpu, Sprout, User } from "lucide-react";
-import InstagramIcon from "@/components/InstagramIcon";
+import { Stethoscope, Scale, Cpu, Sprout } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import Mascot from "@/components/Mascot";
+import TeamGrid from "@/components/TeamGrid";
+import PageOrnaments from "@/components/PageOrnaments";
 import { getTeam } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -47,8 +47,9 @@ export default async function TentangPage() {
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <section className="relative overflow-hidden">
+        <PageOrnaments />
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <Reveal>
             <SectionHeading
               eyebrow="Tentang Kami"
@@ -71,7 +72,8 @@ export default async function TentangPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--color-muted)]/60 py-20">
+
+      <section className="batik-motif bg-[var(--color-muted)]/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionHeading
@@ -103,56 +105,7 @@ export default async function TentangPage() {
           <Reveal>
             <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
           </Reveal>
-          <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {team.map((member, i) => (
-              <Reveal
-                key={member.id}
-                delay={Math.min(i, 8) * 60}
-                className="glass-card flex flex-col overflow-hidden rounded-3xl"
-              >
-                <div className="relative aspect-[4/5] w-full bg-[var(--color-muted)]">
-                  {member.photo ? (
-                    <Image
-                      src={member.photo}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                      unoptimized={member.photo.startsWith("http")}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-[var(--color-muted-foreground)]">
-                      <User size={32} />
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-1 flex-col p-4 text-center">
-                  <p className="font-medium text-[var(--color-dark-green)]">{member.name}</p>
-                  <p className="text-xs text-[var(--color-muted-foreground)]">{member.role}</p>
-                  {member.prodi && (
-                    <p className="text-[11px] text-[var(--color-muted-foreground)]/80">
-                      {member.prodi}
-                    </p>
-                  )}
-                  {member.instagram && (
-                    <a
-                      href={
-                        member.instagram.startsWith("http")
-                          ? member.instagram
-                          : `https://instagram.com/${member.instagram.replace(/^@/, "")}`
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Instagram ${member.name}`}
-                      className="mt-2 inline-flex items-center justify-center gap-1 self-center text-xs font-medium text-[var(--color-midnight-teal)] hover:text-[var(--color-dark-green)]"
-                    >
-                      <InstagramIcon size={14} />
-                      Instagram
-                    </a>
-                  )}
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <TeamGrid team={team} />
         </section>
       )}
 

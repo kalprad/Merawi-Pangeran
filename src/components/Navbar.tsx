@@ -83,7 +83,7 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <nav className="border-t border-[var(--color-border)] bg-[var(--color-beige)] px-4 pb-4 lg:hidden">
+        <nav className="border-t border-[var(--color-border)] bg-[var(--color-beige)]/80 px-4 pb-4 backdrop-blur-xl lg:hidden">
           <ul className="flex flex-col gap-1 pt-2">
             {navLinks.map((link) => {
               const active =
