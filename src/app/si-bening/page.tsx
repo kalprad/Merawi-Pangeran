@@ -2,12 +2,15 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Ruler, FolderInput, ShieldCheck, Download } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
+import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "SI-Bening",
   description:
     "SI-Bening (Sistem Informasi Bening) — aplikasi untuk membantu desain dan perencanaan infrastruktur desa.",
 };
+
+export const dynamic = "force-dynamic";
 
 const highlights = [
   {
@@ -30,7 +33,10 @@ const highlights = [
   },
 ];
 
-export default function SiBeningPage() {
+export default async function SiBeningPage() {
+  const settings = await getSettings();
+  const hasDownloadLink = Boolean(settings.siBeningUrl);
+
   return (
     <div>
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -42,18 +48,31 @@ export default function SiBeningPage() {
               description="Aplikasi yang dikembangkan Tim KKN Merawi Pangeran 2026 untuk membantu Desa Jetis merencanakan dan mendesain infrastruktur secara digital."
             />
 
-            <button
-              type="button"
-              disabled
-              title="Tautan unduhan akan segera tersedia"
-              className="mt-7 inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full bg-[var(--color-muted)] px-7 py-3 text-sm font-semibold text-[var(--color-muted-foreground)]"
-            >
-              <Download size={16} />
-              Segera Hadir
-            </button>
+            {hasDownloadLink ? (
+              <a
+                href={settings.siBeningUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-rosy-brown)] px-7 py-3 text-sm font-semibold text-[var(--color-dark-green)] transition-transform duration-200 hover:-translate-y-0.5"
+              >
+                <Download size={16} />
+                Unduh SI-Bening
+              </a>
+            ) : (
+              <button
+                type="button"
+                disabled
+                title="Tautan unduhan akan segera tersedia"
+                className="mt-7 inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full bg-[var(--color-muted)] px-7 py-3 text-sm font-semibold text-[var(--color-muted-foreground)]"
+              >
+                <Download size={16} />
+                Segera Hadir
+              </button>
+            )}
             <p className="mt-3 text-xs text-[var(--color-muted-foreground)]">
-              Tautan unduhan resmi akan diperbarui di halaman ini begitu
-              aplikasi rilis.
+              {hasDownloadLink
+                ? "Tautan unduhan membuka halaman eksternal (Google Drive/lainnya)."
+                : "Tautan unduhan resmi akan diperbarui di halaman ini begitu aplikasi rilis."}
             </p>
           </div>
 

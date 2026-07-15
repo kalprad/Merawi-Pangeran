@@ -1,13 +1,16 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Stethoscope, Scale, HardHat, Landmark } from "lucide-react";
+import { Stethoscope, Scale, HardHat, Landmark, User } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
+import { getTeam } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
   description:
     "Mengenal Tim KKN Merawi Pangeran 2026 dan program kerja di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang.",
 };
+
+export const dynamic = "force-dynamic";
 
 const divisions = [
   {
@@ -36,7 +39,9 @@ const divisions = [
   },
 ];
 
-export default function TentangPage() {
+export default async function TentangPage() {
+  const team = await getTeam();
+
   return (
     <div>
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -94,6 +99,35 @@ export default function TentangPage() {
           </div>
         </div>
       </section>
+
+      {team.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
+          <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+            {team.map((member) => (
+              <div key={member.id} className="text-center">
+                <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-muted)] sm:h-32 sm:w-32">
+                  {member.photo ? (
+                    <Image
+                      src={member.photo}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      unoptimized={member.photo.startsWith("http")}
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-[var(--color-muted-foreground)]">
+                      <User size={32} />
+                    </div>
+                  )}
+                </div>
+                <p className="mt-3 font-medium text-[var(--color-dark-green)]">{member.name}</p>
+                <p className="text-xs text-[var(--color-muted-foreground)]">{member.role}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:px-8">
         <SectionHeading

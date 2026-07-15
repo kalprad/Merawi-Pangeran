@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import type { Post } from "@/lib/types";
 
 const IMAGE_OPTIONS = [
@@ -30,15 +31,52 @@ export default function PostForm({ mode, initialData }: Props) {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [customFile, setCustomFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    setCustomFile(file);
+    setPreviewUrl(file ? URL.createObjectURL(file) : null);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    let coverImage = form.coverImage;
+
+    if (customFile) {
+      setUploading(true);
+      try {
+        const uploadForm = new FormData();
+        uploadForm.append("file", customFile);
+        uploadForm.append("folder", "Blog");
+        const uploadRes = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: uploadForm,
+        });
+        const uploadData = await uploadRes.json().catch(() => ({}));
+        if (!uploadRes.ok) {
+          setError(uploadData.error ?? "Gagal mengunggah foto.");
+          setUploading(false);
+          return;
+        }
+        coverImage = uploadData.url;
+      } catch {
+        setError("Terjadi kesalahan jaringan saat mengunggah foto.");
+        setUploading(false);
+        return;
+      }
+      setUploading(false);
+    }
+
+    setLoading(true);
 
     const url =
       mode === "create" ? "/api/admin/posts" : `/api/admin/posts/${initialData?.id}`;
@@ -48,7 +86,7 @@ export default function PostForm({ mode, initialData }: Props) {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, coverImage }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -126,7 +164,8 @@ export default function PostForm({ mode, initialData }: Props) {
           id="coverImage"
           value={form.coverImage}
           onChange={(e) => update("coverImage", e.target.value)}
-          className={inputClass}
+          disabled={Boolean(customFile)}
+          className={`${inputClass} disabled:opacity-50`}
         >
           {IMAGE_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -134,6 +173,26 @@ export default function PostForm({ mode, initialData }: Props) {
             </option>
           ))}
         </select>
+      </Field>
+
+      <Field label="Atau unggah foto sendiri (opsional, maks 5MB)" htmlFor="customFile">
+        <input
+          id="customFile"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className={`${inputClass} cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)]`}
+        />
+        {previewUrl && (
+          <div className="relative mt-3 h-32 w-full max-w-xs overflow-hidden rounded-xl border border-[var(--color-border)]">
+            <Image src={previewUrl} alt="Pratinjau foto" fill className="object-cover" unoptimized />
+          </div>
+        )}
+        {customFile && (
+          <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
+            Foto ini akan dipakai, bukan pilihan di atas.
+          </p>
+        )}
       </Field>
 
       <Field label="Ringkasan Singkat" htmlFor="excerpt">
@@ -170,10 +229,10 @@ export default function PostForm({ mode, initialData }: Props) {
       <div className="flex gap-3">
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || uploading}
           className="cursor-pointer rounded-full bg-[var(--color-dark-green)] px-6 py-3 text-sm font-semibold text-[var(--color-beige)] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? "Menyimpan..." : "Simpan Berita"}
+          {uploading ? "Mengunggah foto..." : loading ? "Menyimpan..." : "Simpan Berita"}
         </button>
       </div>
     </form>

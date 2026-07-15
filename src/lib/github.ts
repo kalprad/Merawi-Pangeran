@@ -2,6 +2,14 @@ const TOKEN = process.env.GITHUB_TOKEN;
 const OWNER_REPO = process.env.GITHUB_REPO; // format: "namaakun/nama-repo"
 const BRANCH = process.env.GITHUB_BRANCH || "main";
 
+export function githubRawUrl(filePath: string): string {
+  const encodedPath = filePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  return `https://raw.githubusercontent.com/${OWNER_REPO}/${BRANCH}/${encodedPath}`;
+}
+
 /**
  * Kalau env var GitHub belum diisi (misalnya saat dijalankan di komputer
  * sendiri), sistem otomatis pakai file biasa di folder data/ (lihat data.ts).
@@ -74,4 +82,35 @@ export async function writeJsonToGithub<T>(
     const errorText = await res.text();
     throw new Error(`Gagal menyimpan ${filePath} ke GitHub: ${errorText}`);
   }
+}
+
+/**
+ * Upload file baru (misalnya foto) ke GitHub. Dipakai untuk file yang selalu
+ * baru (nama file dibuat unik), jadi tidak perlu cek "sha" versi lama seperti
+ * writeJsonToGithub di atas.
+ */
+export async function uploadBinaryToGithub(
+  filePath: string,
+  base64Content: string,
+  message: string,
+): Promise<string> {
+  const res = await fetch(
+    `https://api.github.com/repos/${OWNER_REPO}/contents/${filePath}`,
+    {
+      method: "PUT",
+      headers: { ...headers(), "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message,
+        content: base64Content,
+        branch: BRANCH,
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Gagal mengunggah ${filePath} ke GitHub: ${errorText}`);
+  }
+
+  return githubRawUrl(filePath);
 }

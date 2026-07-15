@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import type { Post, Materi, MapPoint } from "./types";
+import type { Post, Materi, MapPoint, Settings, TeamMember } from "./types";
 import { isGithubEnabled, readJsonFromGithub, writeJsonToGithub } from "./github";
 
 const dataDir = path.join(process.cwd(), "data");
@@ -64,4 +64,25 @@ export async function getMapPoints(): Promise<MapPoint[]> {
 
 export async function saveMapPoints(points: MapPoint[]): Promise<void> {
   await writeJson("map-points.json", points);
+}
+
+export async function getSettings(): Promise<Settings> {
+  return readJson<Settings>("settings.json");
+}
+
+export async function saveSettings(settings: Settings): Promise<void> {
+  await writeJson("settings.json", settings);
+}
+
+export async function getTeam(): Promise<TeamMember[]> {
+  return readJson<TeamMember[]>("team.json");
+}
+
+export async function getTeamMemberById(id: string): Promise<TeamMember | undefined> {
+  const team = await getTeam();
+  return team.find((m) => m.id === id);
+}
+
+export async function saveTeam(team: TeamMember[]): Promise<void> {
+  await writeJson("team.json", team);
 }
