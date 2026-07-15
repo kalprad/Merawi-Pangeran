@@ -84,7 +84,7 @@ export default async function Home() {
 
       {/* STATS */}
       <section className="relative mx-auto -mt-16 max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-4 rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-lg sm:grid-cols-4 sm:p-8">
+        <div className="glass-card grid grid-cols-2 gap-4 rounded-3xl p-6 shadow-xl sm:grid-cols-4 sm:p-8">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-display text-3xl text-[var(--color-dark-green)] sm:text-4xl">
@@ -180,7 +180,7 @@ export default async function Home() {
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-44 w-full overflow-hidden">
                 <Image

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Mail, AtSign } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
+import InstagramIcon from "./InstagramIcon";
 import { navLinks } from "@/lib/nav-links";
 
 export default function Footer() {
@@ -72,7 +73,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <AtSign size={18} className="shrink-0 text-[var(--color-rosy-brown)]" />
+                <InstagramIcon size={18} className="shrink-0 text-[var(--color-rosy-brown)]" />
                 <a
                   href="https://instagram.com"
                   target="_blank"

@@ -14,6 +14,7 @@ export default function TeamForm({ mode, initialData }: Props) {
   const router = useRouter();
   const [name, setName] = useState(initialData?.name ?? "");
   const [role, setRole] = useState(initialData?.role ?? "");
+  const [instagram, setInstagram] = useState(initialData?.instagram ?? "");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     initialData?.photo ?? null,
@@ -68,7 +69,7 @@ export default function TeamForm({ mode, initialData }: Props) {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role, photo }),
+        body: JSON.stringify({ name, role, photo, instagram }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -114,8 +115,21 @@ export default function TeamForm({ mode, initialData }: Props) {
       </div>
 
       <div>
+        <label htmlFor="instagram" className="block text-sm font-medium text-[var(--color-dark-green)]">
+          Instagram (opsional)
+        </label>
+        <input
+          id="instagram"
+          value={instagram}
+          onChange={(e) => setInstagram(e.target.value)}
+          placeholder="https://instagram.com/username atau @username"
+          className={inputClass}
+        />
+      </div>
+
+      <div>
         <label htmlFor="photo" className="block text-sm font-medium text-[var(--color-dark-green)]">
-          Foto (maks 5MB)
+          Foto (maks 5MB, sebaiknya persegi panjang/potret)
         </label>
         <input
           id="photo"
@@ -125,7 +139,7 @@ export default function TeamForm({ mode, initialData }: Props) {
           className={`${inputClass} mt-1 cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)]`}
         />
         {previewUrl && (
-          <div className="relative mt-3 h-32 w-32 overflow-hidden rounded-full border border-[var(--color-border)]">
+          <div className="relative mt-3 h-40 w-32 overflow-hidden rounded-2xl border border-[var(--color-border)]">
             <Image src={previewUrl} alt="Pratinjau foto" fill className="object-cover" unoptimized />
           </div>
         )}

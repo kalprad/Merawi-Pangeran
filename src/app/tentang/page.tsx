@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Metadata } from "next";
 import { Stethoscope, Scale, HardHat, Landmark, User } from "lucide-react";
+import InstagramIcon from "@/components/InstagramIcon";
 import SectionHeading from "@/components/SectionHeading";
 import { getTeam } from "@/lib/data";
 
@@ -81,10 +82,7 @@ export default async function TentangPage() {
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {divisions.map((div) => (
-              <div
-                key={div.title}
-                className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm"
-              >
+              <div key={div.title} className="glass-card rounded-3xl p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
                   <div.icon size={22} aria-hidden="true" />
                 </div>
@@ -105,8 +103,11 @@ export default async function TentangPage() {
           <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
           <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
             {team.map((member) => (
-              <div key={member.id} className="text-center">
-                <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-muted)] sm:h-32 sm:w-32">
+              <div
+                key={member.id}
+                className="glass-card flex flex-col overflow-hidden rounded-3xl"
+              >
+                <div className="relative aspect-[4/5] w-full bg-[var(--color-muted)]">
                   {member.photo ? (
                     <Image
                       src={member.photo}
@@ -121,8 +122,26 @@ export default async function TentangPage() {
                     </div>
                   )}
                 </div>
-                <p className="mt-3 font-medium text-[var(--color-dark-green)]">{member.name}</p>
-                <p className="text-xs text-[var(--color-muted-foreground)]">{member.role}</p>
+                <div className="flex flex-1 flex-col p-4 text-center">
+                  <p className="font-medium text-[var(--color-dark-green)]">{member.name}</p>
+                  <p className="text-xs text-[var(--color-muted-foreground)]">{member.role}</p>
+                  {member.instagram && (
+                    <a
+                      href={
+                        member.instagram.startsWith("http")
+                          ? member.instagram
+                          : `https://instagram.com/${member.instagram.replace(/^@/, "")}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Instagram ${member.name}`}
+                      className="mt-2 inline-flex items-center justify-center gap-1 self-center text-xs font-medium text-[var(--color-midnight-teal)] hover:text-[var(--color-dark-green)]"
+                    >
+                      <InstagramIcon size={14} />
+                      Instagram
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
           </div>

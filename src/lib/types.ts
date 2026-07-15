@@ -28,6 +28,7 @@ export type TeamMember = {
   name: string;
   role: string;
   photo: string;
+  instagram?: string;
 };
 
 export type MapPointCategory = "irigasi" | "umkm" | "fasilitas";

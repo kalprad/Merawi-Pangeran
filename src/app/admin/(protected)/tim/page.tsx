@@ -59,7 +59,7 @@ export default function AdminTeamPage() {
               key={member.id}
               className="flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
             >
-              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-[var(--color-muted)]">
+              <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-xl bg-[var(--color-muted)]">
                 {member.photo ? (
                   <Image src={member.photo} alt={member.name} fill className="object-cover" unoptimized />
                 ) : (

@@ -52,7 +52,7 @@ export default function MateriList({ materi }: { materi: Materi[] }) {
           {filtered.map((item) => (
             <li
               key={item.id}
-              className="flex flex-col rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm"
+              className="glass-card flex flex-col rounded-3xl p-6"
             >
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-muted)] text-[var(--color-dark-green)]">

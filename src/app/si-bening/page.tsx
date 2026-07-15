@@ -76,7 +76,7 @@ export default async function SiBeningPage() {
             </p>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm">
+          <div className="glass-card relative overflow-hidden rounded-3xl">
             <Image
               src="/images/si-bening-banner.png"
               alt="SI-Bening — Sistem Informasi Infrastruktur"
@@ -100,7 +100,7 @@ export default async function SiBeningPage() {
             {highlights.map((item) => (
               <div
                 key={item.title}
-                className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center shadow-sm"
+                className="glass-card rounded-3xl p-6 text-center"
               >
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
                   <item.icon size={22} aria-hidden="true" />
