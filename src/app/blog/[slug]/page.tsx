@@ -77,9 +77,32 @@ export default async function BlogDetailPage({
       </div>
 
       <div className="prose-content mt-10 space-y-5 text-base leading-relaxed text-[var(--color-foreground)]">
-        {post.content.split("\n\n").map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
-        ))}
+        {post.content
+          .split("\n\n")
+          .map((block) => block.trim())
+          .filter(Boolean)
+          .map((block, i) => {
+            const imageMatch = block.match(/^!\[(.*?)\]\((\S+)\)$/);
+            if (imageMatch) {
+              const [, alt, src] = imageMatch;
+              return (
+                <div
+                  key={i}
+                  className="relative h-64 w-full overflow-hidden rounded-2xl sm:h-96"
+                >
+                  <Image
+                    src={src}
+                    alt={alt || post.title}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 768px) 768px, 100vw"
+                    unoptimized={src.startsWith("http")}
+                  />
+                </div>
+              );
+            }
+            return <p key={i}>{block}</p>;
+          })}
       </div>
     </article>
   );
