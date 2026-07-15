@@ -1,10 +1,10 @@
 [
   {
-    "id": "3",
-    "title": "Pengenalan Aplikasi SI-Bening untuk Perangkat Desa",
-    "description": "Panduan penggunaan aplikasi SI-Bening bagi perangkat desa dalam mendesain dan merencanakan infrastruktur desa secara digital.",
-    "category": "Teknologi",
-    "date": "2026-02-15",
+    "id": "2",
+    "title": "Pencegahan Stunting dan Gizi Seimbang",
+    "description": "Materi edukasi kesehatan mengenai pencegahan stunting pada anak, pentingnya 1000 hari pertama kehidupan, dan pola makan bergizi seimbang untuk keluarga.",
+    "category": "Kesehatan",
+    "date": "2026-02-02",
     "fileUrl": ""
   },
   {
@@ -12,14 +12,6 @@
     "title": "Literasi Hukum Dasar bagi Masyarakat Desa",
     "description": "Materi sosialisasi mengenai administrasi kependudukan, hak dan kewajiban warga, serta alur pengurusan dokumen kependudukan di tingkat desa.",
     "category": "Hukum",
-    "date": "2026-02-02",
-    "fileUrl": ""
-  },
-  {
-    "id": "2",
-    "title": "Pencegahan Stunting dan Gizi Seimbang",
-    "description": "Materi edukasi kesehatan mengenai pencegahan stunting pada anak, pentingnya 1000 hari pertama kehidupan, dan pola makan bergizi seimbang untuk keluarga.",
-    "category": "Kesehatan",
     "date": "2026-02-02",
     "fileUrl": ""
   }
