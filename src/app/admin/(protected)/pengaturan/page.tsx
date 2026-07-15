@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function PengaturanPage() {
   const [siBeningUrl, setSiBeningUrl] = useState("");
+  const [galleryFolderUrl, setGalleryFolderUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,6 +15,7 @@ export default function PengaturanPage() {
       .then((res) => res.json())
       .then((data) => {
         setSiBeningUrl(data.siBeningUrl ?? "");
+        setGalleryFolderUrl(data.galleryFolderUrl ?? "");
         setLoading(false);
       });
   }, []);
@@ -27,7 +29,7 @@ export default function PengaturanPage() {
       const res = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ siBeningUrl }),
+        body: JSON.stringify({ siBeningUrl, galleryFolderUrl }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -70,6 +72,28 @@ export default function PengaturanPage() {
           <p className="text-xs text-[var(--color-muted-foreground)]">
             Kosongkan kalau belum ada link — halaman SI-Bening akan menampilkan
             tombol &ldquo;Segera Hadir&rdquo;.
+          </p>
+
+          <label
+            htmlFor="galleryFolderUrl"
+            className="block pt-4 text-sm font-medium text-[var(--color-dark-green)]"
+          >
+            Link Folder Google Drive untuk Galeri
+          </label>
+          <input
+            id="galleryFolderUrl"
+            type="url"
+            value={galleryFolderUrl}
+            onChange={(e) => setGalleryFolderUrl(e.target.value)}
+            placeholder="https://drive.google.com/drive/folders/..."
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
+          />
+          <p className="text-xs text-[var(--color-muted-foreground)]">
+            Folder harus dibagikan sebagai &ldquo;Siapa saja yang memiliki
+            link&rdquo; (Anyone with the link). Halaman Galeri akan menarik
+            foto dari folder ini secara otomatis — tidak perlu unggah ulang ke
+            situs. Perlu env var <code>GOOGLE_DRIVE_API_KEY</code> di server
+            (lihat README).
           </p>
 
           {error && (

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Newspaper, BookOpen, Map, Smartphone, ArrowRight } from "lucide-react";
+import { Newspaper, BookOpen, Map, Images, Smartphone, ArrowRight } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
@@ -117,7 +117,7 @@ export default async function Home() {
             description="Empat pilar program kerja KKN Merawi Pangeran 2026 yang dapat kamu telusuri langsung di sini."
           />
         </Reveal>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
               href: "/blog",
@@ -139,6 +139,13 @@ export default async function Home() {
               title: "Peta Interaktif",
               description:
                 "Peta sebaran kerusakan irigasi, UMKM, dan fasilitas umum di wilayah Desa Jetis.",
+            },
+            {
+              href: "/galeri",
+              icon: Images,
+              title: "Galeri Foto",
+              description:
+                "Dokumentasi foto kegiatan KKN selama di Desa Jetis, diambil langsung dari Google Drive.",
             },
             {
               href: "/si-bening",

@@ -22,6 +22,7 @@ export type Materi = {
 
 export type Settings = {
   siBeningUrl: string;
+  galleryFolderUrl?: string;
 };
 
 export type TeamMember = {

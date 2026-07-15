@@ -35,9 +35,10 @@ Data situs disimpan sebagai file JSON di folder `data/`:
 
 Konten ini bisa diedit langsung lewat file, atau melalui **Panel Admin** di
 `/admin` (login dengan `ADMIN_PASSWORD`). Panel admin mendukung kelola
-Berita, Materi Sosialisasi, Tim, dan Pengaturan (link download SI-Bening).
-Data peta masih berupa contoh dan perlu diperbarui manual di
-`data/map-points.json` sampai hasil survei lapangan tersedia.
+Berita, Materi Sosialisasi, Tim, dan Pengaturan (link download SI-Bening,
+link folder Google Drive untuk Galeri). Data peta masih berupa contoh dan
+perlu diperbarui manual di `data/map-points.json` sampai hasil survei
+lapangan tersedia.
 
 ## Struktur folder di GitHub
 
@@ -95,6 +96,32 @@ Langkah setup:
    `/admin`, perubahannya otomatis tersimpan sebagai commit baru di repo
    GitHub kamu, dan langsung tampil di situs (tidak perlu deploy ulang
    manual).
+
+## Galeri Foto (Google Drive)
+
+Halaman `/galeri` menampilkan foto-foto kegiatan KKN langsung dari sebuah
+folder Google Drive — tidak perlu unggah ulang foto ke situs. Langkah
+setup:
+
+1. **Buat folder di Google Drive**, isi dengan foto-foto kegiatan, lalu
+   klik kanan folder → **Share** → ubah ke **Anyone with the link**
+   (Siapa saja yang memiliki link) dengan akses **Viewer**.
+2. **Buat API key Google Drive**:
+   - Buka [Google Cloud Console](https://console.cloud.google.com/) →
+     buat project baru (atau pakai yang sudah ada)
+   - Buka **APIs & Services** → **Library** → cari **Google Drive API** →
+     klik **Enable**
+   - Buka **APIs & Services** → **Credentials** → **Create Credentials** →
+     **API key** → salin key yang muncul
+   - (Opsional tapi disarankan) Batasi key tersebut supaya hanya bisa
+     dipakai untuk **Google Drive API** di bagian "API restrictions"
+3. **Masukkan env var ini di Vercel** (Project Settings → Environment
+   Variables): `GOOGLE_DRIVE_API_KEY` — API key yang tadi dibuat.
+4. **Tempel link folder Google Drive** lewat Panel Admin →
+   `/admin/pengaturan` → "Link Folder Google Drive untuk Galeri".
+5. Selesai — halaman `/galeri` otomatis menampilkan semua foto di folder
+   itu, dan akan ikut ter-update setiap kali ada foto baru ditambahkan ke
+   folder (tanpa perlu deploy ulang).
 
 ## Aset brand
 
