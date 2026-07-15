@@ -11,17 +11,6 @@
     "category": "Kegiatan"
   },
   {
-    "id": "2",
-    "slug": "pemetaan-kondisi-irigasi-desa-jetis",
-    "title": "Pemetaan Kondisi Irigasi di Desa Jetis",
-    "excerpt": "Tim KKN melakukan survei lapangan untuk mendata titik-titik saluran irigasi yang mengalami kerusakan sebagai dasar rekomendasi perbaikan infrastruktur.",
-    "content": "Sebagai bagian dari program kerja bidang infrastruktur, Tim KKN Merawi Pangeran 2026 melaksanakan survei lapangan untuk memetakan kondisi saluran irigasi di wilayah Desa Jetis. Survei dilakukan bersama perangkat desa dan kelompok tani setempat.\n\nData yang dikumpulkan meliputi titik koordinat, tingkat kerusakan, serta dokumentasi visual setiap segmen saluran irigasi. Hasil pemetaan ini selanjutnya akan ditampilkan pada fitur Peta Interaktif di situs ini, sekaligus menjadi salah satu masukan data untuk aplikasi SI-Bening.",
-    "coverImage": "/images/hero-gunung.jpg",
-    "date": "2026-01-20",
-    "author": "Divisi Infrastruktur",
-    "category": "Infrastruktur"
-  },
-  {
     "id": "1",
     "slug": "pembukaan-kkn-merawi-pangeran-2026",
     "title": "Pembukaan KKN Merawi Pangeran 2026 di Desa Jetis",
