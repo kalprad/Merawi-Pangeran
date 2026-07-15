@@ -48,7 +48,18 @@ export default function RichTextEditor({
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.url) {
-          editorInstance.chain().focus().setImage({ src: data.url }).run();
+          // Sisipkan gambar lalu paragraf kosong sesudahnya, supaya kursor
+          // pindah ke luar gambar (bukan "menempel"/memilih gambar itu).
+          // Kalau tidak begini, sisip gambar berikutnya akan MENGGANTIKAN
+          // gambar yang baru saja disisipkan, bukan menambah gambar baru.
+          editorInstance
+            .chain()
+            .focus()
+            .insertContent([
+              { type: "image", attrs: { src: data.url } },
+              { type: "paragraph" },
+            ])
+            .run();
         }
       } finally {
         setUploading(false);
