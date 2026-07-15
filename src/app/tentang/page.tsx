@@ -4,6 +4,7 @@ import { Stethoscope, Scale, Cpu, Sprout, User } from "lucide-react";
 import InstagramIcon from "@/components/InstagramIcon";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
+import Mascot from "@/components/Mascot";
 import { getTeam } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -65,15 +66,7 @@ export default async function TentangPage() {
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <div className="relative mx-auto h-64 w-64 sm:h-80 sm:w-80">
-              <Image
-                src="/images/mascot.png"
-                alt="Maskot KKN Merawi Pangeran 2026"
-                fill
-                sizes="(min-width: 640px) 320px, 256px"
-                className="object-contain"
-              />
-            </div>
+            <Mascot className="mx-auto h-64 w-64 sm:h-80 sm:w-80" />
           </Reveal>
         </div>
       </section>

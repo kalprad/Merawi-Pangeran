@@ -6,6 +6,7 @@ import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
 import CategoryTags from "@/components/CategoryTags";
 import Reveal from "@/components/Reveal";
+import Mascot from "@/components/Mascot";
 import { getPosts, getMateri, getMapPoints } from "@/lib/data";
 
 // Selalu ambil data terbaru tiap kali halaman dibuka (bukan versi lama yang
@@ -182,13 +183,7 @@ export default async function Home() {
           <Reveal delay={120}>
             <div className="relative mx-auto flex h-72 w-72 items-center justify-center sm:h-96 sm:w-96">
               <div className="absolute inset-0 rounded-full bg-[var(--color-dark-green)]/5" />
-              <Image
-                src="/images/mascot.png"
-                alt="Maskot KKN Merawi Pangeran 2026"
-                width={384}
-                height={384}
-                className="relative h-full w-full object-contain"
-              />
+              <Mascot className="h-full w-full" />
             </div>
           </Reveal>
         </div>

@@ -1,10 +1,20 @@
+"use client";
+
+import { useState } from "react";
+
 export default function SakuraDecor({ className = "" }: { className?: string }) {
+  const [boosting, setBoosting] = useState(false);
+
   return (
     <svg
       viewBox="0 0 100 100"
       aria-hidden="true"
-      className={className}
       fill="none"
+      onClick={() => setBoosting(true)}
+      onAnimationEnd={() => setBoosting(false)}
+      className={`cursor-pointer transition-transform duration-300 hover:scale-110 ${
+        boosting ? "sakura-spin-boost" : "sakura-spin"
+      } ${className}`}
     >
       {[0, 72, 144, 216, 288].map((angle) => (
         <ellipse

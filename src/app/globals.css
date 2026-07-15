@@ -105,6 +105,72 @@ h1, h2, h3, h4, .font-display {
   }
 }
 
+/* Sakura decoration — gentle ambient spin, with a fun fast burst on click (see SakuraDecor.tsx) */
+.sakura-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sakura-rotate 18s linear infinite;
+}
+.sakura-spin-boost {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sakura-rotate-boost 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes sakura-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sakura-rotate-boost {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  40% {
+    transform: rotate(360deg) scale(1.15);
+  }
+  to {
+    transform: rotate(720deg) scale(1);
+  }
+}
+
+/* Maskot "kegelian" saat diklik (see Mascot.tsx) */
+@keyframes mascot-wiggle {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg) scale(1, 1);
+  }
+  10% {
+    transform: translateX(-3%) rotate(-5deg) scale(1.03, 0.97);
+  }
+  20% {
+    transform: translateX(3%) rotate(5deg) scale(0.97, 1.03);
+  }
+  30% {
+    transform: translateX(-3%) rotate(-5deg) scale(1.03, 0.97);
+  }
+  40% {
+    transform: translateX(3%) rotate(4deg) scale(0.98, 1.02);
+  }
+  50% {
+    transform: translateX(-2%) rotate(-3deg);
+  }
+  60% {
+    transform: translateX(2%) rotate(3deg);
+  }
+  70% {
+    transform: translateX(-1%) rotate(-1deg);
+  }
+  80% {
+    transform: translateX(1%) rotate(1deg);
+  }
+  90% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+.mascot-wiggle {
+  animation: mascot-wiggle 700ms ease-in-out;
+}
+
 /* Sticky navbar gains depth once the page has scrolled (see Navbar.tsx) */
 .nav-scrolled {
   box-shadow: 0 8px 30px rgba(10, 51, 35, 0.1);
@@ -124,7 +190,10 @@ h1, h2, h3, h4, .font-display {
     scroll-behavior: auto;
   }
   .page-transition,
-  .aurora-blob {
+  .aurora-blob,
+  .sakura-spin,
+  .sakura-spin-boost,
+  .mascot-wiggle {
     animation: none !important;
   }
   * {
