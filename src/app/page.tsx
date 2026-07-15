@@ -4,6 +4,7 @@ import { Newspaper, BookOpen, Map, Smartphone, ArrowRight } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
+import CategoryTags from "@/components/CategoryTags";
 import { getPosts, getMateri, getMapPoints } from "@/lib/data";
 
 // Selalu ambil data terbaru tiap kali halaman dibuka (bukan versi lama yang
@@ -192,9 +193,7 @@ export default async function Home() {
                 />
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <span className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-                  {post.category}
-                </span>
+                <CategoryTags value={post.category} />
                 <h3 className="font-display mt-2 text-lg text-[var(--color-dark-green)]">
                   {post.title}
                 </h3>

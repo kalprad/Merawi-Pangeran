@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getPosts } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
+import CategoryTags from "@/components/CategoryTags";
 
 export const metadata: Metadata = {
   title: "Blog Kegiatan",
@@ -53,10 +54,14 @@ export default async function BlogPage() {
                 />
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-                  <span>{post.category}</span>
-                  <span aria-hidden="true">&middot;</span>
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                <div className="flex flex-wrap items-center gap-2">
+                  <CategoryTags value={post.category} />
+                  <time
+                    dateTime={post.date}
+                    className="text-xs font-medium text-[var(--color-muted-foreground)]"
+                  >
+                    {formatDate(post.date)}
+                  </time>
                 </div>
                 <h2 className="font-display mt-2 text-xl text-[var(--color-dark-green)]">
                   {post.title}

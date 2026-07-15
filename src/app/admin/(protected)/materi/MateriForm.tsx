@@ -67,12 +67,13 @@ export default function MateriForm({ mode, initialData }: Props) {
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Kategori" htmlFor="category">
+        <Field label="Kategori (pisahkan dengan koma jika lebih dari satu)" htmlFor="category">
           <input
             id="category"
             required
             value={form.category}
             onChange={(e) => update("category", e.target.value)}
+            placeholder="contoh: Hukum, Ekonomi"
             className={inputClass}
           />
         </Field>

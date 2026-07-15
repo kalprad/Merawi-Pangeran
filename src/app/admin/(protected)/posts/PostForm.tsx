@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { compressImage } from "@/lib/compressImage";
+import { parseCategories, formatCategories } from "@/lib/categories";
 import type { Post, Materi } from "@/lib/types";
 
 const IMAGE_OPTIONS = [
@@ -15,7 +16,19 @@ const IMAGE_OPTIONS = [
 ];
 
 const PRESET_CATEGORIES = ["Sosialisasi", "Edukasi", "Survey"];
-const CATEGORY_OTHER = "Lainnya";
+
+function splitInitialCategories(category: string | undefined) {
+  const parsed = parseCategories(category ?? "");
+  const presets = new Set(
+    parsed.filter((c) =>
+      PRESET_CATEGORIES.some((p) => p.toLowerCase() === c.toLowerCase()),
+    ),
+  );
+  const custom = parsed.filter(
+    (c) => !PRESET_CATEGORIES.some((p) => p.toLowerCase() === c.toLowerCase()),
+  );
+  return { presets, custom: custom.join(", ") };
+}
 
 type Props = {
   mode: "create" | "edit";
@@ -32,7 +45,6 @@ export default function PostForm({ mode, initialData }: Props) {
     coverImage: initialData?.coverImage ?? IMAGE_OPTIONS[0].value,
     date: initialData?.date ?? new Date().toISOString().slice(0, 10),
     author: initialData?.author ?? "Tim KKN Merawi Pangeran",
-    category: initialData?.category ?? PRESET_CATEGORIES[0],
     relatedMateriId: initialData?.relatedMateriId ?? "",
   });
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +54,20 @@ export default function PostForm({ mode, initialData }: Props) {
   const [uploading, setUploading] = useState(false);
   const [materiList, setMateriList] = useState<Materi[]>([]);
 
-  const isCustomCategory = !PRESET_CATEGORIES.includes(form.category);
+  const initialCategories = splitInitialCategories(initialData?.category);
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+    initialCategories.presets,
+  );
+  const [customCategories, setCustomCategories] = useState(initialCategories.custom);
+
+  function toggleCategory(cat: string) {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
+  }
 
   useEffect(() => {
     fetch("/api/admin/materi")
@@ -64,6 +89,15 @@ export default function PostForm({ mode, initialData }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    const category = formatCategories([
+      ...selectedCategories,
+      ...parseCategories(customCategories),
+    ]);
+    if (!category) {
+      setError("Pilih atau isi minimal satu kategori.");
+      return;
+    }
 
     let coverImage = form.coverImage;
 
@@ -103,7 +137,7 @@ export default function PostForm({ mode, initialData }: Props) {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, coverImage }),
+        body: JSON.stringify({ ...form, category, coverImage }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -144,44 +178,42 @@ export default function PostForm({ mode, initialData }: Props) {
         />
       </Field>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Kategori" htmlFor="category">
-          <select
-            id="category"
-            value={isCustomCategory ? CATEGORY_OTHER : form.category}
-            onChange={(e) =>
-              update("category", e.target.value === CATEGORY_OTHER ? "" : e.target.value)
-            }
-            className={inputClass}
-          >
-            {PRESET_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-            <option value={CATEGORY_OTHER}>{CATEGORY_OTHER} (isi sendiri)</option>
-          </select>
-          {isCustomCategory && (
-            <input
-              required
-              value={form.category}
-              onChange={(e) => update("category", e.target.value)}
-              placeholder="Tulis nama kategori"
-              className={`${inputClass} mt-2`}
-            />
-          )}
-        </Field>
-        <Field label="Tanggal" htmlFor="date">
-          <input
-            id="date"
-            type="date"
-            required
-            value={form.date}
-            onChange={(e) => update("date", e.target.value)}
-            className={inputClass}
-          />
-        </Field>
-      </div>
+      <Field label="Kategori (bisa pilih lebih dari satu)" htmlFor="customCategories">
+        <div className="flex flex-wrap gap-3">
+          {PRESET_CATEGORIES.map((cat) => (
+            <label
+              key={cat}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-dark-green)] has-[:checked]:border-transparent has-[:checked]:bg-[var(--color-dark-green)] has-[:checked]:text-[var(--color-beige)]"
+            >
+              <input
+                type="checkbox"
+                checked={selectedCategories.has(cat)}
+                onChange={() => toggleCategory(cat)}
+                className="sr-only"
+              />
+              {cat}
+            </label>
+          ))}
+        </div>
+        <input
+          id="customCategories"
+          value={customCategories}
+          onChange={(e) => setCustomCategories(e.target.value)}
+          placeholder="Kategori lainnya, pisahkan dengan koma (opsional)"
+          className={`${inputClass} mt-2`}
+        />
+      </Field>
+
+      <Field label="Tanggal" htmlFor="date">
+        <input
+          id="date"
+          type="date"
+          required
+          value={form.date}
+          onChange={(e) => update("date", e.target.value)}
+          className={inputClass}
+        />
+      </Field>
 
       <Field label="Penulis" htmlFor="author">
         <input

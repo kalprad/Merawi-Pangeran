@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, FileText, ArrowUpRight } from "lucide-react";
 import { getPostBySlug, getPosts, getMateriById } from "@/lib/data";
+import { hasOverlap } from "@/lib/categories";
+import CategoryTags from "@/components/CategoryTags";
 import type { Post } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -50,8 +52,8 @@ export default async function BlogDetailPage({
   ]);
 
   const otherPosts = allPosts.filter((p) => p.id !== post.id);
-  const sameCategory = otherPosts.filter((p) => p.category === post.category);
-  const rest = otherPosts.filter((p) => p.category !== post.category);
+  const sameCategory = otherPosts.filter((p) => hasOverlap(p.category, post.category));
+  const rest = otherPosts.filter((p) => !hasOverlap(p.category, post.category));
   const recommended = [...sameCategory, ...rest].slice(0, 3);
 
   return (
@@ -65,10 +67,14 @@ export default async function BlogDetailPage({
         Kembali ke Blog
       </Link>
 
-      <div className="mt-6 flex items-center gap-2 text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-        <span>{post.category}</span>
-        <span aria-hidden="true">&middot;</span>
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <CategoryTags value={post.category} />
+        <time
+          dateTime={post.date}
+          className="text-xs font-medium text-[var(--color-muted-foreground)]"
+        >
+          {formatDate(post.date)}
+        </time>
       </div>
       <h1 className="font-display mt-3 text-3xl text-[var(--color-dark-green)] sm:text-4xl">
         {post.title}
@@ -176,9 +182,7 @@ function RecommendedPosts({ posts }: { posts: Post[] }) {
               />
             </div>
             <div className="flex flex-1 flex-col p-4">
-              <span className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-                {post.category}
-              </span>
+              <CategoryTags value={post.category} />
               <h3 className="font-display mt-1 text-base text-[var(--color-dark-green)]">
                 {post.title}
               </h3>

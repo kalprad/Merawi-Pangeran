@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Download, FileText } from "lucide-react";
+import { parseCategories } from "@/lib/categories";
+import CategoryTags from "@/components/CategoryTags";
 import type { Materi } from "@/lib/types";
 
 function formatDate(date: string) {
@@ -14,13 +16,18 @@ function formatDate(date: string) {
 
 export default function MateriList({ materi }: { materi: Materi[] }) {
   const categories = useMemo(
-    () => ["Semua", ...Array.from(new Set(materi.map((m) => m.category)))],
+    () => [
+      "Semua",
+      ...Array.from(new Set(materi.flatMap((m) => parseCategories(m.category)))),
+    ],
     [materi],
   );
   const [active, setActive] = useState("Semua");
 
   const filtered =
-    active === "Semua" ? materi : materi.filter((m) => m.category === active);
+    active === "Semua"
+      ? materi
+      : materi.filter((m) => parseCategories(m.category).includes(active));
 
   return (
     <div>
@@ -59,9 +66,7 @@ export default function MateriList({ materi }: { materi: Materi[] }) {
                   <FileText size={20} aria-hidden="true" />
                 </div>
                 <div>
-                  <span className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-                    {item.category}
-                  </span>
+                  <CategoryTags value={item.category} />
                   <h3 className="font-display mt-1 text-lg text-[var(--color-dark-green)]">
                     {item.title}
                   </h3>
