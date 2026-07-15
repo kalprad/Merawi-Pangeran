@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { compressImage } from "@/lib/compressImage";
 import type { Post } from "@/lib/types";
 
 const IMAGE_OPTIONS = [
@@ -55,8 +56,9 @@ export default function PostForm({ mode, initialData }: Props) {
     if (customFile) {
       setUploading(true);
       try {
+        const compressed = await compressImage(customFile);
         const uploadForm = new FormData();
-        uploadForm.append("file", customFile);
+        uploadForm.append("file", compressed);
         uploadForm.append("folder", "Blog");
         const uploadRes = await fetch("/api/admin/upload", {
           method: "POST",
@@ -176,7 +178,7 @@ export default function PostForm({ mode, initialData }: Props) {
         </select>
       </Field>
 
-      <Field label="Atau unggah foto sendiri (opsional, maks 5MB)" htmlFor="customFile">
+      <Field label="Atau unggah foto sendiri (opsional, foto besar otomatis dikecilkan)" htmlFor="customFile">
         <input
           id="customFile"
           type="file"

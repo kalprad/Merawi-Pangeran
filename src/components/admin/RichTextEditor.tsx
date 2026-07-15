@@ -7,6 +7,7 @@ import Underline from "@tiptap/extension-underline";
 import TiptapImage from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
+import { compressImage } from "@/lib/compressImage";
 import {
   Bold as BoldIcon,
   Italic as ItalicIcon,
@@ -39,8 +40,9 @@ export default function RichTextEditor({
     async (file: File, editorInstance: Editor) => {
       setUploading(true);
       try {
+        const compressed = await compressImage(file);
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", compressed);
         formData.append("folder", uploadFolder);
         const res = await fetch("/api/admin/upload", {
           method: "POST",

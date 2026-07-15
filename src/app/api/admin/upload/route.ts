@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { uploadImage, type UploadFolder } from "@/lib/upload";
 
 const ALLOWED_FOLDERS: UploadFolder[] = ["Blog", "Tentang Kami"];
-const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+// Vercel menolak body request di atas ~4.5MB di level platform (di luar
+// kendali kode ini), jadi batas di sini dijaga di bawah itu. Foto sudah
+// dikecilkan otomatis di browser sebelum sampai sini (lihat
+// src/lib/compressImage.ts), jadi batas ini jarang kena kecuali untuk
+// file yang bukan foto biasa.
+const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4MB
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -20,7 +25,7 @@ export async function POST(request: Request) {
   }
   if (file.size > MAX_SIZE_BYTES) {
     return NextResponse.json(
-      { error: "Ukuran gambar maksimal 5MB." },
+      { error: "Ukuran gambar maksimal 4MB, coba pakai foto lain atau kecilkan dulu." },
       { status: 400 },
     );
   }

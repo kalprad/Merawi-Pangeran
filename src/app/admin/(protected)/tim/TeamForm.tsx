@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { compressImage } from "@/lib/compressImage";
 import type { TeamMember } from "@/lib/types";
 
 type Props = {
@@ -39,8 +40,9 @@ export default function TeamForm({ mode, initialData }: Props) {
     if (photoFile) {
       setUploading(true);
       try {
+        const compressed = await compressImage(photoFile);
         const uploadForm = new FormData();
-        uploadForm.append("file", photoFile);
+        uploadForm.append("file", compressed);
         uploadForm.append("folder", "Tentang Kami");
         const uploadRes = await fetch("/api/admin/upload", {
           method: "POST",
@@ -143,7 +145,7 @@ export default function TeamForm({ mode, initialData }: Props) {
 
       <div>
         <label htmlFor="photo" className="block text-sm font-medium text-[var(--color-dark-green)]">
-          Foto (maks 5MB, sebaiknya persegi panjang/potret)
+          Foto (sebaiknya persegi panjang/potret, foto besar otomatis dikecilkan)
         </label>
         <input
           id="photo"
