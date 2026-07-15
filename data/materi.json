@@ -1,13 +1,5 @@
 [
   {
-    "id": "4",
-    "title": "Manajemen Usaha Kecil bagi Pelaku UMKM",
-    "description": "Materi pendampingan UMKM meliputi pencatatan keuangan sederhana, strategi pemasaran digital, dan legalitas usaha (NIB).",
-    "category": "Ekonomi",
-    "date": "2026-02-20",
-    "fileUrl": ""
-  },
-  {
     "id": "3",
     "title": "Pengenalan Aplikasi SI-Bening untuk Perangkat Desa",
     "description": "Panduan penggunaan aplikasi SI-Bening bagi perangkat desa dalam mendesain dan merencanakan infrastruktur desa secara digital.",
@@ -16,18 +8,18 @@
     "fileUrl": ""
   },
   {
-    "id": "2",
-    "title": "Pencegahan Stunting dan Gizi Seimbang",
-    "description": "Materi edukasi kesehatan mengenai pencegahan stunting pada anak, pentingnya 1000 hari pertama kehidupan, dan pola makan bergizi seimbang untuk keluarga.",
-    "category": "Kesehatan",
-    "date": "2026-02-02",
-    "fileUrl": ""
-  },
-  {
     "id": "1",
     "title": "Literasi Hukum Dasar bagi Masyarakat Desa",
     "description": "Materi sosialisasi mengenai administrasi kependudukan, hak dan kewajiban warga, serta alur pengurusan dokumen kependudukan di tingkat desa.",
     "category": "Hukum",
+    "date": "2026-02-02",
+    "fileUrl": ""
+  },
+  {
+    "id": "2",
+    "title": "Pencegahan Stunting dan Gizi Seimbang",
+    "description": "Materi edukasi kesehatan mengenai pencegahan stunting pada anak, pentingnya 1000 hari pertama kehidupan, dan pola makan bergizi seimbang untuk keluarga.",
+    "category": "Kesehatan",
     "date": "2026-02-02",
     "fileUrl": ""
   }
