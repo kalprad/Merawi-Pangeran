@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft } from "lucide-react";
-import { getPostBySlug, getPosts } from "@/lib/data";
+import { ArrowLeft, FileText, ArrowUpRight } from "lucide-react";
+import { getPostBySlug, getPosts, getMateriById } from "@/lib/data";
+import type { Post } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +44,18 @@ export default async function BlogDetailPage({
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const [relatedMateri, allPosts] = await Promise.all([
+    post.relatedMateriId ? getMateriById(post.relatedMateriId) : Promise.resolve(undefined),
+    getPosts(),
+  ]);
+
+  const otherPosts = allPosts.filter((p) => p.id !== post.id);
+  const sameCategory = otherPosts.filter((p) => p.category === post.category);
+  const rest = otherPosts.filter((p) => p.category !== post.category);
+  const recommended = [...sameCategory, ...rest].slice(0, 3);
+
   return (
+    <>
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
       <Link
         href="/blog"
@@ -113,7 +125,68 @@ export default async function BlogDetailPage({
           </div>
         )}
       </div>
+
+      {relatedMateri && (
+        <Link
+          href="/materi"
+          className="glass-card mt-6 flex items-center gap-4 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5"
+        >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+            <FileText size={20} aria-hidden="true" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
+              Materi Sosialisasi Terkait
+            </p>
+            <p className="truncate font-medium text-[var(--color-dark-green)]">
+              {relatedMateri.title}
+            </p>
+          </div>
+          <ArrowUpRight size={18} className="shrink-0 text-[var(--color-midnight-teal)]" />
+        </Link>
+      )}
     </article>
+    <RecommendedPosts posts={recommended} />
+    </>
+  );
+}
+
+function RecommendedPosts({ posts }: { posts: Post[] }) {
+  if (posts.length === 0) return null;
+
+  return (
+    <section className="mx-auto max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
+      <h2 className="font-display text-2xl text-[var(--color-dark-green)]">
+        Berita Lainnya
+      </h2>
+      <div className="mt-6 grid gap-6 sm:grid-cols-3">
+        {posts.map((post) => (
+          <Link
+            key={post.id}
+            href={`/blog/${post.slug}`}
+            className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div className="relative h-36 w-full overflow-hidden">
+              <Image
+                src={post.coverImage}
+                alt={post.title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-4">
+              <span className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
+                {post.category}
+              </span>
+              <h3 className="font-display mt-1 text-base text-[var(--color-dark-green)]">
+                {post.title}
+              </h3>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 

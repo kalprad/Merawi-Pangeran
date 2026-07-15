@@ -8,6 +8,7 @@ export type Post = {
   date: string;
   author: string;
   category: string;
+  relatedMateriId?: string;
 };
 
 export type Materi = {

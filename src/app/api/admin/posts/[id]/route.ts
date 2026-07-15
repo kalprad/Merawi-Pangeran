@@ -8,8 +8,17 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { title, excerpt, content, coverImage, date, author, category, slug } =
-    body ?? {};
+  const {
+    title,
+    excerpt,
+    content,
+    coverImage,
+    date,
+    author,
+    category,
+    slug,
+    relatedMateriId,
+  } = body ?? {};
 
   if (!title || !excerpt || !content || !date || !author || !category) {
     return NextResponse.json(
@@ -43,6 +52,7 @@ export async function PUT(
     author,
     category,
     slug: finalSlug,
+    relatedMateriId: relatedMateriId || undefined,
   };
 
   await savePosts(posts);

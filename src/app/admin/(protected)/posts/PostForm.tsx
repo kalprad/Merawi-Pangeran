@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { compressImage } from "@/lib/compressImage";
-import type { Post } from "@/lib/types";
+import type { Post, Materi } from "@/lib/types";
 
 const IMAGE_OPTIONS = [
   { value: "/images/hero-sawah.jpg", label: "Sawah Desa Jetis" },
@@ -13,6 +13,9 @@ const IMAGE_OPTIONS = [
   { value: "/images/si-bening-banner.png", label: "Banner SI-Bening" },
   { value: "/images/mascot.png", label: "Maskot" },
 ];
+
+const PRESET_CATEGORIES = ["Sosialisasi", "Edukasi", "Survey"];
+const CATEGORY_OTHER = "Lainnya";
 
 type Props = {
   mode: "create" | "edit";
@@ -29,13 +32,24 @@ export default function PostForm({ mode, initialData }: Props) {
     coverImage: initialData?.coverImage ?? IMAGE_OPTIONS[0].value,
     date: initialData?.date ?? new Date().toISOString().slice(0, 10),
     author: initialData?.author ?? "Tim KKN Merawi Pangeran",
-    category: initialData?.category ?? "Kegiatan",
+    category: initialData?.category ?? PRESET_CATEGORIES[0],
+    relatedMateriId: initialData?.relatedMateriId ?? "",
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [customFile, setCustomFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [materiList, setMateriList] = useState<Materi[]>([]);
+
+  const isCustomCategory = !PRESET_CATEGORIES.includes(form.category);
+
+  useEffect(() => {
+    fetch("/api/admin/materi")
+      .then((res) => res.json())
+      .then((data) => setMateriList(Array.isArray(data) ? data : []))
+      .catch(() => setMateriList([]));
+  }, []);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -132,13 +146,30 @@ export default function PostForm({ mode, initialData }: Props) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Kategori" htmlFor="category">
-          <input
+          <select
             id="category"
-            required
-            value={form.category}
-            onChange={(e) => update("category", e.target.value)}
+            value={isCustomCategory ? CATEGORY_OTHER : form.category}
+            onChange={(e) =>
+              update("category", e.target.value === CATEGORY_OTHER ? "" : e.target.value)
+            }
             className={inputClass}
-          />
+          >
+            {PRESET_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+            <option value={CATEGORY_OTHER}>{CATEGORY_OTHER} (isi sendiri)</option>
+          </select>
+          {isCustomCategory && (
+            <input
+              required
+              value={form.category}
+              onChange={(e) => update("category", e.target.value)}
+              placeholder="Tulis nama kategori"
+              className={`${inputClass} mt-2`}
+            />
+          )}
         </Field>
         <Field label="Tanggal" htmlFor="date">
           <input
@@ -216,6 +247,28 @@ export default function PostForm({ mode, initialData }: Props) {
           uploadFolder="Blog"
           placeholder="Tulis isi berita di sini... bisa tebal, miring, garis bawah, penomoran, dan sisip gambar (tempel langsung atau tombol gambar)."
         />
+      </Field>
+
+      <Field
+        label="Materi Sosialisasi Terkait (opsional)"
+        htmlFor="relatedMateriId"
+      >
+        <select
+          id="relatedMateriId"
+          value={form.relatedMateriId}
+          onChange={(e) => update("relatedMateriId", e.target.value)}
+          className={inputClass}
+        >
+          <option value="">Tidak ada</option>
+          {materiList.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.title}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
+          Kalau dipilih, tautan materi ini akan tampil di halaman berita.
+        </p>
       </Field>
 
       {error && (

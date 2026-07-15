@@ -10,8 +10,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { title, excerpt, content, coverImage, date, author, category, slug } =
-    body ?? {};
+  const {
+    title,
+    excerpt,
+    content,
+    coverImage,
+    date,
+    author,
+    category,
+    slug,
+    relatedMateriId,
+  } = body ?? {};
 
   if (!title || !excerpt || !content || !date || !author || !category) {
     return NextResponse.json(
@@ -36,6 +45,7 @@ export async function POST(request: Request) {
     date,
     author,
     category,
+    relatedMateriId: relatedMateriId || undefined,
   };
 
   await savePosts([newPost, ...posts]);
