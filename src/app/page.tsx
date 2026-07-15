@@ -5,6 +5,7 @@ import FeatureCard from "@/components/FeatureCard";
 import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
 import CategoryTags from "@/components/CategoryTags";
+import Reveal from "@/components/Reveal";
 import { getPosts, getMateri, getMapPoints } from "@/lib/data";
 
 // Selalu ambil data terbaru tiap kali halaman dibuka (bukan versi lama yang
@@ -40,6 +41,14 @@ export default async function Home() {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-dark-green)]/90 via-[var(--color-dark-green)]/75 to-[var(--color-beige)]" />
+          <div
+            className="aurora-blob h-72 w-72 bg-[var(--color-rosy-brown)]/40 sm:h-96 sm:w-96"
+            style={{ top: "-4rem", left: "-4rem" }}
+          />
+          <div
+            className="aurora-blob h-72 w-72 bg-[var(--color-midnight-teal)]/40 sm:h-96 sm:w-96"
+            style={{ bottom: "-6rem", right: "-4rem", animationDelay: "-8s" }}
+          />
         </div>
 
         <SakuraDecor className="absolute -top-4 right-6 h-24 w-24 opacity-70 sm:right-16 sm:h-32 sm:w-32" />
@@ -68,10 +77,10 @@ export default async function Home() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/blog"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-rosy-brown)] px-6 py-3 text-sm font-semibold text-[var(--color-dark-green)] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-beige)]"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-rosy-brown)] px-6 py-3 text-sm font-semibold text-[var(--color-dark-green)] shadow-lg shadow-[var(--color-dark-green)]/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[var(--color-dark-green)]/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-beige)]"
             >
               Lihat Berita Kegiatan
-              <ArrowRight size={16} />
+              <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <Link
               href="/peta"
@@ -85,7 +94,7 @@ export default async function Home() {
 
       {/* STATS */}
       <section className="relative mx-auto -mt-16 max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="glass-card grid grid-cols-2 gap-4 rounded-3xl p-6 shadow-xl sm:grid-cols-4 sm:p-8">
+        <Reveal className="glass-card grid grid-cols-2 gap-4 rounded-3xl p-6 shadow-xl sm:grid-cols-4 sm:p-8">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-display text-3xl text-[var(--color-dark-green)] sm:text-4xl">
@@ -96,48 +105,60 @@ export default async function Home() {
               </p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* FEATURES */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Layanan Utama"
-          title="Semua informasi KKN dalam satu portal"
-          description="Empat pilar program kerja KKN Merawi Pangeran 2026 yang dapat kamu telusuri langsung di sini."
-        />
+        <Reveal>
+          <SectionHeading
+            eyebrow="Layanan Utama"
+            title="Semua informasi KKN dalam satu portal"
+            description="Empat pilar program kerja KKN Merawi Pangeran 2026 yang dapat kamu telusuri langsung di sini."
+          />
+        </Reveal>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard
-            href="/blog"
-            icon={Newspaper}
-            title="Blog Kegiatan"
-            description="Berita dan dokumentasi terbaru seputar program kerja tim KKN di Desa Jetis."
-          />
-          <FeatureCard
-            href="/materi"
-            icon={BookOpen}
-            title="Materi Sosialisasi"
-            description="Kumpulan materi sosialisasi hukum, kesehatan, ekonomi, dan teknologi yang telah dilaksanakan."
-          />
-          <FeatureCard
-            href="/peta"
-            icon={Map}
-            title="Peta Interaktif"
-            description="Peta sebaran kerusakan irigasi, UMKM, dan fasilitas umum di wilayah Desa Jetis."
-          />
-          <FeatureCard
-            href="/si-bening"
-            icon={Smartphone}
-            title="Aplikasi SI-Bening"
-            description="Sistem Informasi Bening untuk membantu perencanaan desain infrastruktur desa."
-          />
+          {[
+            {
+              href: "/blog",
+              icon: Newspaper,
+              title: "Blog Kegiatan",
+              description:
+                "Berita dan dokumentasi terbaru seputar program kerja tim KKN di Desa Jetis.",
+            },
+            {
+              href: "/materi",
+              icon: BookOpen,
+              title: "Materi Sosialisasi",
+              description:
+                "Kumpulan materi sosialisasi hukum, kesehatan, ekonomi, dan teknologi yang telah dilaksanakan.",
+            },
+            {
+              href: "/peta",
+              icon: Map,
+              title: "Peta Interaktif",
+              description:
+                "Peta sebaran kerusakan irigasi, UMKM, dan fasilitas umum di wilayah Desa Jetis.",
+            },
+            {
+              href: "/si-bening",
+              icon: Smartphone,
+              title: "Aplikasi SI-Bening",
+              description:
+                "Sistem Informasi Bening untuk membantu perencanaan desain infrastruktur desa.",
+            },
+          ].map((feature, i) => (
+            <Reveal key={feature.href} delay={i * 90}>
+              <FeatureCard {...feature} />
+            </Reveal>
+          ))}
         </div>
       </section>
 
       {/* ABOUT + MASCOT */}
       <section className="bg-[var(--color-muted)]/60 py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
-          <div>
+          <Reveal>
             <SectionHeading
               eyebrow="Tentang Kami"
               title="Empat klaster, satu tujuan: desa yang lebih sejahtera"
@@ -150,23 +171,25 @@ export default async function Home() {
               Kenali tim kami
               <ArrowRight size={16} />
             </Link>
-          </div>
-          <div className="relative mx-auto flex h-72 w-72 items-center justify-center sm:h-96 sm:w-96">
-            <div className="absolute inset-0 rounded-full bg-[var(--color-dark-green)]/5" />
-            <Image
-              src="/images/mascot.png"
-              alt="Maskot KKN Merawi Pangeran 2026"
-              width={384}
-              height={384}
-              className="relative h-full w-full object-contain"
-            />
-          </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="relative mx-auto flex h-72 w-72 items-center justify-center sm:h-96 sm:w-96">
+              <div className="absolute inset-0 rounded-full bg-[var(--color-dark-green)]/5" />
+              <Image
+                src="/images/mascot.png"
+                alt="Maskot KKN Merawi Pangeran 2026"
+                width={384}
+                height={384}
+                className="relative h-full w-full object-contain"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* LATEST POSTS */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading eyebrow="Terbaru" title="Berita kegiatan terkini" />
           <Link
             href="/blog"
@@ -175,40 +198,41 @@ export default async function Home() {
             Semua berita
             <ArrowRight size={16} />
           </Link>
-        </div>
+        </Reveal>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {latestPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative h-44 w-full overflow-hidden">
-                <Image
-                  src={post.coverImage}
-                  alt={post.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <CategoryTags value={post.category} />
-                <h3 className="font-display mt-2 text-lg text-[var(--color-dark-green)]">
-                  {post.title}
-                </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-[var(--color-muted-foreground)]">
-                  {post.excerpt}
-                </p>
-              </div>
-            </Link>
+          {latestPosts.map((post, i) => (
+            <Reveal key={post.id} delay={i * 90}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="relative h-44 w-full overflow-hidden">
+                  <Image
+                    src={post.coverImage}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <CategoryTags value={post.category} />
+                  <h3 className="font-display mt-2 text-lg text-[var(--color-dark-green)]">
+                    {post.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm text-[var(--color-muted-foreground)]">
+                    {post.excerpt}
+                  </p>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* SI-BENING CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-[var(--color-midnight-teal)] px-6 py-14 text-center sm:px-16">
+        <Reveal className="relative overflow-hidden rounded-3xl bg-[var(--color-midnight-teal)] px-6 py-14 text-center sm:px-16">
           <SakuraDecor className="absolute -left-6 -top-6 h-28 w-28 opacity-20" />
           <SakuraDecor className="absolute -bottom-8 right-0 h-32 w-32 opacity-20" />
           <p className="text-xs font-semibold tracking-[0.3em] text-[var(--color-rosy-brown)] uppercase">
@@ -228,7 +252,7 @@ export default async function Home() {
             <Smartphone size={16} />
             Unduh SI-Bening
           </Link>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

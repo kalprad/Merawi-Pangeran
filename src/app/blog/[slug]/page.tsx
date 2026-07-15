@@ -6,6 +6,7 @@ import { ArrowLeft, FileText, ArrowUpRight } from "lucide-react";
 import { getPostBySlug, getPosts, getMateriById } from "@/lib/data";
 import { hasOverlap } from "@/lib/categories";
 import CategoryTags from "@/components/CategoryTags";
+import Reveal from "@/components/Reveal";
 import type { Post } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -133,23 +134,25 @@ export default async function BlogDetailPage({
       </div>
 
       {relatedMateri && (
-        <Link
-          href="/materi"
-          className="glass-card mt-6 flex items-center gap-4 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5"
-        >
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
-            <FileText size={20} aria-hidden="true" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-              Materi Sosialisasi Terkait
-            </p>
-            <p className="truncate font-medium text-[var(--color-dark-green)]">
-              {relatedMateri.title}
-            </p>
-          </div>
-          <ArrowUpRight size={18} className="shrink-0 text-[var(--color-midnight-teal)]" />
-        </Link>
+        <Reveal>
+          <Link
+            href="/materi"
+            className="glass-card mt-6 flex items-center gap-4 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5"
+          >
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+              <FileText size={20} aria-hidden="true" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
+                Materi Sosialisasi Terkait
+              </p>
+              <p className="truncate font-medium text-[var(--color-dark-green)]">
+                {relatedMateri.title}
+              </p>
+            </div>
+            <ArrowUpRight size={18} className="shrink-0 text-[var(--color-midnight-teal)]" />
+          </Link>
+        </Reveal>
       )}
     </article>
     <RecommendedPosts posts={recommended} />
@@ -166,28 +169,29 @@ function RecommendedPosts({ posts }: { posts: Post[] }) {
         Berita Lainnya
       </h2>
       <div className="mt-6 grid gap-6 sm:grid-cols-3">
-        {posts.map((post) => (
-          <Link
-            key={post.id}
-            href={`/blog/${post.slug}`}
-            className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
-          >
-            <div className="relative h-36 w-full overflow-hidden">
-              <Image
-                src={post.coverImage}
-                alt={post.title}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-4">
-              <CategoryTags value={post.category} />
-              <h3 className="font-display mt-1 text-base text-[var(--color-dark-green)]">
-                {post.title}
-              </h3>
-            </div>
-          </Link>
+        {posts.map((post, i) => (
+          <Reveal key={post.id} delay={i * 90}>
+            <Link
+              href={`/blog/${post.slug}`}
+              className="glass-card group flex flex-col overflow-hidden rounded-3xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="relative h-36 w-full overflow-hidden">
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-4">
+                <CategoryTags value={post.category} />
+                <h3 className="font-display mt-1 text-base text-[var(--color-dark-green)]">
+                  {post.title}
+                </h3>
+              </div>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

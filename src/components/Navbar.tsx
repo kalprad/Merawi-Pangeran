@@ -3,16 +3,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/nav-links";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-beige)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-beige)]/80">
+    <header
+      className={`sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-beige)]/95 backdrop-blur transition-shadow duration-300 supports-[backdrop-filter]:bg-[var(--color-beige)]/80 ${
+        scrolled ? "nav-scrolled" : ""
+      }`}
+    >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <Link
           href="/"

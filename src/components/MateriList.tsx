@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Download, FileText } from "lucide-react";
 import { parseCategories } from "@/lib/categories";
 import CategoryTags from "@/components/CategoryTags";
+import Reveal from "@/components/Reveal";
 import type { Materi } from "@/lib/types";
 
 function formatDate(date: string) {
@@ -56,9 +57,11 @@ export default function MateriList({ materi }: { materi: Materi[] }) {
         </p>
       ) : (
         <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-          {filtered.map((item) => (
-            <li
+          {filtered.map((item, i) => (
+            <Reveal
               key={item.id}
+              as="li"
+              delay={Math.min(i, 6) * 80}
               className="glass-card flex flex-col rounded-3xl p-6"
             >
               <div className="flex items-start gap-3">
@@ -95,7 +98,7 @@ export default function MateriList({ materi }: { materi: Materi[] }) {
                   </span>
                 )}
               </div>
-            </li>
+            </Reveal>
           ))}
         </ul>
       )}

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Stethoscope, Scale, Cpu, Sprout, User } from "lucide-react";
 import InstagramIcon from "@/components/InstagramIcon";
 import SectionHeading from "@/components/SectionHeading";
+import Reveal from "@/components/Reveal";
 import { getTeam } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default async function TentangPage() {
     <div>
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div>
+          <Reveal>
             <SectionHeading
               eyebrow="Tentang Kami"
               title="KKN Merawi Pangeran 2026"
@@ -62,28 +63,33 @@ export default async function TentangPage() {
               Soshum, dan Medika — untuk mendampingi warga secara
               multidisiplin.
             </p>
-          </div>
-          <div className="relative mx-auto h-64 w-64 sm:h-80 sm:w-80">
-            <Image
-              src="/images/mascot.png"
-              alt="Maskot KKN Merawi Pangeran 2026"
-              fill
-              className="object-contain"
-            />
-          </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="relative mx-auto h-64 w-64 sm:h-80 sm:w-80">
+              <Image
+                src="/images/mascot.png"
+                alt="Maskot KKN Merawi Pangeran 2026"
+                fill
+                sizes="(min-width: 640px) 320px, 256px"
+                className="object-contain"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="bg-[var(--color-muted)]/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            align="center"
-            eyebrow="Klaster Keilmuan"
-            title="Empat klaster mahasiswa KKN"
-          />
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Klaster Keilmuan"
+              title="Empat klaster mahasiswa KKN"
+            />
+          </Reveal>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {divisions.map((div) => (
-              <div key={div.title} className="glass-card rounded-3xl p-6">
+            {divisions.map((div, i) => (
+              <Reveal key={div.title} delay={i * 90} className="glass-card rounded-3xl p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
                   <div.icon size={22} aria-hidden="true" />
                 </div>
@@ -93,7 +99,7 @@ export default async function TentangPage() {
                 <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
                   {div.description}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -101,11 +107,14 @@ export default async function TentangPage() {
 
       {team.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
+          <Reveal>
+            <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
+          </Reveal>
           <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {team.map((member) => (
-              <div
+            {team.map((member, i) => (
+              <Reveal
                 key={member.id}
+                delay={Math.min(i, 8) * 60}
                 className="glass-card flex flex-col overflow-hidden rounded-3xl"
               >
                 <div className="relative aspect-[4/5] w-full bg-[var(--color-muted)]">
@@ -148,19 +157,21 @@ export default async function TentangPage() {
                     </a>
                   )}
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
       )}
 
       <section className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:px-8">
-        <SectionHeading
-          align="center"
-          eyebrow="Lokasi"
-          title="Desa Jetis, Kecamatan Bandungan"
-          description="Kabupaten Semarang, Jawa Tengah — berada di kawasan lereng Gunung Ungaran yang sejuk, dengan mayoritas warga berprofesi sebagai petani dan pelaku UMKM rumahan."
-        />
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="Lokasi"
+            title="Desa Jetis, Kecamatan Bandungan"
+            description="Kabupaten Semarang, Jawa Tengah — berada di kawasan lereng Gunung Ungaran yang sejuk, dengan mayoritas warga berprofesi sebagai petani dan pelaku UMKM rumahan."
+          />
+        </Reveal>
       </section>
     </div>
   );

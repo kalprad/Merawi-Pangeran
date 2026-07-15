@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Ruler, FolderInput, ShieldCheck, Download } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
+import Reveal from "@/components/Reveal";
 import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -41,7 +42,7 @@ export default async function SiBeningPage() {
     <div>
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div>
+          <Reveal>
             <SectionHeading
               eyebrow="Aplikasi Resmi"
               title="SI-Bening — Sistem Informasi Bening"
@@ -74,9 +75,9 @@ export default async function SiBeningPage() {
                 ? "Tautan unduhan membuka halaman eksternal (Google Drive/lainnya)."
                 : "Tautan unduhan resmi akan diperbarui di halaman ini begitu aplikasi rilis."}
             </p>
-          </div>
+          </Reveal>
 
-          <div className="glass-card relative overflow-hidden rounded-3xl">
+          <Reveal delay={120} className="glass-card relative overflow-hidden rounded-3xl">
             <Image
               src="/images/si-bening-banner.png"
               alt="SI-Bening — Sistem Informasi Infrastruktur"
@@ -85,21 +86,24 @@ export default async function SiBeningPage() {
               className="h-full w-full object-cover"
               priority
             />
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="bg-[var(--color-muted)]/60 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            align="center"
-            eyebrow="Kenapa SI-Bening?"
-            title="Dibangun untuk mendukung desa"
-          />
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Kenapa SI-Bening?"
+              title="Dibangun untuk mendukung desa"
+            />
+          </Reveal>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {highlights.map((item) => (
-              <div
+            {highlights.map((item, i) => (
+              <Reveal
                 key={item.title}
+                delay={i * 100}
                 className="glass-card rounded-3xl p-6 text-center"
               >
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
@@ -111,7 +115,7 @@ export default async function SiBeningPage() {
                 <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
                   {item.description}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
