@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Stethoscope, Scale, HardHat, Landmark, User } from "lucide-react";
+import { Stethoscope, Scale, Cpu, Sprout, User } from "lucide-react";
 import InstagramIcon from "@/components/InstagramIcon";
 import SectionHeading from "@/components/SectionHeading";
 import { getTeam } from "@/lib/data";
@@ -15,28 +15,28 @@ export const dynamic = "force-dynamic";
 
 const divisions = [
   {
-    icon: HardHat,
-    title: "Infrastruktur",
+    icon: Cpu,
+    title: "Saintek",
     description:
-      "Memetakan kondisi irigasi dan fasilitas umum, serta mengembangkan aplikasi SI-Bening untuk perencanaan pembangunan desa.",
+      "Memetakan kondisi irigasi dan fasilitas umum, serta mengembangkan aplikasi SI-Bening untuk perencanaan infrastruktur desa.",
   },
   {
-    icon: Stethoscope,
-    title: "Kesehatan",
+    icon: Sprout,
+    title: "Agro",
     description:
-      "Menyelenggarakan sosialisasi pencegahan stunting dan pola hidup sehat bagi warga.",
+      "Mendampingi petani dan pelaku UMKM berbasis hasil bumi melalui pendataan sebaran usaha dan pelatihan manajemen usaha kecil.",
   },
   {
     icon: Scale,
-    title: "Hukum",
+    title: "Soshum",
     description:
       "Memberikan edukasi literasi hukum dasar dan administrasi kependudukan kepada masyarakat.",
   },
   {
-    icon: Landmark,
-    title: "Ekonomi",
+    icon: Stethoscope,
+    title: "Medika",
     description:
-      "Mendampingi pelaku UMKM melalui pendataan sebaran usaha dan pelatihan manajemen usaha kecil.",
+      "Menyelenggarakan sosialisasi pencegahan stunting dan pola hidup sehat bagi warga.",
   },
 ];
 
@@ -58,8 +58,9 @@ export default async function TentangPage() {
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--color-muted-foreground)]">
               Desa Jetis terletak di kaki kawasan pegunungan Bandungan yang
               dikenal dengan potensi pertanian dan pariwisatanya. Tim kami
-              hadir untuk mendampingi warga melalui empat bidang utama:
-              infrastruktur, kesehatan, hukum, dan ekonomi.
+              hadir dari empat klaster keilmuan yang berbeda — Saintek, Agro,
+              Soshum, dan Medika — untuk mendampingi warga secara
+              multidisiplin.
             </p>
           </div>
           <div className="relative mx-auto h-64 w-64 sm:h-80 sm:w-80">
@@ -77,8 +78,8 @@ export default async function TentangPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             align="center"
-            eyebrow="Program Kerja"
-            title="Empat bidang utama pendampingan"
+            eyebrow="Klaster Keilmuan"
+            title="Empat klaster mahasiswa KKN"
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {divisions.map((div) => (

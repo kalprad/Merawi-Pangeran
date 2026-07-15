@@ -139,8 +139,8 @@ export default async function Home() {
           <div>
             <SectionHeading
               eyebrow="Tentang Kami"
-              title="Empat bidang, satu tujuan: desa yang lebih sejahtera"
-              description="Tim KKN Merawi Pangeran 2026 hadir dengan pendekatan multidisiplin — infrastruktur, kesehatan, hukum, dan ekonomi — untuk mendampingi Desa Jetis menuju tata kelola yang lebih baik."
+              title="Empat klaster, satu tujuan: desa yang lebih sejahtera"
+              description="Tim KKN Merawi Pangeran 2026 hadir dari empat klaster keilmuan — Saintek, Agro, Soshum, dan Medika — untuk mendampingi Desa Jetis menuju tata kelola yang lebih baik."
             />
             <Link
               href="/tentang"
