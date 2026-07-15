@@ -110,6 +110,15 @@ h1, h2, h3, h4, .font-display {
   box-shadow: 0 8px 30px rgba(10, 51, 35, 0.1);
 }
 
+/* Hide scrollbar on the draggable gallery carousel track (see GalleryCarousel.tsx) */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getSettings } from "@/lib/data";
 import { getDriveGallery } from "@/lib/google-drive";
 import SectionHeading from "@/components/SectionHeading";
-import GalleryGrid from "@/components/GalleryGrid";
+import GalleryCarousel from "@/components/GalleryCarousel";
 
 export const metadata: Metadata = {
   title: "Galeri",
@@ -45,7 +45,7 @@ export default async function GaleriPage() {
         )}
 
         {gallery.status === "ok" && gallery.photos.length > 0 && (
-          <GalleryGrid photos={gallery.photos} />
+          <GalleryCarousel photos={gallery.photos} />
         )}
       </div>
     </div>
