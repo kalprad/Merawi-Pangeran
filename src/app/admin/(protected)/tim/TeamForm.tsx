@@ -17,6 +17,10 @@ export default function TeamForm({ mode, initialData }: Props) {
   const [role, setRole] = useState(initialData?.role ?? "");
   const [prodi, setProdi] = useState(initialData?.prodi ?? "");
   const [instagram, setInstagram] = useState(initialData?.instagram ?? "");
+  const [programs, setPrograms] = useState<string[]>(() => {
+    const initial = initialData?.programs ?? [];
+    return Array.from({ length: 5 }, (_, i) => initial[i] ?? "");
+  });
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     initialData?.photo ?? null,
@@ -72,7 +76,14 @@ export default function TeamForm({ mode, initialData }: Props) {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role, prodi, photo, instagram }),
+        body: JSON.stringify({
+          name,
+          role,
+          prodi,
+          photo,
+          instagram,
+          programs: programs.map((p) => p.trim()).filter(Boolean),
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -128,6 +139,27 @@ export default function TeamForm({ mode, initialData }: Props) {
           placeholder="contoh: Teknik Sipil"
           className={inputClass}
         />
+      </div>
+
+      <div>
+        <span className="block text-sm font-medium text-[var(--color-dark-green)]">
+          Program Kerja (opsional, tampil saat anggota diklik di halaman Tentang Kami)
+        </span>
+        <div className="mt-1 space-y-2">
+          {programs.map((program, i) => (
+            <input
+              key={i}
+              value={program}
+              onChange={(e) => {
+                const next = [...programs];
+                next[i] = e.target.value;
+                setPrograms(next);
+              }}
+              placeholder={`Program kerja ${i + 1}`}
+              className={inputClass}
+            />
+          ))}
+        </div>
       </div>
 
       <div>

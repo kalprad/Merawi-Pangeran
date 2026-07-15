@@ -32,6 +32,7 @@ export type TeamMember = {
   prodi?: string;
   photo: string;
   instagram?: string;
+  programs?: string[];
 };
 
 export type MapPointCategory = "irigasi" | "umkm" | "fasilitas";

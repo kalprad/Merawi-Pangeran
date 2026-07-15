@@ -7,7 +7,7 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { name, role, prodi, photo, instagram } = body ?? {};
+  const { name, role, prodi, photo, instagram, programs } = body ?? {};
 
   if (!name || !role) {
     return NextResponse.json(
@@ -29,6 +29,7 @@ export async function PUT(
     prodi: prodi ?? team[index].prodi ?? "",
     photo: photo || team[index].photo,
     instagram: instagram ?? team[index].instagram ?? "",
+    programs: Array.isArray(programs) ? programs.filter(Boolean) : (team[index].programs ?? []),
   };
 
   await saveTeam(team);

@@ -1,11 +1,108 @@
 [
   {
-    "id": "00dd8d32-3b8f-4501-afa4-8e7a22fed221",
-    "name": "Anika Minerva Pramono",
-    "role": "Kormasit",
-    "photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Tentang%20Kami/1784117703145-dsc02496.JPG",
-    "prodi": "Hukum 2023",
-    "instagram": ""
+    "id": "3d5d780b-0778-45d9-a873-4c4930fa815e",
+    "name": "Rizki Haikal Pradana",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Sosialisasi Mitigasi Kebencanaan Melalui Demonstrasi Struktur Resilien",
+      "Pembuatan Aplikasi Otomatisasi Desain Talud untuk Proteksi Lahan Pertanian dan Akses Distribusi Ekonomi Desa.",
+      "Pembuatan Aplikasi Perhitungan Rancangan Anggaran Biaya (RAB) Proyek Otomatis",
+      "Pembuatan Aplikasi Perancangan dan Evaluasi Struktur Jembatan Beton Bentang Pendek Eksisting untuk Irigasi Menurut SE Binamarga 2021",
+      "Pembuatan Aplikasi Perhitungan, Evaluasi, dan Rekomendasi Perbaikan Jaringan Irigasi Pertanian"
+    ]
+  },
+  {
+    "id": "64f6567d-353c-465b-862d-38439aa434b9",
+    "name": "Irene Paskhalita Diandra",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Edukasi Literasi Keuangan Digital dan Pencegahan Pinjaman Online Ilegal bagi Warga Desa sebagai Upaya Penguatan Kemandirian Ekonomi Masyarakat ( PKK )",
+      "Penguatan Kesadaran Anti-Bullying dan Pencegahan Kekerasan pada Siswa Sekolah Dasar",
+      "Optimalisasi Media Sosial sebagai Sarana Promosi Digital untuk Meningkatkan Daya Saing UMKM Desa ( Prangkat Desa )",
+      "Workshop “Kenali Uang dan Usaha Sederhana” bagi Anak Sekolah Dasar",
+      "Edukasi Perlindungan Diri dan Pencegahan Kekerasan Seksual pada Anak Usia Sekolah Dasar ( Interdispliner , Napil )"
+    ]
+  },
+  {
+    "id": "4d1f0b8d-14a9-4981-b662-b222655483ea",
+    "name": "Salma Salsabila Zahra",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "PANTAU TUMBUH (Alat Deteksi Tinggi Badan Cerdas Berbasis Sensor)",
+      "ZEROWASTE MACHINE (Pencacah Limbah Organik dari Material Daur Ulang)",
+      "GREENKITCH (Pengolahan Limbah Dapur Menjadi Eco Enzyme Bernilai Guna)",
+      "THERMACOOP (Optimasi Termal Kandang Ternak Berbasis Analisis Fisika Bangunan)",
+      "CERDAS LISTRIK (Edukasi Elektronika dan Keselamatan Penggunaan Listrik)"
+    ]
+  },
+  {
+    "id": "9f518b49-0bba-42b2-aef4-3953862721b8",
+    "name": "M Nafil Haikal",
+    "role": "Kormanit",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Rimbawan Kecil",
+      "Sosialisasi Minat dan Bakat Gen Z",
+      "Pemeliharaan tanaman (mendangir dan penyiraman",
+      "Pembuatan rorak di lahan pertanian untuk mencegah luapan air",
+      "Pengembangan Budidaya Bunga Berkualitas untuk Meningkatkan Kesejahteraan Petani"
+    ]
+  },
+  {
+    "id": "b420abf1-b12b-40da-9046-846888535321",
+    "name": "Anggi Grishella Putri Aurelia",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Sosilasisasi Zero Waste Farming Class (ZEFARM Class)",
+      "Festival Menyongsong Kemerdekaan Pemuda Desa",
+      "Pembuatan pengharum ruangan DIFUSER berbasis bahan alami (ECOFRAGRANT)",
+      "Sosialisasi pemilihan dan perancangan kemasan tepat guna (SMARTPACK)",
+      "Sahabat Buah"
+    ]
+  },
+  {
+    "id": "3a166396-bde3-4186-b63b-c28f1f364120",
+    "name": "Isna Maratul Azizah",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Keluarga Sadar DAGUSIBU (Dapatkan, Gunakan, Simpan, dan Buang Obat)",
+      "Edukasi Cerdas Memilih Makanan Kemasan bagi Anak",
+      "Pendidikan Kesehatan Anak Dasar",
+      "SWARA (Swamedikasi Aman dan Rasional)",
+      "Kenali Obatmu"
+    ]
+  },
+  {
+    "id": "e7794e26-bec2-4960-a72c-b48d0b98546b",
+    "name": "Felicia Averine",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Ibu Siap, Anak Sehat (ISAS) [Tisya]",
+      "GLOW UP: Gerakan Literasi Online Waspada untuk Produk Skincare [Farras]",
+      "CERIA: Cegah Cedera Rumah pada Anak [Raka]",
+      "CEMARA: Cegah Campak, Lengkapi MR Anak [Fazrin]",
+      "SAPA SEHAT: Skrining, Arahan Pertolongan Awal, dan Senam Sehat Dewasa"
+    ]
   },
   {
     "id": "9769e435-8554-4808-9223-d0ab6b6ffd84",
@@ -13,6 +110,118 @@
     "role": "Kormasit",
     "photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Tentang%20Kami/1784117761547-dsc02596.JPG",
     "prodi": "Teknik Geodesi 2023",
-    "instagram": ""
+    "instagram": "",
+    "programs": [
+      "Peremajaan Batas Patok Dusun di Desa Jetis",
+      "Pemetaan Partisipatif Klaim Sengketa Tanah Berbasis Sistem Informasi Geografis dan Integrasi Drone 360° di Desa Jetis",
+      "Peta Administrasi & Fasilitas Desa",
+      "Peta Lahan Permaculture pada dusun di Jetis",
+      "Pemetaan dan Inventarisasi Spasial Jaringan Irigasi Eksisting Berbasis Sistem Informasi Geografis di Desa Jetis"
+    ]
+  },
+  {
+    "id": "282338e9-9336-469f-983d-b56602c2c7b3",
+    "name": "Farras Ulinnuha",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "PIRING KANCIL (Pilar Gizi Seimbang & Cuci Tangan Pakai Sabun Anak Kecil)",
+      "Aku Dokter Kecil: Pelatihan keterampilan dasar pertolongan pertama pada kecelakaan (P3K), seperti penanganan luka ringan, mimisan, dan pingsan.",
+      "PETA MATA (Pemeriksaan Ketajaman dan Edukasi Kesehatan Mata Anak)",
+      "Tumbuh Sehat, Remaja Hebat: Edukasi Menstruasi + Anemia untuk Perempuan Karang Taruna",
+      "Pelatihan Basic Life Support (BLS) Mandiri Desa"
+    ]
+  },
+  {
+    "id": "e86f1aa1-d9dd-40c8-b193-898f2f67e022",
+    "name": "Yassinta Nurlaily Ramadhani",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "TOOTHVENTURE: Petualangan Gigi Sehat",
+      "NutriPlate: Gizi seimbang cegah stunting",
+      "SIAGA GIGI: Siap Jaga Gigi Sejak Dini",
+      "Pojok Obat Keluarga",
+      "KREATIF: Kreasi Edukatif Anak Aktif dan Inovatif"
+    ]
+  },
+  {
+    "id": "00dd8d32-3b8f-4501-afa4-8e7a22fed221",
+    "name": "Anika Minerva Pramono",
+    "role": "Kormasit",
+    "photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Tentang%20Kami/1784117703145-dsc02496.JPG",
+    "prodi": "Hukum 2023",
+    "instagram": "",
+    "programs": [
+      "PAJAK BIJAK (Sosialisasi Pentingnya Membayar Pajak)",
+      "KREASI DIGITAL (Konten Kreatif Solusi Promosi Digital)",
+      "SI-HKI (Sosialisasi & Pendampingan Merek UMKM)",
+      "LENTERA MUDA (Literasi Etika & Aturan Hukum Remaja Cerdas)",
+      "KAPE-DESA (Kapasitas & Evaluasi Perangkat Desa)"
+    ]
+  },
+  {
+    "id": "d149f49c-d7e9-41cf-a8a5-c40f90ae2528",
+    "name": "Sheila Pratisya Salsabila",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Sosialisasi \"Pangan Lokal Sehat & Bergizi\" untuk anak sekolah",
+      "SCAN & CARE: Penerapan Barcode Edukasi untuk Panduan Perawatan Bunga Bagi Pengusaha Bunga",
+      "Pelatihan \"Digital Hospitality\" (Review Management) untuk UMKM",
+      "Sosialisasi Sadar Wisata Dan Sapta Pesona untuk Karang Taruna",
+      "Ekspresi Jiwa Cilik (Psikoedukasi Regulasi Emosi melalui Art Therapy)"
+    ]
+  },
+  {
+    "id": "c23e7e06-4e28-4c4c-9589-7ecd3cadd965",
+    "name": "Rakka Adhi Pratama",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Sosialisasi Program Pertanian Permaculture",
+      "AgroTech Kids: Pengenalan Teknologi Pangan dan Pertanian",
+      "Optimalisasi Budidaya Alpukat untuk Meningkatkan Produktivitas dan Pendapatan Masyarakat",
+      "Edukasi Ketahanan Pangan Keluarga",
+      "Pembuatan Video Profil Desa sebagai Media Informasi dan Promosi Potensi Desa"
+    ]
+  },
+  {
+    "id": "6a483d05-9857-4cc9-9c44-8464553ad3ed",
+    "name": "Fauzan Rasyid Yulianto",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "Mineral Mandiri: Sosialisasi dan Praktik Pembuatan Mineral Block",
+      "Sosialisasi Perencanaan Pengembangan Kandang Domba untuk Mendukung Produktivitas Peternakan Rakyat di Desa Jetis",
+      "Sehat Mulai dari Kandang: Edukasi Biosecurity dan Sanitasi Kandang",
+      "Sarapan Sehat, Seni Hebat: Sarapan Telur & Mozaik Cangkang Telur",
+      "Hewan adalah Teman: Pengenalan Konsep Animal Welfare"
+    ]
+  },
+  {
+    "id": "7f10c558-ffb9-4091-bdd5-e7fb0ad9a13d",
+    "name": "Hafilah Mahardika Pratiwi",
+    "role": "Anggota",
+    "prodi": "",
+    "photo": "",
+    "instagram": "",
+    "programs": [
+      "\"Peta Kemiringan Lahan untuk Mendukung Optimalisasi Pertanian\"",
+      "Peta Persebaran dan Analisis Aksesibilitas Sekolah",
+      "Peta Persebaran dan Potensi Komoditas Alpukat",
+      "Peta Tematik Persebaran UMKM Berbasis SIG",
+      "Edukasi Pembacaan Peta untuk Meningkatkan Literasi Spasial Siswa Sekolah Dasar"
+    ]
   }
 ]
