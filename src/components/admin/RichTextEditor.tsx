@@ -6,12 +6,17 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TiptapImage from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
 import {
   Bold as BoldIcon,
   Italic as ItalicIcon,
   Underline as UnderlineIcon,
   ListOrdered,
   ImagePlus,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
 } from "lucide-react";
 
 type Props = {
@@ -62,6 +67,9 @@ export default function RichTextEditor({
       }),
       Placeholder.configure({
         placeholder: placeholder ?? "Tulis isi berita di sini...",
+      }),
+      TextAlign.configure({
+        types: ["paragraph", "heading"],
       }),
     ],
     content: value,
@@ -136,6 +144,37 @@ export default function RichTextEditor({
           label="Penomoran"
         >
           <ListOrdered size={16} />
+        </ToolbarButton>
+
+        <div className="mx-1 h-5 w-px bg-[var(--color-border)]" aria-hidden="true" />
+
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "left" })}
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          label="Rata kiri"
+        >
+          <AlignLeft size={16} />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "center" })}
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          label="Rata tengah"
+        >
+          <AlignCenter size={16} />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "right" })}
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          label="Rata kanan"
+        >
+          <AlignRight size={16} />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "justify" })}
+          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+          label="Rata kiri-kanan (justify)"
+        >
+          <AlignJustify size={16} />
         </ToolbarButton>
 
         <div className="mx-1 h-5 w-px bg-[var(--color-border)]" aria-hidden="true" />
