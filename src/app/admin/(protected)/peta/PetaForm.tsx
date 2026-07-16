@@ -36,6 +36,7 @@ import type {
   MapLayerCategory,
   MapLayerPhotoConfig,
 } from "@/lib/types";
+import { slugify } from "@/lib/slugify";
 
 type Props = {
   mode: "create" | "edit";
@@ -161,17 +162,6 @@ const DEFAULT_COLORS = [
   "#0a3323",
 ];
 
-function slugify(value: string): string {
-  return (
-    value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 40) || "peta"
-  );
-}
-
 function detectProperties(features: RawFeature[]): string[] {
   const keys = new Set<string>();
   for (const f of features.slice(0, 300)) {
@@ -207,17 +197,31 @@ function computeCategories(
   });
 }
 
+type GeojsonSource =
+  | { kind: "existing"; url: string; name: string; features: RawFeature[] }
+  | { kind: "new"; file: File; name: string; features: RawFeature[] };
+
+function filenameFromUrl(url: string): string {
+  const last = url.split("/").pop() ?? url;
+  try {
+    return decodeURIComponent(last);
+  } catch {
+    return last;
+  }
+}
+
 export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
   const router = useRouter();
 
   const [title, setTitle] = useState(initialData?.title ?? "");
   const slug = mode === "edit" ? (initialData?.slug ?? "") : slugify(title);
 
-  const [features, setFeatures] = useState<RawFeature[]>([]);
-  const [detectedProperties, setDetectedProperties] = useState<string[]>([]);
-  const [geojsonFile, setGeojsonFile] = useState<File | null>(null);
-  const [geojsonUrl, setGeojsonUrl] = useState(initialData?.geojsonUrl ?? "");
-  const [geojsonReady, setGeojsonReady] = useState(mode === "edit");
+  const [geojsonSources, setGeojsonSources] = useState<GeojsonSource[]>([]);
+  const [geojsonLoadingExisting, setGeojsonLoadingExisting] = useState(mode === "edit");
+  const [isDraggingGeojson, setIsDraggingGeojson] = useState(false);
+
+  const features = geojsonSources.flatMap((s) => s.features);
+  const detectedProperties = detectProperties(features);
 
   const [nameProperty, setNameProperty] = useState(initialData?.fields.name ?? "");
   const [categoryProperty, setCategoryProperty] = useState(
@@ -257,60 +261,78 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
   const [loading, setLoading] = useState(false);
   const [uploadingGeojson, setUploadingGeojson] = useState(false);
 
-  // Mode sunting: ambil isi GeoJSON yang sudah ada supaya daftar properti
-  // dan nama fitur untuk pemetaan foto ikut terisi otomatis.
+  // Mode sunting: ambil isi semua GeoJSON yang sudah ada supaya daftar
+  // properti dan nama fitur untuk pemetaan foto ikut terisi otomatis.
   useEffect(() => {
-    if (mode !== "edit" || !initialData?.geojsonUrl) return;
-    fetch(initialData.geojsonUrl)
-      .then((res) => res.json())
-      .then((json) => {
-        const feats = Array.isArray(json?.features) ? json.features : [];
-        setFeatures(feats);
-        setDetectedProperties(detectProperties(feats));
+    if (mode !== "edit" || !initialData?.geojsonUrls?.length) return;
+    Promise.all(
+      initialData.geojsonUrls.map(async (url): Promise<GeojsonSource> => {
+        const res = await fetch(url);
+        const json = await res.json();
+        const feats: RawFeature[] = Array.isArray(json?.features) ? json.features : [];
+        return { kind: "existing", url, name: filenameFromUrl(url), features: feats };
+      }),
+    )
+      .then((sources) => {
+        setGeojsonSources(sources);
+        setGeojsonLoadingExisting(false);
       })
       .catch(() => {
-        setError("Gagal memuat isi GeoJSON yang sudah ada. Unggah ulang jika perlu.");
+        setError("Gagal memuat sebagian isi GeoJSON yang sudah ada. Unggah ulang jika perlu.");
+        setGeojsonLoadingExisting(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  function handleGeojsonFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-    setGeojsonFile(file);
-    setGeojsonReady(false);
-    setError(null);
-    if (!file) return;
-
-    file
-      .text()
-      .then((text) => {
-        const json = JSON.parse(text);
-        if (json?.type !== "FeatureCollection" || !Array.isArray(json.features)) {
-          setError("File harus berupa GeoJSON FeatureCollection.");
-          return;
-        }
-        const feats: RawFeature[] = json.features;
-        setFeatures(feats);
-        setDetectedProperties(detectProperties(feats));
-        setGeojsonReady(true);
-        // Reset pemetaan properti karena file baru bisa punya struktur berbeda.
-        setNameProperty("");
-        setCategoryProperty("");
-        setGoogleMapsProperty("");
-        setInfoFields([]);
-        setCategories([]);
-        setPhotoMap({});
-        setPhotoProperty("");
-      })
-      .catch(() => {
-        setError("Gagal membaca file sebagai GeoJSON (bukan JSON valid).");
-      });
+  // Sinkronkan daftar kategori legenda saat properti kategori dipilih, atau
+  // saat nilai yang terdeteksi berubah (mis. setelah menambah/menghapus
+  // file GeoJSON). Dijalankan di badan render -- bukan di dalam efek --
+  // mengikuti pola "adjust state saat nilai turunan berubah" dari
+  // dokumentasi React, supaya tidak memicu render tambahan yang sia-sia.
+  const detectedCategoryValues = categoryProperty ? detectValues(features, categoryProperty) : [];
+  const categorySyncKey = `${categoryProperty}::${detectedCategoryValues.join("|")}`;
+  const [categoriesSyncedFor, setCategoriesSyncedFor] = useState("");
+  if (categoryProperty && categoriesSyncedFor !== categorySyncKey) {
+    setCategoriesSyncedFor(categorySyncKey);
+    setCategories((prev) => computeCategories(detectedCategoryValues, prev));
   }
 
-  function handleCategoryPropertyChange(value: string) {
-    setCategoryProperty(value);
-    const values = detectValues(features, value);
-    setCategories(computeCategories(values, categories));
+  function addGeojsonFiles(files: File[]) {
+    setError(null);
+    for (const file of files) {
+      file
+        .text()
+        .then((text) => {
+          const json = JSON.parse(text);
+          if (json?.type !== "FeatureCollection" || !Array.isArray(json.features)) {
+            setError(`"${file.name}" bukan GeoJSON FeatureCollection yang valid.`);
+            return;
+          }
+          const feats: RawFeature[] = json.features;
+          setGeojsonSources((prev) => [
+            ...prev,
+            { kind: "new", file, name: file.name, features: feats },
+          ]);
+        })
+        .catch(() => {
+          setError(`Gagal membaca "${file.name}" sebagai GeoJSON (bukan JSON valid).`);
+        });
+    }
+  }
+
+  function removeGeojsonSource(index: number) {
+    setGeojsonSources((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleGeojsonFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    addGeojsonFiles(Array.from(e.target.files ?? []));
+    e.target.value = "";
+  }
+
+  function handleGeojsonDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDraggingGeojson(false);
+    addGeojsonFiles(Array.from(e.dataTransfer.files ?? []));
   }
 
   function updateCategory(index: number, patch: Partial<MapLayerCategory>) {
@@ -421,37 +443,38 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
       setError("Pilih properti yang menjadi nama fitur.");
       return;
     }
+    if (geojsonSources.length === 0) {
+      setError("Unggah minimal satu file GeoJSON.");
+      return;
+    }
 
-    let finalGeojsonUrl = geojsonUrl;
-
-    if (geojsonFile) {
-      setUploadingGeojson(true);
+    setUploadingGeojson(true);
+    const geojsonUrls: string[] = [];
+    for (const source of geojsonSources) {
+      if (source.kind === "existing") {
+        geojsonUrls.push(source.url);
+        continue;
+      }
       try {
         const form = new FormData();
-        form.append("file", geojsonFile);
+        form.append("file", source.file);
         form.append("kind", "geojson");
         form.append("slug", slug);
         const res = await fetch("/api/admin/peta/upload", { method: "POST", body: form });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
-          setError(data.error ?? "Gagal mengunggah GeoJSON.");
+          setError(data.error ?? `Gagal mengunggah "${source.name}".`);
           setUploadingGeojson(false);
           return;
         }
-        finalGeojsonUrl = data.url;
-        setGeojsonUrl(data.url);
+        geojsonUrls.push(data.url);
       } catch {
-        setError("Terjadi kesalahan jaringan saat mengunggah GeoJSON.");
+        setError(`Terjadi kesalahan jaringan saat mengunggah "${source.name}".`);
         setUploadingGeojson(false);
         return;
       }
-      setUploadingGeojson(false);
     }
-
-    if (!finalGeojsonUrl) {
-      setError("Unggah file GeoJSON terlebih dahulu.");
-      return;
-    }
+    setUploadingGeojson(false);
 
     const photo: MapLayerPhotoConfig =
       photoMode === "map"
@@ -471,7 +494,7 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
         body: JSON.stringify({
           title,
           slug,
-          geojsonUrl: finalGeojsonUrl,
+          geojsonUrls,
           fields: {
             name: nameProperty,
             category: categoryProperty || undefined,
@@ -517,21 +540,68 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
       </Field>
 
       <Field label="Unggah GeoJSON" htmlFor="geojson">
-        <input
-          id="geojson"
-          type="file"
-          accept=".geojson,.json,application/geo+json,application/json"
-          onChange={handleGeojsonFileChange}
-          className={`${inputClass} cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)]`}
-        />
-        {mode === "edit" && !geojsonFile && geojsonUrl && (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDraggingGeojson(true);
+          }}
+          onDragLeave={() => setIsDraggingGeojson(false)}
+          onDrop={handleGeojsonDrop}
+          className={`rounded-xl border-2 border-dashed p-3 transition-colors duration-150 ${
+            isDraggingGeojson
+              ? "border-[var(--color-midnight-teal)] bg-[var(--color-muted)]"
+              : "border-[var(--color-border)]"
+          }`}
+        >
+          <input
+            id="geojson"
+            type="file"
+            accept=".geojson,.json,application/geo+json,application/json"
+            multiple
+            onChange={handleGeojsonFileChange}
+            className={`${inputClass} cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)]`}
+          />
+          <p className="mt-1.5 text-[11px] text-[var(--color-muted-foreground)]">
+            Bisa lebih dari satu file sekaligus -- semua fitur akan digabung jadi satu jenis
+            peta. Seret file ke sini atau pilih beberapa file sekaligus.
+          </p>
+        </div>
+
+        {geojsonLoadingExisting && (
           <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
-            Memakai GeoJSON yang sudah ada. Pilih file untuk menggantinya.
+            Memuat GeoJSON yang sudah ada...
           </p>
         )}
-        {geojsonReady && (
+
+        {geojsonSources.length > 0 && (
+          <ul className="mt-2 space-y-1">
+            {geojsonSources.map((source, i) => (
+              <li
+                key={`${source.kind}-${source.name}-${i}`}
+                className="flex items-center justify-between gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs"
+              >
+                <span className="truncate text-[var(--color-dark-green)]">
+                  {source.name}{" "}
+                  <span className="text-[var(--color-muted-foreground)]">
+                    ({source.features.length} fitur{source.kind === "new" ? ", baru" : ""})
+                  </span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeGeojsonSource(i)}
+                  className="shrink-0 cursor-pointer font-semibold text-red-600 hover:underline"
+                >
+                  Hapus
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {geojsonSources.length > 0 && (
           <p className="mt-1 text-xs font-medium text-[var(--color-midnight-teal)]">
-            {features.length} fitur terbaca, {detectedProperties.length} properti terdeteksi.
+            Total {features.length} fitur dari {geojsonSources.length} file,{" "}
+            {detectedProperties.length} properti terdeteksi.
           </p>
         )}
       </Field>
@@ -566,7 +636,7 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
               <select
                 id="categoryProperty"
                 value={categoryProperty}
-                onChange={(e) => handleCategoryPropertyChange(e.target.value)}
+                onChange={(e) => setCategoryProperty(e.target.value)}
                 className={inputClass}
               >
                 {propertyOptions.map((p) => (

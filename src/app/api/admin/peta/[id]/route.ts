@@ -7,12 +7,12 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { title, geojsonUrl, fields, categories, photo, downloadUrl, order } =
+  const { title, geojsonUrls, fields, categories, photo, downloadUrl, order } =
     body ?? {};
 
-  if (!title || !geojsonUrl || !fields?.name) {
+  if (!title || !Array.isArray(geojsonUrls) || geojsonUrls.length === 0 || !fields?.name) {
     return NextResponse.json(
-      { error: "Judul, GeoJSON, dan properti nama fitur wajib diisi." },
+      { error: "Judul, minimal satu GeoJSON, dan properti nama fitur wajib diisi." },
       { status: 400 },
     );
   }
@@ -26,7 +26,7 @@ export async function PUT(
   layers[index] = {
     ...layers[index],
     title,
-    geojsonUrl,
+    geojsonUrls,
     fields,
     categories: Array.isArray(categories) ? categories : [],
     photo: photo ?? { mode: "none" },

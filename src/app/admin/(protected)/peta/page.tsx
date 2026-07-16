@@ -2,8 +2,79 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, UploadCloud } from "lucide-react";
 import type { MapLayer } from "@/lib/types";
+import { slugify } from "@/lib/slugify";
+
+const NAME_PROPERTY_HINTS = ["nama", "name", "namobj", "judul", "title", "label"];
+
+function guessNameProperty(properties: Record<string, unknown>): string {
+  const keys = Object.keys(properties);
+  const hinted = keys.find((k) => NAME_PROPERTY_HINTS.includes(k.toLowerCase()));
+  if (hinted) return hinted;
+  const firstString = keys.find((k) => typeof properties[k] === "string");
+  return firstString ?? keys[0] ?? "";
+}
+
+function stripExtension(fileName: string): string {
+  return fileName.replace(/\.[^./\\]+$/, "").trim();
+}
+
+type ImportResult = { ok: true; title: string } | { ok: false; name: string; error: string };
+
+async function importGeojsonFile(file: File): Promise<ImportResult> {
+  try {
+    const text = await file.text();
+    const json = JSON.parse(text);
+    if (json?.type !== "FeatureCollection" || !Array.isArray(json.features)) {
+      throw new Error("Bukan GeoJSON FeatureCollection yang valid.");
+    }
+
+    const title = stripExtension(file.name) || "Peta Baru";
+    const slug = slugify(title);
+    const nameProperty = guessNameProperty(
+      (json.features[0]?.properties ?? {}) as Record<string, unknown>,
+    );
+
+    const uploadForm = new FormData();
+    uploadForm.append("file", file);
+    uploadForm.append("kind", "geojson");
+    uploadForm.append("slug", slug);
+    const uploadRes = await fetch("/api/admin/peta/upload", {
+      method: "POST",
+      body: uploadForm,
+    });
+    const uploadData = await uploadRes.json().catch(() => ({}));
+    if (!uploadRes.ok) {
+      throw new Error(uploadData.error ?? "Gagal mengunggah GeoJSON.");
+    }
+
+    const createRes = await fetch("/api/admin/peta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        slug,
+        geojsonUrls: [uploadData.url],
+        fields: { name: nameProperty },
+        categories: [],
+        photo: { mode: "none" },
+      }),
+    });
+    const createData = await createRes.json().catch(() => ({}));
+    if (!createRes.ok) {
+      throw new Error(createData.error ?? "Gagal menyimpan jenis peta.");
+    }
+
+    return { ok: true, title };
+  } catch (err) {
+    return {
+      ok: false,
+      name: file.name,
+      error: err instanceof Error ? err.message : "Terjadi kesalahan.",
+    };
+  }
+}
 
 export default function AdminPetaPage() {
   const [layers, setLayers] = useState<MapLayer[]>([]);
@@ -12,6 +83,14 @@ export default function AdminPetaPage() {
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
   const [savingOrder, setSavingOrder] = useState(false);
+
+  const [isDraggingImport, setIsDraggingImport] = useState(false);
+  const [bulkImporting, setBulkImporting] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number } | null>(null);
+  const [bulkSummary, setBulkSummary] = useState<{
+    created: string[];
+    failed: { name: string; error: string }[];
+  } | null>(null);
 
   async function loadLayers() {
     setLoading(true);
@@ -78,6 +157,31 @@ export default function AdminPetaPage() {
     setDragOverId(null);
   }
 
+  async function handleBulkImportFiles(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return;
+    const files = Array.from(fileList).filter((f) => /\.(geojson|json)$/i.test(f.name));
+    if (files.length === 0) return;
+
+    setBulkSummary(null);
+    setBulkImporting(true);
+    setBulkProgress({ done: 0, total: files.length });
+
+    const created: string[] = [];
+    const failed: { name: string; error: string }[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const result = await importGeojsonFile(files[i]);
+      if (result.ok) created.push(result.title);
+      else failed.push({ name: result.name, error: result.error });
+      setBulkProgress({ done: i + 1, total: files.length });
+    }
+
+    setBulkImporting(false);
+    setBulkProgress(null);
+    setBulkSummary({ created, failed });
+    if (created.length > 0) loadLayers();
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -91,6 +195,72 @@ export default function AdminPetaPage() {
           <Plus size={16} />
           Tambah Jenis Peta
         </Link>
+      </div>
+
+      <div
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDraggingImport(true);
+        }}
+        onDragLeave={() => setIsDraggingImport(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDraggingImport(false);
+          handleBulkImportFiles(e.dataTransfer.files);
+        }}
+        className={`mt-6 rounded-2xl border-2 border-dashed p-4 text-center transition-colors duration-150 ${
+          isDraggingImport
+            ? "border-[var(--color-midnight-teal)] bg-[var(--color-muted)]"
+            : "border-[var(--color-border)] bg-[var(--color-surface)]"
+        }`}
+      >
+        <UploadCloud
+          size={22}
+          className="mx-auto text-[var(--color-midnight-teal)]"
+          aria-hidden="true"
+        />
+        <label
+          htmlFor="bulkGeojsonImport"
+          className="mt-1 block cursor-pointer text-sm font-medium text-[var(--color-dark-green)]"
+        >
+          Seret banyak file GeoJSON ke sini, atau{" "}
+          <span className="underline">pilih beberapa file</span>
+        </label>
+        <p className="mt-0.5 text-xs text-[var(--color-muted-foreground)]">
+          Tiap file jadi satu jenis peta baru (judul dari nama file). Sunting satu per satu
+          setelahnya untuk atur kategori, legenda, dan foto.
+        </p>
+        <input
+          id="bulkGeojsonImport"
+          type="file"
+          accept=".geojson,.json,application/geo+json,application/json"
+          multiple
+          disabled={bulkImporting}
+          onChange={(e) => {
+            handleBulkImportFiles(e.target.files);
+            e.target.value = "";
+          }}
+          className="hidden"
+        />
+        {bulkProgress && (
+          <p className="mt-2 text-xs font-medium text-[var(--color-midnight-teal)]">
+            Mengimpor {bulkProgress.done}/{bulkProgress.total}...
+          </p>
+        )}
+        {bulkSummary && (
+          <div className="mt-2 text-xs">
+            {bulkSummary.created.length > 0 && (
+              <p className="font-medium text-[var(--color-dark-green)]">
+                Berhasil dibuat: {bulkSummary.created.join(", ")}
+              </p>
+            )}
+            {bulkSummary.failed.length > 0 && (
+              <p className="mt-0.5 text-red-600">
+                Gagal: {bulkSummary.failed.map((f) => `${f.name} (${f.error})`).join("; ")}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {loading ? (

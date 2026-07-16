@@ -17,12 +17,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { title, slug, geojsonUrl, fields, categories, photo, downloadUrl, order } =
+  const { title, slug, geojsonUrls, fields, categories, photo, downloadUrl, order } =
     body ?? {};
 
-  if (!title || !geojsonUrl || !fields?.name) {
+  if (!title || !Array.isArray(geojsonUrls) || geojsonUrls.length === 0 || !fields?.name) {
     return NextResponse.json(
-      { error: "Judul, GeoJSON, dan properti nama fitur wajib diisi." },
+      { error: "Judul, minimal satu GeoJSON, dan properti nama fitur wajib diisi." },
       { status: 400 },
     );
   }
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     id: crypto.randomUUID(),
     slug: uniqueSlug(String(slug || title), layers),
     title,
-    geojsonUrl,
+    geojsonUrls,
     fields,
     categories: Array.isArray(categories) ? categories : [],
     photo: photo ?? { mode: "none" },

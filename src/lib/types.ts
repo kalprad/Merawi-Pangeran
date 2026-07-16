@@ -98,7 +98,7 @@ export type MapLayer = {
   id: string;
   slug: string;
   title: string;
-  geojsonUrl: string;
+  geojsonUrls: string[];
   fields: MapLayerFieldMapping;
   categories: MapLayerCategory[];
   photo: MapLayerPhotoConfig;

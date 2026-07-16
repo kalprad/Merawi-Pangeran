@@ -163,24 +163,32 @@ export async function saveMapLayers(layers: MapLayer[]): Promise<void> {
 
 /**
  * Ambil semua jenis peta lengkap dengan isi GeoJSON-nya, siap dirender.
- * Kalau GeoJSON satu layer gagal dibaca (misalnya file yang dirujuk sudah
- * terhapus/tidak bisa diakses), layer itu dilewati saja supaya satu data
- * yang rusak tidak membuat seluruh halaman peta error.
+ * Satu jenis peta bisa merujuk ke beberapa file GeoJSON sekaligus --
+ * semua fitur dari file-file itu digabung jadi satu FeatureCollection.
+ * Kalau salah satu file gagal dibaca (misalnya sudah terhapus/tidak bisa
+ * diakses), file itu saja yang dilewati supaya satu sumber yang rusak
+ * tidak membuat seluruh jenis peta (atau seluruh halaman) error.
  */
 export async function getResolvedMapLayers(): Promise<ResolvedMapLayer[]> {
   const layers = await getMapLayers();
-  const settled = await Promise.allSettled(
-    layers.map(async (layer): Promise<ResolvedMapLayer> => ({
-      ...layer,
-      geojson: await readGeoJsonSource<FeatureCollection>(layer.geojsonUrl),
-    })),
-  );
+  return Promise.all(
+    layers.map(async (layer): Promise<ResolvedMapLayer> => {
+      const sourceResults = await Promise.allSettled(
+        layer.geojsonUrls.map((url) => readGeoJsonSource<FeatureCollection>(url)),
+      );
 
-  return settled.flatMap((result) => {
-    if (result.status === "fulfilled") return [result.value];
-    console.error("Gagal memuat GeoJSON untuk salah satu jenis peta:", result.reason);
-    return [];
-  });
+      const features = sourceResults.flatMap((result) => {
+        if (result.status === "fulfilled") return result.value.features;
+        console.error(
+          `Gagal memuat salah satu GeoJSON untuk jenis peta "${layer.title}":`,
+          result.reason,
+        );
+        return [];
+      });
+
+      return { ...layer, geojson: { type: "FeatureCollection", features } };
+    }),
+  );
 }
 
 export async function getDesaBoundary(): Promise<

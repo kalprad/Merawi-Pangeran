@@ -51,7 +51,9 @@ export async function POST(request: Request) {
         );
       }
 
-      const url = await uploadPetaFile(buffer, "data.geojson", `Peta Interaktif/${slug}`);
+      // Nama file asli dipakai (bukan nama tetap) supaya satu jenis peta
+      // bisa memuat beberapa file GeoJSON berbeda tanpa saling menimpa.
+      const url = await uploadPetaFile(buffer, file.name, `Peta Interaktif/${slug}/geojson`);
       return NextResponse.json({ url });
     }
 

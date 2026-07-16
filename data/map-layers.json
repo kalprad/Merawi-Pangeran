@@ -3,7 +3,9 @@
     "id": "layer-irigasi",
     "slug": "irigasi",
     "title": "Kerusakan Irigasi",
-    "geojsonUrl": "data/geo/irigasi.geojson",
+    "geojsonUrls": [
+      "data/geo/irigasi.geojson"
+    ],
     "fields": {
       "name": "Nama",
       "category": "Status",
@@ -43,7 +45,9 @@
     "id": "layer-fasilitas",
     "slug": "fasilitas",
     "title": "Fasilitas Umum",
-    "geojsonUrl": "data/geo/fasilitas.geojson",
+    "geojsonUrls": [
+      "data/geo/fasilitas.geojson"
+    ],
     "fields": {
       "name": "Nama",
       "category": "Jenis",
@@ -77,7 +81,9 @@
     "id": "layer-umkm",
     "slug": "umkm",
     "title": "Sebaran UMKM",
-    "geojsonUrl": "Peta Interaktif/UMKM/Data_UMKM.geojson",
+    "geojsonUrls": [
+      "Peta Interaktif/UMKM/Data_UMKM.geojson"
+    ],
     "fields": {
       "name": "Nama",
       "category": "Jenis",
@@ -140,7 +146,9 @@
     "id": "0b7f2273-205d-40af-bd06-0a40896392ca",
     "slug": "er",
     "title": "er",
-    "geojsonUrl": "/uploads/Peta Interaktif/er/data.geojson",
+    "geojsonUrls": [
+      "/uploads/Peta Interaktif/er/data.geojson"
+    ],
     "fields": {
       "name": "Nama",
       "category": "Jenis",
