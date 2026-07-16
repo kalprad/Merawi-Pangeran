@@ -61,46 +61,5 @@
       }
     },
     "order": 3
-  },
-  {
-    "id": "0b7f2273-205d-40af-bd06-0a40896392ca",
-    "slug": "er",
-    "title": "er",
-    "geojsonUrl": "/uploads/Peta Interaktif/er/data.geojson",
-    "fields": {
-      "name": "Nama",
-      "category": "Jenis",
-      "googleMaps": "Google Maps",
-      "info": []
-    },
-    "categories": [
-      {
-        "value": "Makanan",
-        "label": "Makanan",
-        "color": "#C9793A",
-        "icon": "heart-pulse"
-      },
-      {
-        "value": "Jasa",
-        "label": "Jasa",
-        "color": "#105666",
-        "icon": "wrench"
-      },
-      {
-        "value": "Barang",
-        "label": "Barang",
-        "color": "#6C5B9E",
-        "icon": "map-pin"
-      }
-    ],
-    "photo": {
-      "mode": "map",
-      "photoMap": {
-        "Ardy Photo": "/uploads/Peta Interaktif/er/photos/Ardy Photo.png",
-        "Ariih Catering": "/uploads/Peta Interaktif/er/photos/Ariih Catering.png"
-      }
-    },
-    "downloadUrl": "https://drive.google.com/file/d/1EnN7BMTb7PSP0c8DvDPdUD5to_5jHhVw/view?usp=drive_link",
-    "order": 4
   }
 ]
