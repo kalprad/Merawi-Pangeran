@@ -1,45 +1,5 @@
 [
   {
-    "id": "layer-irigasi",
-    "slug": "irigasi",
-    "title": "Kerusakan Irigasi",
-    "geojsonUrl": "data/geo/irigasi.geojson",
-    "fields": {
-      "name": "Nama",
-      "category": "Status",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Rusak Berat",
-        "label": "Rusak Berat",
-        "color": "#B3423A",
-        "icon": "alert-triangle"
-      },
-      {
-        "value": "Rusak Ringan",
-        "label": "Rusak Ringan",
-        "color": "#D3968C",
-        "icon": "droplet"
-      },
-      {
-        "value": "Perlu Perbaikan",
-        "label": "Perlu Perbaikan",
-        "color": "#C9793A",
-        "icon": "wrench"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 1
-  },
-  {
     "id": "layer-fasilitas",
     "slug": "fasilitas",
     "title": "Fasilitas Umum",
