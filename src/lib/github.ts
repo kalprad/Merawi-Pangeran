@@ -116,3 +116,46 @@ export async function uploadBinaryToGithub(
 
   return githubRawUrl(filePath);
 }
+
+/**
+ * Upload atau timpa file di path tetap (misalnya data GeoJSON atau foto yang
+ * namanya harus tetap sama supaya bisa dicocokkan ulang). Beda dengan
+ * uploadBinaryToGithub, fungsi ini cek dulu apakah file sudah ada (butuh
+ * "sha" kalau mau menimpa), dan path-nya di-encode per segmen supaya aman
+ * untuk nama file yang mengandung spasi/tanda kurung.
+ */
+export async function upsertBinaryToGithub(
+  filePath: string,
+  base64Content: string,
+  message: string,
+): Promise<string> {
+  const encodedPath = filePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const url = `https://api.github.com/repos/${OWNER_REPO}/contents/${encodedPath}`;
+
+  const existing = await fetch(`${url}?ref=${BRANCH}`, {
+    headers: headers(),
+    cache: "no-store",
+  });
+  const sha = existing.ok ? (await existing.json()).sha : undefined;
+
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { ...headers(), "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message,
+      content: base64Content,
+      branch: BRANCH,
+      ...(sha ? { sha } : {}),
+    }),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Gagal mengunggah ${filePath} ke GitHub: ${errorText}`);
+  }
+
+  return githubRawUrl(filePath);
+}

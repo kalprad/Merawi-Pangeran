@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "name": "Fasilitas",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama": "Balai Desa Jetis",
+        "Deskripsi": "Pusat pemerintahan dan kegiatan administrasi Desa Jetis.",
+        "Jenis": "Pemerintahan"
+      },
+      "geometry": { "type": "Point", "coordinates": [110.3266, -7.2178] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama": "Posyandu Melati",
+        "Deskripsi": "Fasilitas kesehatan untuk pemeriksaan ibu dan anak tingkat dusun.",
+        "Jenis": "Kesehatan"
+      },
+      "geometry": { "type": "Point", "coordinates": [110.3231, -7.2196] }
+    }
+  ]
+}

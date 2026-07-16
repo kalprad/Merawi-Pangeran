@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMapPoints } from "@/lib/data";
+import { getDesaBoundary, getResolvedMapLayers } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import MapLoader from "@/components/MapLoader";
 import Reveal from "@/components/Reveal";
@@ -14,7 +14,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function PetaPage() {
-  const points = await getMapPoints();
+  const [layers, boundary] = await Promise.all([
+    getResolvedMapLayers(),
+    getDesaBoundary(),
+  ]);
 
   return (
     <div className="relative overflow-hidden">
@@ -24,7 +27,7 @@ export default async function PetaPage() {
           <SectionHeading
             eyebrow="Peta Interaktif"
             title="Sebaran data Desa Jetis"
-            description="Jelajahi titik kerusakan irigasi, sebaran UMKM, dan fasilitas umum. Aktifkan/nonaktifkan kategori lewat tombol di atas peta."
+            description="Pilih jenis peta lewat menu di atas peta untuk menjelajahi titik kerusakan irigasi, sebaran UMKM, dan fasilitas umum."
           />
           <p className="glass-card mt-3 max-w-2xl rounded-2xl px-4 py-3 text-xs text-[var(--color-muted-foreground)]">
             Catatan: titik pada peta ini masih berupa data contoh dan akan
@@ -32,7 +35,7 @@ export default async function PetaPage() {
           </p>
         </Reveal>
         <Reveal delay={100} className="mt-8">
-          <MapLoader points={points} />
+          <MapLoader layers={layers} boundary={boundary} />
         </Reveal>
       </div>
     </div>

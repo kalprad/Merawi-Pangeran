@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut, Newspaper, BookOpen, Users, Settings } from "lucide-react";
+import { LogOut, Newspaper, BookOpen, Users, Settings, Map } from "lucide-react";
 
 const tabs = [
   { href: "/admin/posts", label: "Berita", icon: Newspaper },
   { href: "/admin/materi", label: "Materi Sosialisasi", icon: BookOpen },
   { href: "/admin/tim", label: "Tim", icon: Users },
+  { href: "/admin/peta", label: "Peta Interaktif", icon: Map },
   { href: "/admin/pengaturan", label: "Pengaturan", icon: Settings },
 ];
 

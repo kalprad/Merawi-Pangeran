@@ -35,14 +35,65 @@ export type TeamMember = {
   programs?: string[];
 };
 
-export type MapPointCategory = "irigasi" | "umkm" | "fasilitas";
+import type { FeatureCollection } from "geojson";
 
-export type MapPoint = {
-  id: string;
-  category: MapPointCategory;
+export type MapIconKey =
+  | "utensils"
+  | "wrench"
+  | "shopping-bag"
+  | "droplet"
+  | "alert-triangle"
+  | "home"
+  | "heart-pulse"
+  | "landmark"
+  | "map-pin"
+  | "graduation-cap"
+  | "sprout"
+  | "trees"
+  | "factory"
+  | "building"
+  | "waves"
+  | "zap"
+  | "store"
+  | "fish"
+  | "paw-print"
+  | "construction"
+  | "trash-2"
+  | "mountain"
+  | "book-open"
+  | "camera";
+
+export type MapLayerCategory = {
+  value: string;
+  label: string;
+  color: string;
+  icon: MapIconKey;
+};
+
+export type MapLayerFieldMapping = {
   name: string;
-  description: string;
-  status: string;
-  lat: number;
-  lng: number;
+  category?: string;
+  googleMaps?: string;
+  info?: { label: string; property: string }[];
+};
+
+export type MapLayerPhotoConfig =
+  | { mode: "none" }
+  | { mode: "map"; photoMap: Record<string, string> }
+  | { mode: "property"; property: string };
+
+export type MapLayer = {
+  id: string;
+  slug: string;
+  title: string;
+  geojsonUrl: string;
+  fields: MapLayerFieldMapping;
+  categories: MapLayerCategory[];
+  photo: MapLayerPhotoConfig;
+  downloadUrl?: string;
+  order: number;
+};
+
+export type ResolvedMapLayer = MapLayer & {
+  geojson: FeatureCollection;
 };

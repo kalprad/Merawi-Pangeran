@@ -7,24 +7,28 @@ import SakuraDecor from "@/components/SakuraDecor";
 import CategoryTags from "@/components/CategoryTags";
 import Reveal from "@/components/Reveal";
 import Mascot from "@/components/Mascot";
-import { getPosts, getMateri, getMapPoints } from "@/lib/data";
+import { getPosts, getMateri, getResolvedMapLayers } from "@/lib/data";
 
 // Selalu ambil data terbaru tiap kali halaman dibuka (bukan versi lama yang
 // tersimpan), supaya berita/materi baru dari panel admin langsung muncul.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [posts, materi, mapPoints] = await Promise.all([
+  const [posts, materi, mapLayers] = await Promise.all([
     getPosts(),
     getMateri(),
-    getMapPoints(),
+    getResolvedMapLayers(),
   ]);
   const latestPosts = posts.slice(0, 3);
+  const mapPointCount = mapLayers.reduce(
+    (total, layer) => total + layer.geojson.features.length,
+    0,
+  );
 
   const stats = [
     { label: "Berita Kegiatan", value: `${posts.length}+` },
     { label: "Materi Sosialisasi", value: `${materi.length}+` },
-    { label: "Titik Terpetakan", value: `${mapPoints.length}+` },
+    { label: "Titik Terpetakan", value: `${mapPointCount}+` },
     { label: "Tahun Pengabdian", value: "2026" },
   ];
 

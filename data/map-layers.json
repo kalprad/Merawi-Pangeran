@@ -1,0 +1,180 @@
+[
+  {
+    "id": "layer-irigasi",
+    "slug": "irigasi",
+    "title": "Kerusakan Irigasi",
+    "geojsonUrl": "data/geo/irigasi.geojson",
+    "fields": {
+      "name": "Nama",
+      "category": "Status",
+      "info": [
+        {
+          "label": "Deskripsi",
+          "property": "Deskripsi"
+        }
+      ]
+    },
+    "categories": [
+      {
+        "value": "Rusak Berat",
+        "label": "Rusak Berat",
+        "color": "#B3423A",
+        "icon": "alert-triangle"
+      },
+      {
+        "value": "Rusak Ringan",
+        "label": "Rusak Ringan",
+        "color": "#D3968C",
+        "icon": "droplet"
+      },
+      {
+        "value": "Perlu Perbaikan",
+        "label": "Perlu Perbaikan",
+        "color": "#C9793A",
+        "icon": "wrench"
+      }
+    ],
+    "photo": {
+      "mode": "none"
+    },
+    "order": 1
+  },
+  {
+    "id": "layer-fasilitas",
+    "slug": "fasilitas",
+    "title": "Fasilitas Umum",
+    "geojsonUrl": "data/geo/fasilitas.geojson",
+    "fields": {
+      "name": "Nama",
+      "category": "Jenis",
+      "info": [
+        {
+          "label": "Deskripsi",
+          "property": "Deskripsi"
+        }
+      ]
+    },
+    "categories": [
+      {
+        "value": "Pemerintahan",
+        "label": "Pemerintahan",
+        "color": "#839958",
+        "icon": "landmark"
+      },
+      {
+        "value": "Kesehatan",
+        "label": "Kesehatan",
+        "color": "#105666",
+        "icon": "heart-pulse"
+      }
+    ],
+    "photo": {
+      "mode": "none"
+    },
+    "order": 2
+  },
+  {
+    "id": "layer-umkm",
+    "slug": "umkm",
+    "title": "Sebaran UMKM",
+    "geojsonUrl": "Peta Interaktif/UMKM/Data_UMKM.geojson",
+    "fields": {
+      "name": "Nama",
+      "category": "Jenis",
+      "googleMaps": "Google Maps",
+      "info": [
+        {
+          "label": "Dusun",
+          "property": "Dusun"
+        }
+      ]
+    },
+    "categories": [
+      {
+        "value": "Makanan",
+        "label": "Makanan",
+        "color": "#C9793A",
+        "icon": "utensils"
+      },
+      {
+        "value": "Jasa",
+        "label": "Jasa",
+        "color": "#105666",
+        "icon": "wrench"
+      },
+      {
+        "value": "Barang",
+        "label": "Barang",
+        "color": "#6C5B9E",
+        "icon": "shopping-bag"
+      }
+    ],
+    "photo": {
+      "mode": "map",
+      "photoMap": {
+        "Agung Flower Decoration": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Agung%20Flower%20Decoration.png",
+        "Ardy Photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ardy%20Photo.png",
+        "Ariih Catering": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ariih%20Catering.png",
+        "Bengkel AFI MOTOR": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Bengkel%20AFI%20MOTOR.png",
+        "Berkah Bapak Flowers": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Bapak%20Flowers.png",
+        "Berkah Jaya": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Jaya.png",
+        "Dapur Noknie": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Dapur%20Noknie.png",
+        "Es Puter Srinoto": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Es%20Puter%20Srinoto.png",
+        "Flowriska Nursery": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Flowriska%20Nursery.png",
+        "Jadah Ibu Lasmirah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jadah%20Ibu%20Lasmirah.png",
+        "Jamu Yu Qodriyah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jamu%20Yu%20Qodriyah.png",
+        "Mibas Ojo Lali": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Mibas%20Ojo%20Lali.png",
+        "Omah Jahit ka ef we": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Jahit%20ka%20ef%20we.png",
+        "Omah Rajut Kalita Tegar": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Rajut%20Kalita%20Tegar.png",
+        "Penjahit Barokah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Barokah.png",
+        "Penjahit Ibu Siti Chofsah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Ibu%20Siti%20Chofsah.png",
+        "Pillow and Paint and Wellding": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Pillow%20and%20Paint%20and%20Wellding.png",
+        "Toko Berkah Ninu": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Toko%20Berkah%20Ninu.png",
+        "[Berkah Avocado_Sujatmiko]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BBerkah%20Avocado_Sujatmiko%5D.png",
+        "[Yola_Seblak dan Sosis Bakar Bandungan]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BYola_Seblak%20dan%20Sosis%20Bakar%20Bandungan%5D.png"
+      }
+    },
+    "order": 3
+  },
+  {
+    "id": "0b7f2273-205d-40af-bd06-0a40896392ca",
+    "slug": "er",
+    "title": "er",
+    "geojsonUrl": "/uploads/Peta Interaktif/er/data.geojson",
+    "fields": {
+      "name": "Nama",
+      "category": "Jenis",
+      "googleMaps": "Google Maps",
+      "info": []
+    },
+    "categories": [
+      {
+        "value": "Makanan",
+        "label": "Makanan",
+        "color": "#C9793A",
+        "icon": "heart-pulse"
+      },
+      {
+        "value": "Jasa",
+        "label": "Jasa",
+        "color": "#105666",
+        "icon": "wrench"
+      },
+      {
+        "value": "Barang",
+        "label": "Barang",
+        "color": "#6C5B9E",
+        "icon": "map-pin"
+      }
+    ],
+    "photo": {
+      "mode": "map",
+      "photoMap": {
+        "Ardy Photo": "/uploads/Peta Interaktif/er/photos/Ardy Photo.png",
+        "Ariih Catering": "/uploads/Peta Interaktif/er/photos/Ariih Catering.png"
+      }
+    },
+    "downloadUrl": "https://drive.google.com/file/d/1EnN7BMTb7PSP0c8DvDPdUD5to_5jHhVw/view?usp=drive_link",
+    "order": 4
+  }
+]

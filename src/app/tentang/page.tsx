@@ -103,7 +103,7 @@ export default async function TentangPage() {
       {team.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <Reveal>
-            <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026" />
+            <SectionHeading align="center" eyebrow="Tim Kami" title="Anggota KKN Merawi Pangeran 2026 Sub Unit Jetis" />
           </Reveal>
           <TeamGrid team={team} />
         </section>

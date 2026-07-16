@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local fallback storage for admin uploads (used when GITHUB_TOKEN isn't set,
+# e.g. on a dev machine) -- in production these go to GitHub instead
+/public/uploads/
+/public/images/uploads/
+
 # local Claude Code tool settings (machine-specific, not shared project config)
 .claude/settings.local.json
 

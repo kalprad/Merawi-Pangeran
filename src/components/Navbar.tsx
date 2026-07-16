@@ -44,7 +44,7 @@ export default function Navbar() {
               Merawi Pangeran
             </span>
             <span className="text-[11px] font-medium tracking-wide text-[var(--color-midnight-teal)] uppercase">
-              KKN Desa Jetis · 2026
+              KKN-PPM UGM Periode II 2026
             </span>
           </span>
         </Link>

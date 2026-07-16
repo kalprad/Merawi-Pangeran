@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "name": "Irigasi",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama": "Saluran Irigasi Blok Sawah Utara",
+        "Deskripsi": "Dinding saluran retak dan mengalami kebocoran pada sisi kiri, menyebabkan aliran air ke sawah tidak optimal.",
+        "Status": "Rusak Berat"
+      },
+      "geometry": { "type": "Point", "coordinates": [110.3255, -7.2168] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama": "Saluran Irigasi Dukuh Krajan",
+        "Deskripsi": "Sedimentasi lumpur cukup tinggi sehingga debit air berkurang saat musim kemarau.",
+        "Status": "Rusak Ringan"
+      },
+      "geometry": { "type": "Point", "coordinates": [110.3298, -7.2201] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Nama": "Pintu Air Blok Kebonan",
+        "Deskripsi": "Pintu air sudah berkarat dan sulit dibuka-tutup secara manual.",
+        "Status": "Perlu Perbaikan"
+      },
+      "geometry": { "type": "Point", "coordinates": [110.3221, -7.2139] }
+    }
+  ]
+}
