@@ -1,16 +1,16 @@
 [
   {
+    "id": "459ea752-b1c1-4c29-8dad-50e32092b7ff",
+    "category": "jembatan",
+    "title": "Tutorial #1 Penggunaan Modul Evaluasi Jembatan",
+    "driveUrl": "https://drive.google.com/file/d/18I6T_8Zto3ltpMWPQywWJM8IxDtr2c8w/view?usp=drive_link",
+    "order": 1
+  },
+  {
     "id": "97964000-47d3-4b5c-9a14-1482bcbfa48e",
     "category": "jembatan",
     "title": "Tutorial #2 Penggunaan Modul Desain Jembatan",
     "driveUrl": "https://drive.google.com/file/d/1CPRkXDdf8Va8NMJDJOm7Ycniwe-2KFOt/view?usp=drive_link",
     "order": 2
-  },
-  {
-    "id": "459ea752-b1c1-4c29-8dad-50e32092b7ff",
-    "category": "jembatan",
-    "title": "Desain jembatan",
-    "driveUrl": "https://drive.google.com/file/d/1CPRkXDdf8Va8NMJDJOm7Ycniwe-2KFOt/view?usp=drive_link",
-    "order": 1
   }
 ]
