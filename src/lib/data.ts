@@ -9,11 +9,27 @@ import type {
   Settings,
   TeamMember,
 } from "./types";
-import { isGithubEnabled, readJsonFromGithub, writeJsonToGithub } from "./github";
+import { githubRawUrl, isGithubEnabled, readJsonFromGithub, writeJsonToGithub } from "./github";
 
 const dataDir = path.join(process.cwd(), "data");
 
+/**
+ * Baca file GeoJSON yang ikut di-commit di repo (data bawaan/seed).
+ * Di server (Vercel), path dinamis seperti ini tidak ikut ter-bundle oleh
+ * Next.js file tracing, jadi HARUS diambil lewat raw.githubusercontent.com,
+ * bukan fs.readFile -- fs hanya dipakai sebagai fallback saat development
+ * lokal (tanpa GITHUB_TOKEN), di mana seluruh repo memang ada di disk.
+ */
 async function readGeoJsonFile<T>(repoRelativePath: string): Promise<T> {
+  if (isGithubEnabled()) {
+    const res = await fetch(githubRawUrl(repoRelativePath), { cache: "no-store" });
+    if (!res.ok) {
+      throw new Error(
+        `Gagal membaca ${repoRelativePath} dari GitHub (status ${res.status})`,
+      );
+    }
+    return res.json() as Promise<T>;
+  }
   const raw = await fs.readFile(
     path.join(process.cwd(), repoRelativePath),
     "utf-8",
@@ -130,15 +146,26 @@ export async function saveMapLayers(layers: MapLayer[]): Promise<void> {
   await writeJson("map-layers.json", layers);
 }
 
-/** Ambil semua jenis peta lengkap dengan isi GeoJSON-nya, siap dirender. */
+/**
+ * Ambil semua jenis peta lengkap dengan isi GeoJSON-nya, siap dirender.
+ * Kalau GeoJSON satu layer gagal dibaca (misalnya file yang dirujuk sudah
+ * terhapus/tidak bisa diakses), layer itu dilewati saja supaya satu data
+ * yang rusak tidak membuat seluruh halaman peta error.
+ */
 export async function getResolvedMapLayers(): Promise<ResolvedMapLayer[]> {
   const layers = await getMapLayers();
-  return Promise.all(
-    layers.map(async (layer) => ({
+  const settled = await Promise.allSettled(
+    layers.map(async (layer): Promise<ResolvedMapLayer> => ({
       ...layer,
       geojson: await readGeoJsonSource<FeatureCollection>(layer.geojsonUrl),
     })),
   );
+
+  return settled.flatMap((result) => {
+    if (result.status === "fulfilled") return [result.value];
+    console.error("Gagal memuat GeoJSON untuk salah satu jenis peta:", result.reason);
+    return [];
+  });
 }
 
 export async function getDesaBoundary(): Promise<
