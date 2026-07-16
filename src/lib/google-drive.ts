@@ -37,6 +37,34 @@ export function extractDriveFolderId(input?: string | null): string | null {
   return null;
 }
 
+/**
+ * Ambil ID file dari berbagai bentuk link Google Drive yang mungkin
+ * ditempel admin untuk video tutorial, misalnya:
+ * - https://drive.google.com/file/d/ABC123/view?usp=sharing
+ * - https://drive.google.com/open?id=ABC123
+ * - atau ID file polos: ABC123
+ */
+export function extractDriveFileId(input?: string | null): string | null {
+  if (!input) return null;
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+
+  const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileMatch) return fileMatch[1];
+
+  const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (idParamMatch) return idParamMatch[1];
+
+  if (/^[a-zA-Z0-9_-]{15,}$/.test(trimmed)) return trimmed;
+
+  return null;
+}
+
+export function driveEmbedUrl(driveUrl: string): string | null {
+  const id = extractDriveFileId(driveUrl);
+  return id ? `https://drive.google.com/file/d/${id}/preview` : null;
+}
+
 export async function getDriveGallery(
   folderUrl?: string | null,
 ): Promise<DriveGalleryResult> {

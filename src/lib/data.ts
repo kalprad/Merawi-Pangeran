@@ -8,6 +8,7 @@ import type {
   ResolvedMapLayer,
   Settings,
   TeamMember,
+  TutorialVideo,
 } from "./types";
 import { githubRawUrl, isGithubEnabled, readJsonFromGithub, writeJsonToGithub } from "./github";
 
@@ -109,6 +110,20 @@ export async function getMateri(): Promise<Materi[]> {
 
 export async function saveMateri(materi: Materi[]): Promise<void> {
   await writeJson("materi.json", materi);
+}
+
+export async function getTutorialVideos(): Promise<TutorialVideo[]> {
+  const videos = await readJson<TutorialVideo[]>("tutorial-videos.json");
+  return videos.slice().sort((a, b) => a.order - b.order);
+}
+
+export async function getTutorialVideoById(id: string): Promise<TutorialVideo | undefined> {
+  const videos = await getTutorialVideos();
+  return videos.find((v) => v.id === id);
+}
+
+export async function saveTutorialVideos(videos: TutorialVideo[]): Promise<void> {
+  await writeJson("tutorial-videos.json", videos);
 }
 
 export async function getSettings(): Promise<Settings> {

@@ -20,9 +20,21 @@ export type Materi = {
   fileUrl: string;
 };
 
+export type TutorialCategory = "jembatan" | "irigasi" | "talud" | "rab";
+
 export type Settings = {
   siBeningUrl: string;
   galleryFolderUrl?: string;
+  featureGuideUrls?: Record<TutorialCategory, string>;
+};
+
+export type TutorialVideo = {
+  id: string;
+  category: TutorialCategory;
+  title: string;
+  description?: string;
+  driveUrl: string;
+  order: number;
 };
 
 export type TeamMember = {

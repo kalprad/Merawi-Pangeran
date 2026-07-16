@@ -1,10 +1,24 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Ruler, FolderInput, ShieldCheck, Download } from "lucide-react";
+import {
+  Ruler,
+  FolderInput,
+  ShieldCheck,
+  Download,
+  Droplets,
+  Construction,
+  Mountain,
+  Calculator,
+  Eye,
+  Zap,
+  MapPin,
+} from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import PageOrnaments from "@/components/PageOrnaments";
-import { getSettings } from "@/lib/data";
+import TutorialCourse from "@/components/TutorialCourse";
+import { getSettings, getTutorialVideos } from "@/lib/data";
+import type { TutorialCategory } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "SI-Bening",
@@ -35,8 +49,66 @@ const highlights = [
   },
 ];
 
+const philosophyPoints = [
+  {
+    icon: Eye,
+    title: "Bening = Transparan",
+    description:
+      "Setiap data dan proses perencanaan infrastruktur dapat dilihat dan ditelusuri dengan jelas oleh perangkat desa.",
+  },
+  {
+    icon: Zap,
+    title: "Bening = Mengalir Cepat",
+    description:
+      "Seperti air yang tak terhambat, mencerminkan proses kerja SI-Bening yang gesit dan efisien di setiap tahap desain dan evaluasi.",
+  },
+  {
+    icon: MapPin,
+    title: "Daerah Irigasi Sibening",
+    description:
+      "Nama SI-Bening terinspirasi dari Daerah Irigasi Sibening, simbol semangat untuk terus mengalirkan manfaat bagi Desa Jetis.",
+  },
+];
+
+const features: {
+  category: TutorialCategory;
+  icon: typeof Construction;
+  title: string;
+  description: string;
+}[] = [
+  {
+    category: "jembatan",
+    icon: Construction,
+    title: "Evaluasi & Desain Jembatan",
+    description:
+      "Mengevaluasi kondisi jembatan yang ada dan membantu merancang desain jembatan baru sesuai kebutuhan desa, lengkap dengan pertimbangan teknis dasar.",
+  },
+  {
+    category: "irigasi",
+    icon: Droplets,
+    title: "Saluran Irigasi",
+    description:
+      "Membantu perencanaan dan desain saluran irigasi agar aliran air ke lahan pertanian warga lebih terarah, efisien, dan mudah dipantau.",
+  },
+  {
+    category: "talud",
+    icon: Mountain,
+    title: "Talud",
+    description:
+      "Mendukung evaluasi dan desain talud/penahan tanah untuk mencegah longsor dan menjaga kestabilan lereng di area rawan.",
+  },
+  {
+    category: "rab",
+    icon: Calculator,
+    title: "Perhitungan RAB",
+    description:
+      "Menghitung Rencana Anggaran Biaya (RAB) pembangunan infrastruktur secara digital, sehingga perencanaan biaya lebih rapi dan transparan.",
+  },
+];
+
 export default async function SiBeningPage() {
   const settings = await getSettings();
+  const tutorialVideos = await getTutorialVideos();
   const hasDownloadLink = Boolean(settings.siBeningUrl);
 
   return (
@@ -88,6 +160,103 @@ export default async function SiBeningPage() {
               className="h-full w-full object-cover"
               priority
             />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Filosofi"
+              title="Kenapa disebut SI-Bening?"
+            />
+          </Reveal>
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {philosophyPoints.map((item, i) => (
+              <Reveal
+                key={item.title}
+                delay={i * 100}
+                className="glass-card rounded-3xl p-6 text-center"
+              >
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+                  <item.icon size={22} aria-hidden="true" />
+                </div>
+                <h3 className="font-display mt-4 text-lg text-[var(--color-dark-green)]">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
+                  {item.description}
+                </p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="batik-motif bg-[var(--color-muted)]/60 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Fitur SI-Bening"
+              title="Empat fitur utama untuk desa"
+            />
+          </Reveal>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((item, i) => {
+              const guideUrl = settings.featureGuideUrls?.[item.category];
+              return (
+                <Reveal
+                  key={item.title}
+                  delay={i * 100}
+                  className="glass-card flex h-full flex-col rounded-3xl p-6 text-center"
+                >
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+                    <item.icon size={22} aria-hidden="true" />
+                  </div>
+                  <h3 className="font-display mt-4 text-lg text-[var(--color-dark-green)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
+                    {item.description}
+                  </p>
+                  {guideUrl ? (
+                    <a
+                      href={guideUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-dark-green)]/10 px-4 py-2 text-xs font-semibold text-[var(--color-dark-green)] transition-colors duration-200 hover:bg-[var(--color-dark-green)]/20"
+                    >
+                      <Download size={14} />
+                      Unduh Cara Penggunaan
+                    </a>
+                  ) : (
+                    <span className="mt-4 inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full bg-[var(--color-muted)] px-4 py-2 text-xs font-semibold text-[var(--color-muted-foreground)]">
+                      <Download size={14} />
+                      Panduan Segera Hadir
+                    </span>
+                  )}
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Belajar SI-Bening"
+              title="Video tutorial penggunaan aplikasi"
+              description="Pelajari cara menggunakan setiap fitur SI-Bening lewat video tutorial, disusun per modul seperti kelas daring."
+            />
+          </Reveal>
+          <Reveal delay={100} className="mt-10">
+            <TutorialCourse videos={tutorialVideos} />
           </Reveal>
         </div>
       </section>
