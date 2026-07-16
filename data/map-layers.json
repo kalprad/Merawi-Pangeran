@@ -1,39 +1,5 @@
 [
   {
-    "id": "layer-fasilitas",
-    "slug": "fasilitas",
-    "title": "Fasilitas Umum",
-    "geojsonUrl": "data/geo/fasilitas.geojson",
-    "fields": {
-      "name": "Nama",
-      "category": "Jenis",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Pemerintahan",
-        "label": "Pemerintahan",
-        "color": "#839958",
-        "icon": "landmark"
-      },
-      {
-        "value": "Kesehatan",
-        "label": "Kesehatan",
-        "color": "#105666",
-        "icon": "heart-pulse"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 2
-  },
-  {
     "id": "layer-umkm",
     "slug": "umkm",
     "title": "Sebaran UMKM",
