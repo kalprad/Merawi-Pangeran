@@ -1,83 +1,5 @@
 [
   {
-    "id": "layer-irigasi",
-    "slug": "irigasi",
-    "title": "Kerusakan Irigasi",
-    "geojsonUrls": [
-      "data/geo/irigasi.geojson"
-    ],
-    "fields": {
-      "name": "Nama",
-      "category": "Status",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Rusak Berat",
-        "label": "Rusak Berat",
-        "color": "#B3423A",
-        "icon": "alert-triangle"
-      },
-      {
-        "value": "Rusak Ringan",
-        "label": "Rusak Ringan",
-        "color": "#D3968C",
-        "icon": "droplet"
-      },
-      {
-        "value": "Perlu Perbaikan",
-        "label": "Perlu Perbaikan",
-        "color": "#C9793A",
-        "icon": "wrench"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 1
-  },
-  {
-    "id": "layer-fasilitas",
-    "slug": "fasilitas",
-    "title": "Fasilitas Umum",
-    "geojsonUrls": [
-      "data/geo/fasilitas.geojson"
-    ],
-    "fields": {
-      "name": "Nama",
-      "category": "Jenis",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Pemerintahan",
-        "label": "Pemerintahan",
-        "color": "#839958",
-        "icon": "landmark"
-      },
-      {
-        "value": "Kesehatan",
-        "label": "Kesehatan",
-        "color": "#105666",
-        "icon": "heart-pulse"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 2
-  },
-  {
     "id": "layer-umkm",
     "slug": "umkm",
     "title": "Sebaran UMKM",
@@ -143,11 +65,11 @@
     "order": 3
   },
   {
-    "id": "0b7f2273-205d-40af-bd06-0a40896392ca",
-    "slug": "er",
-    "title": "er",
+    "id": "777224d6-5a21-4837-a7db-e461c71267a7",
+    "slug": "umkm-2",
+    "title": "UMKM",
     "geojsonUrls": [
-      "/uploads/Peta Interaktif/er/data.geojson"
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/umkm/data.geojson"
     ],
     "fields": {
       "name": "Nama",
@@ -160,7 +82,7 @@
         "value": "Makanan",
         "label": "Makanan",
         "color": "#C9793A",
-        "icon": "heart-pulse"
+        "icon": "utensils"
       },
       {
         "value": "Jasa",
@@ -172,17 +94,13 @@
         "value": "Barang",
         "label": "Barang",
         "color": "#6C5B9E",
-        "icon": "map-pin"
+        "icon": "shopping-bag"
       }
     ],
     "photo": {
-      "mode": "map",
-      "photoMap": {
-        "Ardy Photo": "/uploads/Peta Interaktif/er/photos/Ardy Photo.png",
-        "Ariih Catering": "/uploads/Peta Interaktif/er/photos/Ariih Catering.png"
-      }
+      "mode": "property",
+      "property": "Foto"
     },
-    "downloadUrl": "https://drive.google.com/file/d/1EnN7BMTb7PSP0c8DvDPdUD5to_5jHhVw/view?usp=drive_link",
-    "order": 4
+    "order": 2
   }
 ]
