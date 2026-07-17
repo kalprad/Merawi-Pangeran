@@ -8,7 +8,7 @@
     "rab": ""
   },
   "releaseCountdown": {
-    "enabled": true,
+    "enabled": false,
     "releaseAt": "2026-07-17T22:22",
     "title": "Countdown to release",
     "message": "Made with love and dedication"
