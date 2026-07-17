@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Stethoscope, Scale, Cpu, Sprout } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
-import Mascot from "@/components/Mascot";
+import MascotIntro from "@/components/MascotIntro";
 import TeamGrid from "@/components/TeamGrid";
+import DivisionGrid from "@/components/DivisionGrid";
 import PageOrnaments from "@/components/PageOrnaments";
 import { getTeam } from "@/lib/data";
+import { divisions } from "@/lib/divisions";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
@@ -15,35 +16,17 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const divisions = [
-  {
-    icon: Cpu,
-    title: "Saintek",
-    description:
-      "Memetakan kondisi irigasi dan fasilitas umum, serta mengembangkan aplikasi SI-Bening untuk perencanaan infrastruktur desa.",
-  },
-  {
-    icon: Sprout,
-    title: "Agro",
-    description:
-      "Mendampingi petani dan pelaku UMKM berbasis hasil bumi melalui pendataan sebaran usaha dan pelatihan manajemen usaha kecil.",
-  },
-  {
-    icon: Scale,
-    title: "Soshum",
-    description:
-      "Memberikan edukasi literasi hukum dasar dan administrasi kependudukan kepada masyarakat.",
-  },
-  {
-    icon: Stethoscope,
-    title: "Medika",
-    description:
-      "Menyelenggarakan sosialisasi pencegahan stunting dan pola hidup sehat bagi warga.",
-  },
-];
-
 export default async function TentangPage() {
   const team = await getTeam();
+
+  const photoByName = new Map(team.map((member) => [member.name, member.photo]));
+  const divisionsWithPhotos = divisions.map((div) => ({
+    ...div,
+    members: div.members.map((member) => ({
+      ...member,
+      photo: photoByName.get(member.name),
+    })),
+  }));
 
   return (
     <div>
@@ -67,7 +50,7 @@ export default async function TentangPage() {
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <Mascot className="mx-auto h-64 w-64 sm:h-80 sm:w-80" />
+            <MascotIntro className="mx-auto" />
           </Reveal>
         </div>
       </section>
@@ -82,21 +65,7 @@ export default async function TentangPage() {
               title="Empat klaster mahasiswa KKN"
             />
           </Reveal>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {divisions.map((div, i) => (
-              <Reveal key={div.title} delay={i * 90} className="glass-card rounded-3xl p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-dark-green)] text-[var(--color-beige)]">
-                  <div.icon size={22} aria-hidden="true" />
-                </div>
-                <h3 className="font-display mt-4 text-lg text-[var(--color-dark-green)]">
-                  {div.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
-                  {div.description}
-                </p>
-              </Reveal>
-            ))}
-          </div>
+          <DivisionGrid divisions={divisionsWithPhotos} />
         </div>
       </section>
 

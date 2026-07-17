@@ -56,6 +56,21 @@ export type TeamMember = {
   programs?: string[];
 };
 
+export type DivisionMember = {
+  name: string;
+  programs: string[];
+  /** Diisi di tentang/page.tsx dari data tim admin (getTeam()), dicocokkan lewat nama. */
+  photo?: string;
+};
+
+export type Division = {
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  members: DivisionMember[];
+};
+
 import type { FeatureCollection } from "geojson";
 
 export type MapIconKey =
