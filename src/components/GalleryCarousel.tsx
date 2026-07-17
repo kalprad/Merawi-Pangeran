@@ -12,6 +12,8 @@ export default function GalleryCarousel({ photos }: { photos: DrivePhoto[] }) {
   const dragRef = useRef({ dragging: false, startX: 0, startScroll: 0, moved: false });
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [renderedPhoto, setRenderedPhoto] = useState<DrivePhoto | null>(null);
+  const [visible, setVisible] = useState(false);
 
   const close = useCallback(() => setActiveIndex(null), []);
   const showPrev = useCallback(() => {
@@ -34,6 +36,21 @@ export default function GalleryCarousel({ photos }: { photos: DrivePhoto[] }) {
   }, [activeIndex, close, showPrev, showNext]);
 
   const active = activeIndex !== null ? photos[activeIndex] : null;
+
+  useEffect(() => {
+    if (active) {
+      // Mounts the lightbox immediately so the next frame's opacity/scale
+      // flip has something to animate; this is a rare, user-triggered
+      // toggle.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRenderedPhoto(active);
+      const raf = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setVisible(false);
+    const timeout = setTimeout(() => setRenderedPhoto(null), 200);
+    return () => clearTimeout(timeout);
+  }, [active]);
 
   // Lebar 1 slide + gap dipakai untuk hitung jarak geser tombol panah & posisi dot aktif.
   const getStep = useCallback(() => {
@@ -189,12 +206,13 @@ export default function GalleryCarousel({ photos }: { photos: DrivePhoto[] }) {
         </div>
       </Reveal>
 
-      {active && (
+      {renderedPhoto && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={active.name}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          aria-label={renderedPhoto.name}
+          data-state={visible ? "open" : "closed"}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm transition-opacity duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
           onClick={close}
         >
           <button
@@ -234,18 +252,19 @@ export default function GalleryCarousel({ photos }: { photos: DrivePhoto[] }) {
           )}
 
           <div
-            className="relative flex max-h-[85vh] max-w-4xl flex-col items-center"
+            data-state={visible ? "open" : "closed"}
+            className="relative flex max-h-[85vh] max-w-4xl flex-col items-center transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={active.imageUrl}
-              alt={active.name}
+              src={renderedPhoto.imageUrl}
+              alt={renderedPhoto.name}
               referrerPolicy="no-referrer"
               className="max-h-[80vh] w-auto rounded-2xl object-contain shadow-2xl"
             />
             <a
-              href={active.viewUrl}
+              href={renderedPhoto.viewUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white"

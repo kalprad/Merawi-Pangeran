@@ -17,6 +17,23 @@ const MEMBER_CARD_GRADIENTS = [
 
 export default function DivisionGrid({ divisions }: { divisions: Division[] }) {
   const [active, setActive] = useState<Division | null>(null);
+  const [renderedDivision, setRenderedDivision] = useState<Division | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (active) {
+      // Mounts the modal immediately so the next frame's opacity/scale flip
+      // has something to animate; this is a rare, user-triggered toggle, not
+      // a hot path.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRenderedDivision(active);
+      const raf = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setVisible(false);
+    const timeout = setTimeout(() => setRenderedDivision(null), 200);
+    return () => clearTimeout(timeout);
+  }, [active]);
 
   useEffect(() => {
     if (!active) return;
@@ -67,20 +84,22 @@ export default function DivisionGrid({ divisions }: { divisions: Division[] }) {
         })}
       </div>
 
-      {active &&
+      {renderedDivision &&
         createPortal(
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={active.title}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+            aria-label={renderedDivision.title}
+            data-state={visible ? "open" : "closed"}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm transition-opacity duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
             onClick={() => setActive(null)}
           >
             {/* Key di judul klaster supaya state halaman (page) mulai dari 0
                 lagi setiap kali klaster yang dibuka berganti. */}
             <DivisionModal
-              key={active.title}
-              division={active}
+              key={renderedDivision.title}
+              division={renderedDivision}
+              visible={visible}
               onClose={() => setActive(null)}
             />
           </div>,
@@ -92,9 +111,11 @@ export default function DivisionGrid({ divisions }: { divisions: Division[] }) {
 
 function DivisionModal({
   division,
+  visible,
   onClose,
 }: {
   division: Division;
+  visible: boolean;
   onClose: () => void;
 }) {
   const [page, setPage] = useState(0);
@@ -112,7 +133,8 @@ function DivisionModal({
 
   return (
     <div
-      className="glass-card relative flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-[var(--color-surface)] p-6 sm:p-8"
+      data-state={visible ? "open" : "closed"}
+      className="glass-card relative flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-[var(--color-surface)] p-6 sm:p-8 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
       onClick={(e) => e.stopPropagation()}
     >
       <button

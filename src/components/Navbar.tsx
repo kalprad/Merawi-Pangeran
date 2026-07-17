@@ -11,6 +11,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [renderMenu, setRenderMenu] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -18,6 +20,21 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (open) {
+      // Mounts the panel immediately so the next frame's opacity/scale flip
+      // has something to animate; this is a rare, user-triggered toggle, not
+      // a hot path.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRenderMenu(true);
+      const raf = requestAnimationFrame(() => setMenuVisible(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setMenuVisible(false);
+    const timeout = setTimeout(() => setRenderMenu(false), 200);
+    return () => clearTimeout(timeout);
+  }, [open]);
 
   return (
     <header
@@ -97,32 +114,40 @@ export default function Navbar() {
         </div>
       </div>
 
-      {open && (
-        <nav className="border-t border-[var(--color-border)] bg-[var(--color-beige)]/80 px-4 pb-4 backdrop-blur-xl lg:hidden">
-          <ul className="flex flex-col gap-1 pt-2">
-            {navLinks.map((link) => {
-              const active =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(link.href);
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`block rounded-lg px-4 py-3 text-base font-medium ${
-                      active
-                        ? "bg-[var(--color-dark-green)] text-[var(--color-beige)]"
-                        : "text-[var(--color-dark-green)] hover:bg-[var(--color-muted)]"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      {renderMenu && (
+        <div
+          data-state={menuVisible ? "open" : "closed"}
+          className="grid transition-[grid-template-rows] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:grid-rows-[0fr] data-[state=open]:grid-rows-[1fr] lg:hidden"
+        >
+          <nav
+            data-state={menuVisible ? "open" : "closed"}
+            className="overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-beige)]/80 backdrop-blur-xl data-[state=closed]:border-t-0"
+          >
+            <ul className="flex flex-col gap-1 px-4 pt-2 pb-4">
+              {navLinks.map((link) => {
+                const active =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname?.startsWith(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`block rounded-lg px-4 py-3 text-base font-medium ${
+                        active
+                          ? "bg-[var(--color-dark-green)] text-[var(--color-beige)]"
+                          : "text-[var(--color-dark-green)] hover:bg-[var(--color-muted)]"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
       )}
     </header>
   );

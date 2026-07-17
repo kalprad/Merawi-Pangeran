@@ -15,6 +15,23 @@ function instagramUrl(instagram: string) {
 
 export default function TeamGrid({ team }: { team: TeamMember[] }) {
   const [active, setActive] = useState<TeamMember | null>(null);
+  const [renderedMember, setRenderedMember] = useState<TeamMember | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (active) {
+      // Mounts the modal immediately so the next frame's opacity/scale flip
+      // has something to animate; this is a rare, user-triggered toggle, not
+      // a hot path.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRenderedMember(active);
+      const raf = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setVisible(false);
+    const timeout = setTimeout(() => setRenderedMember(null), 200);
+    return () => clearTimeout(timeout);
+  }, [active]);
 
   useEffect(() => {
     if (!active) return;
@@ -70,16 +87,18 @@ export default function TeamGrid({ team }: { team: TeamMember[] }) {
         ))}
       </div>
 
-      {active && (
+      {renderedMember && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={active.name}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          aria-label={renderedMember.name}
+          data-state={visible ? "open" : "closed"}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm transition-opacity duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
           onClick={() => setActive(null)}
         >
           <div
-            className="glass-card relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-[var(--color-surface)] p-6 sm:p-8"
+            className="glass-card relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-[var(--color-surface)] p-6 sm:p-8 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
+            data-state={visible ? "open" : "closed"}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -93,13 +112,13 @@ export default function TeamGrid({ team }: { team: TeamMember[] }) {
 
             <div className="flex flex-col items-center text-center">
               <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-full bg-[var(--color-muted)]">
-                {active.photo ? (
+                {renderedMember.photo ? (
                   <Image
-                    src={active.photo}
-                    alt={active.name}
+                    src={renderedMember.photo}
+                    alt={renderedMember.name}
                     fill
                     className="object-cover"
-                    unoptimized={active.photo.startsWith("http")}
+                    unoptimized={renderedMember.photo.startsWith("http")}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-[var(--color-muted-foreground)]">
@@ -108,19 +127,19 @@ export default function TeamGrid({ team }: { team: TeamMember[] }) {
                 )}
               </div>
               <h3 className="font-display mt-4 text-xl text-[var(--color-dark-green)]">
-                {active.name}
+                {renderedMember.name}
               </h3>
               <span className="mt-1 inline-flex items-center rounded-full bg-[var(--color-dark-green)] px-3 py-1 text-xs font-semibold text-[var(--color-beige)]">
-                {active.role}
+                {renderedMember.role}
               </span>
-              {active.prodi && (
+              {renderedMember.prodi && (
                 <p className="mt-2 text-sm text-[var(--color-muted-foreground)]">
-                  {active.prodi}
+                  {renderedMember.prodi}
                 </p>
               )}
-              {active.instagram && (
+              {renderedMember.instagram && (
                 <a
-                  href={instagramUrl(active.instagram)}
+                  href={instagramUrl(renderedMember.instagram)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[var(--color-midnight-teal)] hover:text-[var(--color-dark-green)]"
@@ -131,13 +150,13 @@ export default function TeamGrid({ team }: { team: TeamMember[] }) {
               )}
             </div>
 
-            {!!active.programs?.length && (
+            {!!renderedMember.programs?.length && (
               <div className="mt-6 border-t border-[var(--color-border)] pt-5">
                 <h4 className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
                   Program Kerja
                 </h4>
                 <ol className="mt-3 space-y-2.5">
-                  {active.programs.map((program, i) => (
+                  {renderedMember.programs.map((program, i) => (
                     <li key={i} className="flex gap-3 text-sm leading-relaxed text-[var(--color-foreground)]">
                       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-muted)] text-[11px] font-semibold text-[var(--color-dark-green)]">
                         {i + 1}

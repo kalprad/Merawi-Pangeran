@@ -269,6 +269,23 @@ function LayerDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [renderDropdown, setRenderDropdown] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      // Mounts the dropdown immediately so the next frame's opacity/scale
+      // flip has something to animate; this is a rare, user-triggered
+      // toggle.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRenderDropdown(true);
+      const raf = requestAnimationFrame(() => setDropdownVisible(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setDropdownVisible(false);
+    const timeout = setTimeout(() => setRenderDropdown(false), 200);
+    return () => clearTimeout(timeout);
+  }, [open]);
 
   useEffect(() => {
     function onPointerDown(e: MouseEvent) {
@@ -304,10 +321,11 @@ function LayerDropdown({
         />
       </button>
 
-      {open && (
+      {renderDropdown && (
         <ul
           role="listbox"
-          className="glass-card absolute top-full left-0 z-[3000] mt-2 w-64 overflow-hidden rounded-2xl p-1.5"
+          data-state={dropdownVisible ? "open" : "closed"}
+          className="glass-card absolute top-full left-0 z-[3000] mt-2 w-64 overflow-hidden rounded-2xl p-1.5 origin-top-left transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
         >
           {layers.map((layer) => {
             const selected = layer.id === activeLayer.id;

@@ -22,6 +22,19 @@ export default function Mascot({ className = "" }: { className?: string }) {
   const [gazePx, setGazePx] = useState({ x: 0, y: 0 });
   const [parallaxPx, setParallaxPx] = useState({ x: 0, y: 0 });
   const [reacting, setReacting] = useState(false);
+  const reactTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleReact() {
+    setReacting(true);
+    if (reactTimeoutRef.current) clearTimeout(reactTimeoutRef.current);
+    reactTimeoutRef.current = setTimeout(() => setReacting(false), 700);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (reactTimeoutRef.current) clearTimeout(reactTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -68,8 +81,7 @@ export default function Mascot({ className = "" }: { className?: string }) {
         {/* Lapisan floating — animasi naik-turun terus-menerus */}
         <div className="mascot-float relative h-full w-full">
           <div
-            onClick={() => setReacting(true)}
-            onAnimationEnd={() => setReacting(false)}
+            onClick={handleReact}
             className={`relative h-full w-full cursor-pointer ${reacting ? "mascot-wiggle" : ""}`}
           >
             <Image
