@@ -63,44 +63,5 @@
       }
     },
     "order": 3
-  },
-  {
-    "id": "777224d6-5a21-4837-a7db-e461c71267a7",
-    "slug": "umkm-2",
-    "title": "UMKM",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/umkm/data.geojson"
-    ],
-    "fields": {
-      "name": "Nama",
-      "category": "Jenis",
-      "googleMaps": "Google Maps",
-      "info": []
-    },
-    "categories": [
-      {
-        "value": "Makanan",
-        "label": "Makanan",
-        "color": "#C9793A",
-        "icon": "utensils"
-      },
-      {
-        "value": "Jasa",
-        "label": "Jasa",
-        "color": "#105666",
-        "icon": "wrench"
-      },
-      {
-        "value": "Barang",
-        "label": "Barang",
-        "color": "#6C5B9E",
-        "icon": "shopping-bag"
-      }
-    ],
-    "photo": {
-      "mode": "property",
-      "property": "Foto"
-    },
-    "order": 2
   }
 ]
