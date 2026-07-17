@@ -2,15 +2,15 @@
   "siBeningUrl": "",
   "galleryFolderUrl": "https://drive.google.com/drive/folders/1QUqdFlEipQ9HtbxNWhaS1RbgLu55hrW-?usp=sharing",
   "featureGuideUrls": {
-    "jembatan": "",
-    "irigasi": "",
+    "jembatan": "https://drive.google.com/file/d/1cmvMlqRjEEuDNaC4TWpmqxijrffLBO9Z/view?usp=drive_link",
+    "irigasi": "https://drive.google.com/file/d/1eMseHze8J3StTjIgNc07Hiz9xJ35Yw5d/view?usp=drive_link",
     "talud": "",
     "rab": ""
   },
   "releaseCountdown": {
     "enabled": false,
-    "releaseAt": "",
-    "title": "",
-    "message": ""
+    "releaseAt": "2026-07-17T22:22",
+    "title": "Countdown to release",
+    "message": "Made with love and dedication"
   }
 }
