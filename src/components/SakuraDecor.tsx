@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 
-export default function SakuraDecor({ className = "" }: { className?: string }) {
+export default function SakuraDecor({
+  className = "",
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   const [boosting, setBoosting] = useState(false);
 
   return (
@@ -12,6 +18,7 @@ export default function SakuraDecor({ className = "" }: { className?: string }) 
       fill="none"
       onClick={() => setBoosting(true)}
       onAnimationEnd={() => setBoosting(false)}
+      style={style}
       className={`cursor-pointer transition-transform duration-300 hover:scale-110 ${
         boosting ? "sakura-spin-boost" : "sakura-spin"
       } ${className}`}

@@ -22,10 +22,19 @@ export type Materi = {
 
 export type TutorialCategory = "jembatan" | "irigasi" | "talud" | "rab";
 
+export type ReleaseCountdownSettings = {
+  enabled: boolean;
+  /** Waktu rilis, format ISO datetime-local (mis. "2026-08-17T09:00"). */
+  releaseAt: string;
+  title?: string;
+  message?: string;
+};
+
 export type Settings = {
   siBeningUrl: string;
   galleryFolderUrl?: string;
   featureGuideUrls?: Record<TutorialCategory, string>;
+  releaseCountdown?: ReleaseCountdownSettings;
 };
 
 export type TutorialVideo = {

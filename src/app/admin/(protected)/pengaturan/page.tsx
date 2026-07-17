@@ -17,11 +17,14 @@ const emptyGuideUrls: Record<TutorialCategory, string> = {
   rab: "",
 };
 
+const emptyReleaseCountdown = { enabled: false, releaseAt: "", title: "", message: "" };
+
 export default function PengaturanPage() {
   const [siBeningUrl, setSiBeningUrl] = useState("");
   const [galleryFolderUrl, setGalleryFolderUrl] = useState("");
   const [featureGuideUrls, setFeatureGuideUrls] =
     useState<Record<TutorialCategory, string>>(emptyGuideUrls);
+  const [releaseCountdown, setReleaseCountdown] = useState(emptyReleaseCountdown);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +37,7 @@ export default function PengaturanPage() {
         setSiBeningUrl(data.siBeningUrl ?? "");
         setGalleryFolderUrl(data.galleryFolderUrl ?? "");
         setFeatureGuideUrls({ ...emptyGuideUrls, ...data.featureGuideUrls });
+        setReleaseCountdown({ ...emptyReleaseCountdown, ...data.releaseCountdown });
         setLoading(false);
       });
   }, []);
@@ -51,7 +55,12 @@ export default function PengaturanPage() {
       const res = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ siBeningUrl, galleryFolderUrl, featureGuideUrls }),
+        body: JSON.stringify({
+          siBeningUrl,
+          galleryFolderUrl,
+          featureGuideUrls,
+          releaseCountdown,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -147,6 +156,87 @@ export default function PengaturanPage() {
               />
             </div>
           ))}
+
+          <div className="pt-4">
+            <p className="text-sm font-medium text-[var(--color-dark-green)]">
+              Countdown Persiapan Rilis
+            </p>
+            <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
+              Saat diaktifkan, seluruh pengunjung situs (kecuali panel admin
+              ini) hanya akan melihat layar hitung mundur sampai waktu rilis
+              tercapai — cocok ditampilkan langsung saat prosesi penyerahan
+              ke perangkat desa. Situs akan otomatis terbuka begitu waktunya
+              tiba.
+            </p>
+          </div>
+
+          <label className="flex items-center gap-3 pt-2">
+            <input
+              type="checkbox"
+              checked={releaseCountdown.enabled}
+              onChange={(e) =>
+                setReleaseCountdown((prev) => ({ ...prev, enabled: e.target.checked }))
+              }
+              className="h-4 w-4 rounded border-[var(--color-border)] accent-[var(--color-dark-green)]"
+            />
+            <span className="text-sm font-medium text-[var(--color-dark-green)]">
+              Aktifkan layar countdown
+            </span>
+          </label>
+
+          <label
+            htmlFor="releaseAt"
+            className="block pt-2 text-sm font-medium text-[var(--color-dark-green)]"
+          >
+            Waktu Rilis
+          </label>
+          <input
+            id="releaseAt"
+            type="datetime-local"
+            value={releaseCountdown.releaseAt}
+            onChange={(e) =>
+              setReleaseCountdown((prev) => ({ ...prev, releaseAt: e.target.value }))
+            }
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
+          />
+          <p className="text-xs text-[var(--color-muted-foreground)]">
+            Berdasarkan waktu lokal perangkat ini. Wajib diisi kalau
+            countdown diaktifkan.
+          </p>
+
+          <label
+            htmlFor="countdownTitle"
+            className="block pt-2 text-sm font-medium text-[var(--color-dark-green)]"
+          >
+            Judul di Layar Countdown (opsional)
+          </label>
+          <input
+            id="countdownTitle"
+            type="text"
+            value={releaseCountdown.title}
+            onChange={(e) =>
+              setReleaseCountdown((prev) => ({ ...prev, title: e.target.value }))
+            }
+            placeholder="Website Merawi Pangeran akan segera rilis"
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
+          />
+
+          <label
+            htmlFor="countdownMessage"
+            className="block pt-2 text-sm font-medium text-[var(--color-dark-green)]"
+          >
+            Pesan di Layar Countdown (opsional)
+          </label>
+          <textarea
+            id="countdownMessage"
+            value={releaseCountdown.message}
+            onChange={(e) =>
+              setReleaseCountdown((prev) => ({ ...prev, message: e.target.value }))
+            }
+            placeholder="Nantikan peluncuran resmi situs ini pada prosesi penyerahan program kerja kepada perangkat desa."
+            rows={2}
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
+          />
 
           {error && (
             <p role="alert" className="text-sm font-medium text-red-600">

@@ -157,6 +157,245 @@ h1, h2, h3, h4, .font-display {
   animation: mascot-float 3.6s ease-in-out infinite;
 }
 
+/* Layar countdown rilis: tirai iris terbuka + kilatan cahaya + pesan
+   melambung saat waktu rilis tercapai (see ReleaseCountdown.tsx). Durasi di
+   sini disinkronkan dengan CELEBRATE_MS/WIPE_MS di komponen -- perayaan penuh
+   dulu (sunburst ganda, kilauan, confetti, maskot melompat + berkilau) baru
+   tirai perlahan terbuka, supaya intensitasnya terasa lebih lama dan megah. */
+@keyframes countdown-iris-out {
+  from {
+    clip-path: circle(150% at 50% 50%);
+    filter: blur(0);
+  }
+  60% {
+    filter: blur(0);
+  }
+  to {
+    clip-path: circle(0% at 50% 50%);
+    filter: blur(8px);
+  }
+}
+.countdown-iris-out {
+  animation: countdown-iris-out 1700ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation-delay: var(--wipe-delay, 0ms);
+}
+
+@keyframes countdown-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.25);
+  }
+  30% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(4.4);
+  }
+}
+.countdown-flash {
+  animation: countdown-flash 1500ms ease-out forwards;
+}
+
+@keyframes countdown-message-in {
+  from {
+    opacity: 0;
+    transform: scale(0.65) translateY(10px);
+  }
+  55% {
+    transform: scale(1.1) translateY(0);
+  }
+  75% {
+    transform: scale(0.98) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.countdown-message-in {
+  animation: countdown-message-in 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Sapuan kilau emas yang terus melintas di teks pesan rilis, untuk kesan
+   mewah selama layar perayaan ditahan. */
+@keyframes text-shimmer-sweep {
+  from {
+    background-position: -160% 0;
+  }
+  to {
+    background-position: 260% 0;
+  }
+}
+.text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-beige) 35%,
+    #fffaf0 50%,
+    var(--color-beige) 65%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer-sweep 2.4s linear infinite;
+}
+
+/* Maskot menyambut secara epic begitu tirai countdown terbuka: melompat
+   membesar dengan pantulan elastis, berkilau sesaat, lalu lepas landas
+   terbang ke atas menghilang tepat menjelang tirai terbuka -- satu urutan
+   koreografi tunggal (bukan glow berdenyut tanpa henti) supaya penutupnya
+   terasa jadi puncak momen, bukan jeda yang kelamaan (see ReleaseCountdown.tsx).
+   Durasi animation di bawah disamakan dengan CELEBRATE_MS di komponen. */
+@keyframes mascot-hero-pop {
+  0% {
+    opacity: 1;
+    transform: scale(0.7) translateY(18%) rotate(-10deg);
+    filter: drop-shadow(0 0 0 rgba(247, 244, 213, 0));
+  }
+  12% {
+    transform: scale(1.34) translateY(-12%) rotate(8deg);
+    filter: drop-shadow(0 0 40px rgba(247, 244, 213, 0.9));
+  }
+  20% {
+    transform: scale(0.9) translateY(4%) rotate(-3deg);
+    filter: drop-shadow(0 0 20px rgba(247, 244, 213, 0.45));
+  }
+  28% {
+    transform: scale(1.12) translateY(-4%) rotate(3deg);
+    filter: drop-shadow(0 0 34px rgba(247, 244, 213, 0.8));
+  }
+  36% {
+    transform: scale(1) translateY(0%) rotate(0deg);
+    filter: drop-shadow(0 0 22px rgba(247, 244, 213, 0.5));
+  }
+  /* Sesi maskot selesai berayun di sekitar sini -- lihat LIFTOFF_SWAP_MS di
+     komponen, gambar ditukar jadi roket tepat saat wrapper tenang begini
+     supaya pergantiannya jelas terlihat, bukan tersamar oleh gerakan cepat. */
+  48% {
+    transform: scale(1.05) translateY(-2%) rotate(0deg);
+    filter: drop-shadow(0 0 44px rgba(247, 244, 213, 0.95));
+  }
+  58% {
+    transform: scale(1.02) translateY(-1%) rotate(1deg);
+    filter: drop-shadow(0 0 26px rgba(247, 244, 213, 0.55));
+  }
+  /* Roket "melayang diam" berkilau di tempat -- rentang tahan paling lama
+     di seluruh urutan, supaya benar-benar sempat terlihat sebelum lepas landas. */
+  70% {
+    transform: scale(1.08) translateY(-3%) rotate(-1deg);
+    filter: drop-shadow(0 0 42px rgba(247, 244, 213, 0.9));
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0.93) translateY(3%) rotate(2deg);
+    filter: drop-shadow(0 0 14px rgba(247, 244, 213, 0.3));
+  }
+  92% {
+    opacity: 1;
+    transform: scale(1.28) translateY(-100%) rotate(-11deg);
+    filter: drop-shadow(0 0 55px rgba(247, 244, 213, 1));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-330%) rotate(-18deg);
+    filter: drop-shadow(0 0 8px rgba(247, 244, 213, 0));
+  }
+}
+.mascot-hero-pop {
+  animation: mascot-hero-pop var(--hero-pop-duration, 3000ms) cubic-bezier(0.32, 0, 0.2, 1) both;
+}
+
+@keyframes hero-sunburst {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  35% {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.1) rotate(55deg);
+  }
+}
+.hero-sunburst {
+  pointer-events: none;
+  border-radius: 9999px;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(247, 244, 213, 0.9) 0deg 6deg,
+    rgba(247, 244, 213, 0) 6deg 24deg
+  );
+  animation: hero-sunburst 1900ms ease-out forwards;
+}
+
+@keyframes hero-sunburst-alt {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  40% {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6) rotate(-65deg);
+  }
+}
+.hero-sunburst-secondary {
+  pointer-events: none;
+  border-radius: 9999px;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(211, 150, 140, 0.85) 0deg 4deg,
+    rgba(211, 150, 140, 0) 4deg 20deg
+  );
+  animation: hero-sunburst-alt 2100ms ease-out 150ms both;
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sx), var(--sy)) scale(1);
+  }
+}
+.sparkle-burst {
+  pointer-events: none;
+  border-radius: 9999px;
+  animation: sparkle-burst 1600ms ease-out forwards;
+  animation-delay: var(--sd, 0ms);
+}
+
+/* Confetti bunga sakura yang berjatuhan selama perayaan rilis berlangsung. */
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-20%) rotate(0deg) scale(0.7);
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(720%) rotate(var(--cr, 180deg)) scale(0.9);
+  }
+}
+.confetti-fall {
+  pointer-events: none;
+  animation: confetti-fall var(--cdur, 2600ms) ease-in var(--cdelay, 0ms) both;
+}
+
 /* Maskot "kegelian" saat diklik (see Mascot.tsx) */
 @keyframes mascot-wiggle {
   0%,
@@ -249,7 +488,16 @@ h1, h2, h3, h4, .font-display {
   .sakura-spin,
   .sakura-spin-boost,
   .mascot-float,
-  .mascot-wiggle {
+  .mascot-wiggle,
+  .countdown-iris-out,
+  .countdown-flash,
+  .countdown-message-in,
+  .text-shimmer,
+  .mascot-hero-pop,
+  .hero-sunburst,
+  .hero-sunburst-secondary,
+  .sparkle-burst,
+  .confetti-fall {
     animation: none !important;
   }
   * {

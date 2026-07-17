@@ -3,6 +3,8 @@ import { milkAndHoney, neueMontreal } from "./fonts";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
+import ReleaseCountdown from "@/components/ReleaseCountdown";
+import { getSettings } from "@/lib/data";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,11 +16,14 @@ export const metadata: Metadata = {
     "Portal resmi KKN Merawi Pangeran 2026 di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang. Berita kegiatan, materi sosialisasi, peta interaktif desa, dan aplikasi SI-Bening.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+  const serverTime = new Date().getTime();
+
   return (
     <html
       lang="id"
@@ -26,11 +31,13 @@ export default function RootLayout({
       className={`${milkAndHoney.variable} ${neueMontreal.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-1">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
+        <ReleaseCountdown settings={settings.releaseCountdown} serverTime={serverTime}>
+          <Navbar />
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+        </ReleaseCountdown>
       </body>
     </html>
   );
