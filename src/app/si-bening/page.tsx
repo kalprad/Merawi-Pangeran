@@ -106,10 +106,20 @@ const features: {
   },
 ];
 
-export default async function SiBeningPage() {
+const TUTORIAL_CATEGORIES = new Set<TutorialCategory>(["jembatan", "irigasi", "talud", "rab"]);
+
+export default async function SiBeningPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ modul?: string; video?: string }>;
+}) {
   const settings = await getSettings();
   const tutorialVideos = await getTutorialVideos();
   const hasDownloadLink = Boolean(settings.siBeningUrl);
+  const { modul, video } = await searchParams;
+  const initialModule = TUTORIAL_CATEGORIES.has(modul as TutorialCategory)
+    ? (modul as TutorialCategory)
+    : "jembatan";
 
   return (
     <div>
@@ -245,7 +255,7 @@ export default async function SiBeningPage() {
         </div>
       </section>
 
-      <section className="py-20">
+      <section id="tutorial" className="scroll-mt-24 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionHeading
@@ -256,7 +266,11 @@ export default async function SiBeningPage() {
             />
           </Reveal>
           <Reveal delay={100} className="mt-10">
-            <TutorialCourse videos={tutorialVideos} />
+            <TutorialCourse
+              videos={tutorialVideos}
+              initialModule={initialModule}
+              initialVideoId={video ?? null}
+            />
           </Reveal>
         </div>
       </section>

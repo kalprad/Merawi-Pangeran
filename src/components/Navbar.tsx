@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { navLinks } from "@/lib/nav-links";
 
 export default function Navbar() {
@@ -71,15 +71,30 @@ export default function Navbar() {
           })}
         </nav>
 
-        <button
-          type="button"
-          aria-label={open ? "Tutup menu" : "Buka menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-dark-green)] hover:bg-[var(--color-muted)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] lg:hidden"
-        >
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-1">
+          <Link
+            href="/cari"
+            aria-label="Cari"
+            onClick={() => setOpen(false)}
+            className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
+              pathname?.startsWith("/cari")
+                ? "bg-[var(--color-dark-green)] text-[var(--color-beige)]"
+                : "text-[var(--color-dark-green)] hover:bg-[var(--color-muted)]"
+            }`}
+          >
+            <Search size={20} aria-hidden="true" />
+          </Link>
+
+          <button
+            type="button"
+            aria-label={open ? "Tutup menu" : "Buka menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-dark-green)] hover:bg-[var(--color-muted)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] lg:hidden"
+          >
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {open && (

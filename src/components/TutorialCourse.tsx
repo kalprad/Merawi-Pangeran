@@ -12,9 +12,17 @@ const modules: { value: TutorialCategory; label: string; icon: LucideIcon }[] = 
   { value: "rab", label: "Perhitungan RAB", icon: Calculator },
 ];
 
-export default function TutorialCourse({ videos }: { videos: TutorialVideo[] }) {
-  const [activeModule, setActiveModule] = useState<TutorialCategory>("jembatan");
-  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+export default function TutorialCourse({
+  videos,
+  initialModule = "jembatan",
+  initialVideoId = null,
+}: {
+  videos: TutorialVideo[];
+  initialModule?: TutorialCategory;
+  initialVideoId?: string | null;
+}) {
+  const [activeModule, setActiveModule] = useState<TutorialCategory>(initialModule);
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(initialVideoId);
 
   const activeVideos = videos
     .filter((v) => v.category === activeModule)

@@ -14,3 +14,10 @@ export function hasOverlap(a: string, b: string): boolean {
   const setA = new Set(parseCategories(a).map((c) => c.toLowerCase()));
   return parseCategories(b).some((c) => setA.has(c.toLowerCase()));
 }
+
+export const TUTORIAL_CATEGORY_LABELS: Record<string, string> = {
+  jembatan: "Evaluasi & Desain Jembatan",
+  irigasi: "Saluran Irigasi",
+  talud: "Talud",
+  rab: "Perhitungan RAB",
+};

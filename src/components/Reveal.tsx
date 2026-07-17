@@ -10,6 +10,7 @@ type RevealProps = {
   /** Vertical offset (px) the content travels in from. */
   y?: number;
   as?: "div" | "li";
+  id?: string;
 };
 
 export default function Reveal({
@@ -18,6 +19,7 @@ export default function Reveal({
   delay = 0,
   y = 24,
   as = "div",
+  id,
 }: RevealProps) {
   const ref = useRef<HTMLDivElement & HTMLLIElement>(null);
   const [visible, setVisible] = useState(false);
@@ -58,14 +60,14 @@ export default function Reveal({
 
   if (as === "li") {
     return (
-      <li ref={ref} className={className} style={style}>
+      <li ref={ref} id={id} className={className} style={style}>
         {children}
       </li>
     );
   }
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <div ref={ref} id={id} className={className} style={style}>
       {children}
     </div>
   );
