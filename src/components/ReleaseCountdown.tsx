@@ -76,6 +76,20 @@ const CONFETTI = [
   { left: "48%", size: 18, delay: 500, duration: 2700, rotate: "200deg" },
 ];
 
+/**
+ * Input datetime-local dari admin ("2026-07-17T19:53") tidak membawa info
+ * zona waktu, jadi "new Date(...)" akan menafsirkannya sebagai waktu lokal
+ * runtime yang menjalankannya -- di browser pengunjung Indonesia itu WIB,
+ * tapi saat di-render di server (mis. fungsi serverless Vercel yang
+ * defaultnya UTC) string yang sama malah dibaca sebagai UTC, meleset 7 jam.
+ * Admin selalu mengisi jam dalam WIB (UTC+7), jadi offset-nya disematkan
+ * eksplisit di sini supaya hasilnya sama persis di server maupun browser.
+ */
+function parseWibDatetime(value: string): number {
+  const withSeconds = value.length === 16 ? `${value}:00` : value;
+  return new Date(`${withSeconds}+07:00`).getTime();
+}
+
 function getRemaining(targetMs: number, nowMs: number) {
   const totalSeconds = Math.floor(Math.max(0, targetMs - nowMs) / 1000);
   return {
@@ -101,7 +115,7 @@ export default function ReleaseCountdown({ settings, serverTime, children }: Pro
   const isAdminRoute = pathname?.startsWith("/admin") ?? false;
 
   const targetMs =
-    settings?.enabled && settings.releaseAt ? new Date(settings.releaseAt).getTime() : NaN;
+    settings?.enabled && settings.releaseAt ? parseWibDatetime(settings.releaseAt) : NaN;
   const hasValidTarget = !Number.isNaN(targetMs);
   const startsLocked = hasValidTarget && serverTime < targetMs;
 

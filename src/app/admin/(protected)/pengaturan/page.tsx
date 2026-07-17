@@ -200,7 +200,8 @@ export default function PengaturanPage() {
             className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
           />
           <p className="text-xs text-[var(--color-muted-foreground)]">
-            Berdasarkan waktu lokal perangkat ini. Wajib diisi kalau
+            Selalu dianggap sebagai waktu Indonesia bagian barat (WIB,
+            UTC+7), apa pun zona waktu perangkat ini. Wajib diisi kalau
             countdown diaktifkan.
           </p>
 
