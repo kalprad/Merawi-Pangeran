@@ -99,13 +99,13 @@ export default function TutorialCourse({
             <iframe
               key={activeVideo.id}
               src={embedUrl}
-              className="aspect-video w-full"
+              className="aspect-video min-h-[240px] w-full"
               allow="autoplay"
               allowFullScreen
               title={activeVideo.title}
             />
           ) : (
-            <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 p-6 text-center text-[var(--color-muted-foreground)]">
+            <div className="flex aspect-video min-h-[240px] w-full flex-col items-center justify-center gap-2 p-6 text-center text-[var(--color-muted-foreground)]">
               <CirclePlay size={32} aria-hidden="true" />
               <p className="text-sm">Belum ada video untuk modul ini.</p>
             </div>
