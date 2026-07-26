@@ -7,6 +7,13 @@
     "order": 1
   },
   {
+    "id": "989268d2-10c9-450d-875d-c76dd2bbf155",
+    "category": "pengenalan",
+    "title": "Apa itu Aplikasi SI-BENING",
+    "driveUrl": "https://drive.google.com/file/d/1fUBIxmlcs-vQAV2T2azVIJ81N4jyL8HO/view?usp=drive_link",
+    "order": 1
+  },
+  {
     "id": "97964000-47d3-4b5c-9a14-1482bcbfa48e",
     "category": "jembatan",
     "title": "Tutorial #2 Penggunaan Modul Desain Jembatan",
@@ -14,10 +21,10 @@
     "order": 2
   },
   {
-    "id": "989268d2-10c9-450d-875d-c76dd2bbf155",
+    "id": "983166a1-15af-41c6-8371-19f870227a37",
     "category": "pengenalan",
-    "title": "Apa itu Aplikasi SI-BENING",
-    "driveUrl": "https://drive.google.com/file/d/1fUBIxmlcs-vQAV2T2azVIJ81N4jyL8HO/view?usp=drive_link",
-    "order": 1
+    "title": "Cara Download SI-BENING",
+    "driveUrl": "https://drive.google.com/file/d/13O0tnnjgShRDyb8eDKIY6adtoqDwzMOo/view?usp=drive_link",
+    "order": 2
   }
 ]
