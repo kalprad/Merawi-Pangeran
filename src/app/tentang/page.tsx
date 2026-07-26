@@ -5,6 +5,7 @@ import MascotIntro from "@/components/MascotIntro";
 import TeamGrid from "@/components/TeamGrid";
 import DivisionGrid from "@/components/DivisionGrid";
 import PageOrnaments from "@/components/PageOrnaments";
+import PengabdianCountdown from "@/components/PengabdianCountdown";
 import { getTeam } from "@/lib/data";
 import { divisions } from "@/lib/divisions";
 
@@ -18,6 +19,7 @@ export const dynamic = "force-dynamic";
 
 export default async function TentangPage() {
   const team = await getTeam();
+  const serverTime = Date.now();
 
   const photoByName = new Map(team.map((member) => [member.name, member.photo]));
   const divisionsWithPhotos = divisions.map((div) => ({
@@ -86,6 +88,12 @@ export default async function TentangPage() {
             title="Desa Jetis, Kecamatan Bandungan"
             description="Kabupaten Semarang, Jawa Tengah — berada di kawasan lereng Gunung Ungaran yang sejuk, dengan mayoritas warga berprofesi sebagai petani dan pelaku UMKM rumahan."
           />
+        </Reveal>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
+        <Reveal className="batik-motif batik-motif-invert relative overflow-hidden rounded-3xl bg-[var(--color-dark-green)] px-6 py-14 text-center sm:px-16">
+          <PengabdianCountdown serverTime={serverTime} />
         </Reveal>
       </section>
     </div>

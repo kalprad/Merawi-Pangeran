@@ -29,7 +29,7 @@ import type { FeatureCategory, TutorialCategory } from "@/lib/types";
 export const metadata: Metadata = {
   title: "SI-Bening",
   description:
-    "SI-Bening (Sistem Informasi Bening) — aplikasi untuk membantu desain dan perencanaan infrastruktur desa.",
+    "SI-Bening (Sistem Informasi Bangunan dan Engineering) — aplikasi untuk membantu desain dan perencanaan infrastruktur desa.",
 };
 
 export const dynamic = "force-dynamic";
@@ -191,7 +191,7 @@ export default async function SiBeningPage({
           <Reveal>
             <SectionHeading
               eyebrow="Aplikasi Resmi"
-              title="SI-Bening — Sistem Informasi Bening"
+              title="SI-Bening — Sistem Informasi Bangunan dan Engineering"
               description="Aplikasi yang dikembangkan Tim KKN Merawi Pangeran 2026 untuk membantu Desa Jetis merencanakan dan mendesain infrastruktur secara digital."
             />
 

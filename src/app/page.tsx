@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Newspaper, BookOpen, Map, Images, Smartphone, ArrowRight } from "lucide-react";
+import { Newspaper, BookOpen, Map, Images, Laptop, ArrowRight } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
@@ -154,10 +154,10 @@ export default async function Home() {
             },
             {
               href: "/si-bening",
-              icon: Smartphone,
+              icon: Laptop,
               title: "Aplikasi SI-Bening",
               description:
-                "Sistem Informasi Bening untuk membantu perencanaan desain infrastruktur desa.",
+                "Sistem Informasi Bangunan dan Engineering untuk membantu perencanaan desain infrastruktur desa.",
             },
           ].map((feature, i) => (
             <Reveal key={feature.href} delay={i * 90}>
@@ -248,14 +248,15 @@ export default async function Home() {
             Rencanakan infrastruktur desa lebih mudah
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-beige)]/85">
-            Sistem Informasi Bening membantu perangkat desa mendesain dan
-            merencanakan infrastruktur secara digital, cepat, dan akurat.
+            Sistem Informasi Bangunan dan Engineering membantu perangkat desa
+            mendesain dan merencanakan infrastruktur secara digital, cepat,
+            dan akurat.
           </p>
           <Link
             href="/si-bening"
             className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-rosy-brown)] px-7 py-3 text-sm font-semibold text-[var(--color-dark-green)] transition-transform duration-200 hover:-translate-y-0.5"
           >
-            <Smartphone size={16} />
+            <Laptop size={16} />
             Unduh SI-Bening
           </Link>
         </Reveal>

@@ -68,19 +68,19 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={18} className="shrink-0 text-[var(--color-rosy-brown)]" />
-                <a href="mailto:kknmerawipangeran@gmail.com" className="hover:text-white">
-                  kknmerawipangeran@gmail.com
+                <a href="mailto:kknpangeran@gmail.com" className="hover:text-white">
+                  kknpangeran@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <InstagramIcon size={18} className="shrink-0 text-[var(--color-rosy-brown)]" />
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/merawipangeran"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white"
                 >
-                  @merawipangeran.jetis
+                  @merawipangeran
                 </a>
               </li>
             </ul>
