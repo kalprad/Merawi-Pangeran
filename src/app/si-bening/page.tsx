@@ -12,6 +12,12 @@ import {
   Eye,
   Zap,
   MapPin,
+  MonitorCog,
+  Cpu,
+  MemoryStick,
+  HardDrive,
+  MonitorSmartphone,
+  Wifi,
 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
@@ -106,6 +112,56 @@ const features: {
   },
 ];
 
+const systemRequirements: {
+  icon: typeof MonitorCog;
+  component: string;
+  minimum: string;
+  recommended: string;
+}[] = [
+  {
+    icon: MonitorCog,
+    component: "OS",
+    minimum: "Windows 10 64-bit",
+    recommended: "Windows 11 64-bit",
+  },
+  {
+    icon: Cpu,
+    component: "Prosesor",
+    minimum: "Dual-core (Intel Core i3 / AMD Ryzen 3, generasi 8xxx+)",
+    recommended: "Quad-core (Intel Core i5 / AMD Ryzen 5)",
+  },
+  {
+    icon: MemoryStick,
+    component: "RAM",
+    minimum: "8 GB",
+    recommended: "16 GB",
+  },
+  {
+    icon: HardDrive,
+    component: "Penyimpanan",
+    minimum: "2 GB ruang kosong (HDD)",
+    recommended: "2 GB ruang kosong di SSD",
+  },
+  {
+    icon: MonitorCog,
+    component: "GPU",
+    minimum: "Grafis terintegrasi (Intel UHD/Iris Xe, AMD Radeon Vega)",
+    recommended: "Sama — GPU diskrit tidak diperlukan",
+  },
+  {
+    icon: MonitorSmartphone,
+    component: "Layar",
+    minimum: "1366 x 768",
+    recommended: "1920 x 1080",
+  },
+  {
+    icon: Wifi,
+    component: "Internet",
+    minimum: "Diperlukan untuk deteksi retak (API Roboflow) & tile peta Irigasi",
+    recommended: "Koneksi stabil",
+  },
+];
+
 const TUTORIAL_CATEGORIES = new Set<TutorialCategory>([
   "pengenalan",
   "jembatan",
@@ -176,6 +232,67 @@ export default async function SiBeningPage({
               className="h-full w-full object-cover"
               priority
             />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              align="center"
+              eyebrow="Kebutuhan Perangkat"
+              title="Spesifikasi Sistem untuk Menjalankan SI-Bening"
+              description="Pastikan perangkat Anda memenuhi spesifikasi berikut agar SI-Bening dapat berjalan dengan lancar."
+            />
+          </Reveal>
+          <Reveal delay={100} className="glass-card mt-10 overflow-hidden rounded-3xl">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                <thead>
+                  <tr className="bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+                    <th className="px-5 py-4 font-display text-base font-semibold">
+                      Komponen
+                    </th>
+                    <th className="px-5 py-4 font-display text-base font-semibold">
+                      Minimum
+                    </th>
+                    <th className="px-5 py-4 font-display text-base font-semibold">
+                      Direkomendasikan
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {systemRequirements.map((row, i) => (
+                    <tr
+                      key={row.component}
+                      className={
+                        i % 2 === 0
+                          ? "bg-[var(--color-surface)]"
+                          : "bg-[var(--color-muted)]/50"
+                      }
+                    >
+                      <td className="px-5 py-4 align-top font-semibold text-[var(--color-dark-green)]">
+                        <span className="inline-flex items-center gap-2">
+                          <row.icon
+                            size={16}
+                            className="shrink-0 text-[var(--color-midnight-teal)]"
+                            aria-hidden="true"
+                          />
+                          {row.component}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4 align-top text-[var(--color-muted-foreground)]">
+                        {row.minimum}
+                      </td>
+                      <td className="px-5 py-4 align-top text-[var(--color-muted-foreground)]">
+                        {row.recommended}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Reveal>
         </div>
       </section>
