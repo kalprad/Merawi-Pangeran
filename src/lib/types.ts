@@ -20,7 +20,10 @@ export type Materi = {
   fileUrl: string;
 };
 
-export type TutorialCategory = "jembatan" | "irigasi" | "talud" | "rab";
+export type TutorialCategory = "pengenalan" | "jembatan" | "irigasi" | "talud" | "rab";
+
+/** Empat fitur utama SI-Bening (di luar modul "Pengenalan" pada video tutorial). */
+export type FeatureCategory = Exclude<TutorialCategory, "pengenalan">;
 
 export type ReleaseCountdownSettings = {
   enabled: boolean;
@@ -33,7 +36,7 @@ export type ReleaseCountdownSettings = {
 export type Settings = {
   siBeningUrl: string;
   galleryFolderUrl?: string;
-  featureGuideUrls?: Record<TutorialCategory, string>;
+  featureGuideUrls?: Record<FeatureCategory, string>;
   releaseCountdown?: ReleaseCountdownSettings;
 };
 

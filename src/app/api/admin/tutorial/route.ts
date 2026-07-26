@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 import { getTutorialVideos, saveTutorialVideos } from "@/lib/data";
 import type { TutorialCategory, TutorialVideo } from "@/lib/types";
 
-const CATEGORIES: TutorialCategory[] = ["jembatan", "irigasi", "talud", "rab"];
+const CATEGORIES: TutorialCategory[] = [
+  "pengenalan",
+  "jembatan",
+  "irigasi",
+  "talud",
+  "rab",
+];
 
 export async function GET() {
   const videos = await getTutorialVideos();

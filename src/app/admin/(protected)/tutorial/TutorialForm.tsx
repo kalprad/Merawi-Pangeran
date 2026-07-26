@@ -11,6 +11,7 @@ type Props = {
 };
 
 const categoryOptions: { value: TutorialCategory; label: string }[] = [
+  { value: "pengenalan", label: "Pengenalan Aplikasi" },
   { value: "jembatan", label: "Evaluasi & Desain Jembatan" },
   { value: "irigasi", label: "Saluran Irigasi" },
   { value: "talud", label: "Talud" },

@@ -1,11 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Construction, Droplets, Mountain, Calculator, CirclePlay, type LucideIcon } from "lucide-react";
+import {
+  Sparkles,
+  Construction,
+  Droplets,
+  Mountain,
+  Calculator,
+  CirclePlay,
+  ChevronRight,
+  type LucideIcon,
+} from "lucide-react";
 import { driveEmbedUrl } from "@/lib/google-drive";
 import type { TutorialCategory, TutorialVideo } from "@/lib/types";
 
 const modules: { value: TutorialCategory; label: string; icon: LucideIcon }[] = [
+  { value: "pengenalan", label: "Pengenalan Aplikasi", icon: Sparkles },
   { value: "jembatan", label: "Evaluasi & Desain Jembatan", icon: Construction },
   { value: "irigasi", label: "Saluran Irigasi", icon: Droplets },
   { value: "talud", label: "Talud", icon: Mountain },
@@ -14,7 +24,7 @@ const modules: { value: TutorialCategory; label: string; icon: LucideIcon }[] = 
 
 export default function TutorialCourse({
   videos,
-  initialModule = "jembatan",
+  initialModule = "pengenalan",
   initialVideoId = null,
 }: {
   videos: TutorialVideo[];
@@ -29,6 +39,13 @@ export default function TutorialCourse({
     .sort((a, b) => a.order - b.order);
   const activeVideo = activeVideos.find((v) => v.id === activeVideoId) ?? activeVideos[0];
   const embedUrl = activeVideo ? driveEmbedUrl(activeVideo.driveUrl) : null;
+  const activeIndex = activeVideo
+    ? activeVideos.findIndex((v) => v.id === activeVideo.id)
+    : -1;
+  const nextVideo =
+    activeIndex >= 0 && activeIndex < activeVideos.length - 1
+      ? activeVideos[activeIndex + 1]
+      : null;
 
   function selectModule(value: TutorialCategory) {
     setActiveModule(value);
@@ -92,6 +109,27 @@ export default function TutorialCourse({
               <CirclePlay size={32} aria-hidden="true" />
               <p className="text-sm">Belum ada video untuk modul ini.</p>
             </div>
+          )}
+          {activeVideo && nextVideo && (
+            <button
+              type="button"
+              onClick={() => setActiveVideoId(nextVideo.id)}
+              className="flex w-full items-center justify-between gap-3 border-t border-[var(--color-border)] bg-[var(--color-surface)]/70 px-5 py-3 text-left transition-colors duration-200 hover:bg-[var(--color-muted)]/60"
+            >
+              <span className="min-w-0">
+                <span className="block text-xs text-[var(--color-muted-foreground)]">
+                  Video selanjutnya
+                </span>
+                <span className="block truncate text-sm font-medium text-[var(--color-dark-green)]">
+                  {nextVideo.title}
+                </span>
+              </span>
+              <ChevronRight
+                size={20}
+                className="shrink-0 text-[var(--color-midnight-teal)]"
+                aria-hidden="true"
+              />
+            </button>
           )}
         </div>
 

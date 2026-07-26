@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSettings, saveSettings } from "@/lib/data";
-import type { TutorialCategory } from "@/lib/types";
+import type { FeatureCategory } from "@/lib/types";
 
-const CATEGORIES: TutorialCategory[] = ["jembatan", "irigasi", "talud", "rab"];
+const CATEGORIES: FeatureCategory[] = ["jembatan", "irigasi", "talud", "rab"];
 
 export async function GET() {
   const settings = await getSettings();
@@ -23,7 +23,7 @@ export async function PUT(request: Request) {
         typeof featureGuideUrls?.[category] === "string" ? featureGuideUrls[category] : "";
       return acc;
     },
-    {} as Record<TutorialCategory, string>,
+    {} as Record<FeatureCategory, string>,
   );
 
   const normalizedReleaseCountdown = {

@@ -6,6 +6,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 import type { TutorialCategory, TutorialVideo } from "@/lib/types";
 
 const categoryGroups: { value: TutorialCategory; label: string }[] = [
+  { value: "pengenalan", label: "Pengenalan Aplikasi" },
   { value: "jembatan", label: "Evaluasi & Desain Jembatan" },
   { value: "irigasi", label: "Saluran Irigasi" },
   { value: "talud", label: "Talud" },

@@ -18,7 +18,7 @@ import Reveal from "@/components/Reveal";
 import PageOrnaments from "@/components/PageOrnaments";
 import TutorialCourse from "@/components/TutorialCourse";
 import { getSettings, getTutorialVideos } from "@/lib/data";
-import type { TutorialCategory } from "@/lib/types";
+import type { FeatureCategory, TutorialCategory } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "SI-Bening",
@@ -71,7 +71,7 @@ const philosophyPoints = [
 ];
 
 const features: {
-  category: TutorialCategory;
+  category: FeatureCategory;
   icon: typeof Construction;
   title: string;
   description: string;
@@ -106,7 +106,13 @@ const features: {
   },
 ];
 
-const TUTORIAL_CATEGORIES = new Set<TutorialCategory>(["jembatan", "irigasi", "talud", "rab"]);
+const TUTORIAL_CATEGORIES = new Set<TutorialCategory>([
+  "pengenalan",
+  "jembatan",
+  "irigasi",
+  "talud",
+  "rab",
+]);
 
 export default async function SiBeningPage({
   searchParams,
@@ -119,7 +125,7 @@ export default async function SiBeningPage({
   const { modul, video } = await searchParams;
   const initialModule = TUTORIAL_CATEGORIES.has(modul as TutorialCategory)
     ? (modul as TutorialCategory)
-    : "jembatan";
+    : "pengenalan";
 
   return (
     <div>

@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { TutorialCategory } from "@/lib/types";
+import type { FeatureCategory } from "@/lib/types";
 
-const featureGuideFields: { value: TutorialCategory; label: string }[] = [
+const featureGuideFields: { value: FeatureCategory; label: string }[] = [
   { value: "jembatan", label: "Evaluasi & Desain Jembatan" },
   { value: "irigasi", label: "Saluran Irigasi" },
   { value: "talud", label: "Talud" },
   { value: "rab", label: "Perhitungan RAB" },
 ];
 
-const emptyGuideUrls: Record<TutorialCategory, string> = {
+const emptyGuideUrls: Record<FeatureCategory, string> = {
   jembatan: "",
   irigasi: "",
   talud: "",
@@ -23,7 +23,7 @@ export default function PengaturanPage() {
   const [siBeningUrl, setSiBeningUrl] = useState("");
   const [galleryFolderUrl, setGalleryFolderUrl] = useState("");
   const [featureGuideUrls, setFeatureGuideUrls] =
-    useState<Record<TutorialCategory, string>>(emptyGuideUrls);
+    useState<Record<FeatureCategory, string>>(emptyGuideUrls);
   const [releaseCountdown, setReleaseCountdown] = useState(emptyReleaseCountdown);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -42,7 +42,7 @@ export default function PengaturanPage() {
       });
   }, []);
 
-  function updateGuideUrl(category: TutorialCategory, value: string) {
+  function updateGuideUrl(category: FeatureCategory, value: string) {
     setFeatureGuideUrls((prev) => ({ ...prev, [category]: value }));
   }
 

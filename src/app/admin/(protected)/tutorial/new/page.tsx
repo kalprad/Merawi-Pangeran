@@ -1,7 +1,13 @@
 import type { TutorialCategory } from "@/lib/types";
 import TutorialForm from "../TutorialForm";
 
-const VALID_CATEGORIES: TutorialCategory[] = ["jembatan", "irigasi", "talud", "rab"];
+const VALID_CATEGORIES: TutorialCategory[] = [
+  "pengenalan",
+  "jembatan",
+  "irigasi",
+  "talud",
+  "rab",
+];
 
 export default async function NewTutorialPage({
   searchParams,
