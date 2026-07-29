@@ -205,5 +205,92 @@
     },
     "downloadUrl": "https://drive.google.com/file/d/1kofmEmGmpYS9wFS6ZIPTsvxJm5fS_sPm/view?usp=drive_link",
     "order": 3
+  },
+  {
+    "id": "da10e484-8ab3-429d-b46b-e2b6a5ea013e",
+    "slug": "fasilitas-umum-desa-jetis",
+    "title": "Fasilitas Umum Desa Jetis",
+    "geojsonUrls": [
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/fasilitas-umum-desa-jetis/geojson/Fasum%20geojson.geojson"
+    ],
+    "fields": {
+      "name": "Name",
+      "category": "Jenis",
+      "googleMaps": "Google Maps",
+      "info": []
+    },
+    "categories": [
+      {
+        "value": "PAUD",
+        "label": "PAUD",
+        "color": "#4c00ff",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Sarana Ibadah",
+        "label": "Sarana Ibadah",
+        "color": "#01fee0",
+        "icon": "building"
+      },
+      {
+        "value": "Sarana Kesehatan",
+        "label": "Sarana Kesehatan",
+        "color": "#ffffff",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Sarana Perekonomian",
+        "label": "Sarana Perekonomian",
+        "color": "#839958",
+        "icon": "shopping-bag"
+      },
+      {
+        "value": "Sarana Prasana Lainnya",
+        "label": "Sarana Prasana Lainnya",
+        "color": "#D3968C",
+        "icon": "landmark"
+      },
+      {
+        "value": "Sekolah Dasar",
+        "label": "Sekolah Dasar",
+        "color": "#d5493f",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Madrasah Ibtidaiyah",
+        "label": "Madrasah Ibtidaiyah",
+        "color": "#4a5a3f",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Sekolah Menengah Pertama",
+        "label": "Sekolah Menengah Pertama",
+        "color": "#1b4fb6",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Madrasah Tsanawiyah",
+        "label": "Madrasah Tsanawiyah",
+        "color": "#C9793A",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Taman Kanak-Kanak",
+        "label": "Taman Kanak-Kanak",
+        "color": "#df20d9",
+        "icon": "graduation-cap"
+      },
+      {
+        "value": "Raudhatul Athfal",
+        "label": "Raudhatul Athfal",
+        "color": "#6C5B9E",
+        "icon": "graduation-cap"
+      }
+    ],
+    "photo": {
+      "mode": "none"
+    },
+    "downloadUrl": "https://drive.google.com/file/d/1QJ478iOiYMn1f0ckB7Sd51WGUTEQzVYI/view?usp=drive_link",
+    "order": 4
   }
 ]
