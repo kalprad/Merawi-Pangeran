@@ -132,21 +132,5 @@
       }
     },
     "order": 3
-  },
-  {
-    "id": "848f36b7-5371-404b-bc32-59715b6f130d",
-    "slug": "saluran-irigasi-2",
-    "title": "saluran irigasi",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/saluran%20irigasi.geojson"
-    ],
-    "fields": {
-      "name": "nama"
-    },
-    "categories": [],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 3
   }
 ]
