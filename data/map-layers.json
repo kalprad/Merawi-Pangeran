@@ -223,20 +223,14 @@
       {
         "value": "PAUD",
         "label": "PAUD",
-        "color": "#4c00ff",
+        "color": "#9c3bc9",
         "icon": "graduation-cap"
       },
       {
         "value": "Sarana Ibadah",
         "label": "Sarana Ibadah",
-        "color": "#01fee0",
+        "color": "#14db06",
         "icon": "building"
-      },
-      {
-        "value": "Sarana Kesehatan",
-        "label": "Sarana Kesehatan",
-        "color": "#ffffff",
-        "icon": "map-pin"
       },
       {
         "value": "Sarana Perekonomian",
@@ -253,7 +247,7 @@
       {
         "value": "Sekolah Dasar",
         "label": "Sekolah Dasar",
-        "color": "#d5493f",
+        "color": "#B3423A",
         "icon": "graduation-cap"
       },
       {
@@ -265,7 +259,7 @@
       {
         "value": "Sekolah Menengah Pertama",
         "label": "Sekolah Menengah Pertama",
-        "color": "#1b4fb6",
+        "color": "#0a3323",
         "icon": "graduation-cap"
       },
       {
@@ -277,13 +271,13 @@
       {
         "value": "Taman Kanak-Kanak",
         "label": "Taman Kanak-Kanak",
-        "color": "#df20d9",
+        "color": "#105666",
         "icon": "graduation-cap"
       },
       {
         "value": "Raudhatul Athfal",
         "label": "Raudhatul Athfal",
-        "color": "#6C5B9E",
+        "color": "#5b9a9f",
         "icon": "graduation-cap"
       }
     ],
