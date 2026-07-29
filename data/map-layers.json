@@ -10,56 +10,61 @@
     "fields": {
       "name": "Name",
       "category": "Name",
-      "info": []
+      "info": [
+        {
+          "label": "Deskripsi",
+          "property": "Deskripsi"
+        }
+      ]
     },
     "categories": [
       {
         "value": "Bendung Pleret",
         "label": "Bendung Pleret",
         "color": "#C9793A",
-        "icon": "map-pin"
+        "icon": "droplet"
       },
       {
         "value": "Bendung Kemiri",
         "label": "Bendung Kemiri",
         "color": "#105666",
-        "icon": "map-pin"
+        "icon": "droplet"
       },
       {
         "value": "Kerusakan Buis U pada Belokan",
         "label": "Kerusakan Buis U pada Belokan",
         "color": "#6C5B9E",
-        "icon": "map-pin"
+        "icon": "wrench"
       },
       {
         "value": "Kebocoran Saluran Buis U dan Sedimentasi",
         "label": "Kebocoran Saluran Buis U dan Sedimentasi",
         "color": "#839958",
-        "icon": "map-pin"
+        "icon": "wrench"
       },
       {
         "value": "Kebocoran Saluran Buis U 1",
         "label": "Kebocoran Saluran Buis U 1",
         "color": "#D3968C",
-        "icon": "map-pin"
+        "icon": "wrench"
       },
       {
         "value": "Kebocoran Saluran Buis U 2",
         "label": "Kebocoran Saluran Buis U 2",
         "color": "#B3423A",
-        "icon": "map-pin"
+        "icon": "wrench"
       },
       {
         "value": "Kebocoran Saluran Buis U 3",
         "label": "Kebocoran Saluran Buis U 3",
         "color": "#4a5a3f",
-        "icon": "map-pin"
+        "icon": "wrench"
       },
       {
         "value": "Kalikupang",
         "label": "Kalikupang",
         "color": "#0a3323",
-        "icon": "map-pin"
+        "icon": "droplet"
       }
     ],
     "photo": {
