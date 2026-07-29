@@ -149,7 +149,12 @@
     "fields": {
       "name": "Dusun",
       "category": "Dusun",
-      "info": []
+      "info": [
+        {
+          "label": "Deskripsi",
+          "property": "Deskripsi"
+        }
+      ]
     },
     "categories": [
       {
