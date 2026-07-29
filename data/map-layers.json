@@ -63,5 +63,75 @@
       }
     },
     "order": 3
+  },
+  {
+    "id": "5b989189-41af-48ec-add2-0e1b88df4a56",
+    "slug": "saluran-irigasi",
+    "title": "Saluran Irigasi",
+    "geojsonUrls": [
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/saluran%20irigasi.geojson",
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/Foto%20dan%20deskripsi%20Irigasi.geojson"
+    ],
+    "fields": {
+      "name": "Name",
+      "category": "Deskripsi",
+      "info": []
+    },
+    "categories": [
+      {
+        "value": "Bendung pleret adalah bendung paling hilir dari sistem jaringan irigasi kalikupang dan berfungsi sebagai suplesi air. Kondisi saluran cukup baik, akan tetapi terdapat sampah di sekitar bendung. Aliran air sungai juga terpantau sangat kecil.",
+        "label": "Bendung pleret adalah bendung paling hilir dari sistem jaringan irigasi kalikupang dan berfungsi sebagai suplesi air. Kondisi saluran cukup baik, akan tetapi terdapat sampah di sekitar bendung. Aliran air sungai juga terpantau sangat kecil.",
+        "color": "#C9793A",
+        "icon": "droplet"
+      },
+      {
+        "value": "Bendung Kemiri merupakan bendung kedua dalam sistem jaringan sei bening. Bendung dalam kondisi baik. Bendung ini juga merupakan bangunan yang menghubungkan saluran yang dipisahkan oleh Kali Kemiri.",
+        "label": "Bendung Kemiri merupakan bendung kedua dalam sistem jaringan sei bening. Bendung dalam kondisi baik. Bendung ini juga merupakan bangunan yang menghubungkan saluran yang dipisahkan oleh Kali Kemiri.",
+        "color": "#105666",
+        "icon": "droplet"
+      },
+      {
+        "value": "Lokasi titik kerusakan pada komponen saluran drainase berupa beton pracetak tipe Buis U (penampang Tapak Kuda). Kerusakan terjadi secara spesifik di area belokan (tikungan saluran), kemungkinan akibat besarnya tekanan hidrolik atau hantaman arus air saat debit puncak.",
+        "label": "Lokasi titik kerusakan pada komponen saluran drainase berupa beton pracetak tipe Buis U (penampang Tapak Kuda). Kerusakan terjadi secara spesifik di area belokan (tikungan saluran), kemungkinan akibat besarnya tekanan hidrolik atau hantaman arus air saat debit puncak.",
+        "color": "#6C5B9E",
+        "icon": "wrench"
+      },
+      {
+        "value": "Selain kerusakan dinding saluran, pada saat pengukuran kedalaman saluran, dari dasar hingga tepi atas saluran hanya tersisa 0.15 m dari kedalaman total 0.2 m. Artinya lapisan sedimentasi telah mencapai 5 cm.",
+        "label": "Selain kerusakan dinding saluran, pada saat pengukuran kedalaman saluran, dari dasar hingga tepi atas saluran hanya tersisa 0.15 m dari kedalaman total 0.2 m. Artinya lapisan sedimentasi telah mencapai 5 cm.",
+        "color": "#839958",
+        "icon": "wrench"
+      },
+      {
+        "value": "Kerusakan dinding saluran banyak terjadi pada saluran dengan belokan dan sambungan buis-u. Pada belokan, aliran air memiliki gaya sentrifugal yang menekan dinding luar saluran dengan lebih kuat, mempercepat erosi dan kelelahan material pada sambungan buis-U yang tidak terlindungi dengan baik.",
+        "label": "Kerusakan dinding saluran banyak terjadi pada saluran dengan belokan dan sambungan buis-u. Pada belokan, aliran air memiliki gaya sentrifugal yang menekan dinding luar saluran dengan lebih kuat, mempercepat erosi dan kelelahan material pada sambungan buis-U yang tidak terlindungi dengan baik.",
+        "color": "#D3968C",
+        "icon": "wrench"
+      },
+      {
+        "value": "Terdapat banyak titik dengan dinding saluran yang ambrol yang berakibat pada banyaknya kehilangan air. Kebocoran dinding ini juga menciptakan turbulensi yang menghambat aliran air.",
+        "label": "Terdapat banyak titik dengan dinding saluran yang ambrol yang berakibat pada banyaknya kehilangan air. Kebocoran dinding ini juga menciptakan turbulensi yang menghambat aliran air.",
+        "color": "#B3423A",
+        "icon": "wrench"
+      },
+      {
+        "value": "Dinding saluran yang ambrol berakibat kepada bocornya air ke tanah di samping dan air mengalir kembali ke sungai.",
+        "label": "Dinding saluran yang ambrol berakibat kepada bocornya air ke tanah di samping dan air mengalir kembali ke sungai.",
+        "color": "#4a5a3f",
+        "icon": "wrench"
+      },
+      {
+        "value": "Benung Kalikupang merupakan bendung paling hulu dari sistem jaringan Kalikupang. Bendung ini dibangun sebagai suplesi dari jaringan eksisting untuk memenuhi kebutuhan irigasi setempat. Kondisi tubuh bendung cukup baik. Akan tetapi, terdapat bagian pada mercu bendung yang tergerus aliran air.",
+        "label": "Benung Kalikupang merupakan bendung paling hulu dari sistem jaringan Kalikupang. Bendung ini dibangun sebagai suplesi dari jaringan eksisting untuk memenuhi kebutuhan irigasi setempat. Kondisi tubuh bendung cukup baik. Akan tetapi, terdapat bagian pada mercu bendung yang tergerus aliran air.",
+        "color": "#0a3323",
+        "icon": "droplet"
+      }
+    ],
+    "photo": {
+      "mode": "property",
+      "property": "Path Foto"
+    },
+    "downloadUrl": "https://drive.google.com/file/d/1gzCfsn4fw80Vh2Yv90YPAMrPGn7ykg33/view?usp=sharing",
+    "order": 2
   }
 ]
