@@ -148,53 +148,9 @@
     ],
     "fields": {
       "name": "Dusun",
-      "category": "Dusun",
       "info": []
     },
-    "categories": [
-      {
-        "value": "Ngunut",
-        "label": "Ngunut",
-        "color": "#C9793A",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Deso",
-        "label": "Deso",
-        "color": "#105666",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Ngasem",
-        "label": "Ngasem",
-        "color": "#6C5B9E",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Jombor",
-        "label": "Jombor",
-        "color": "#839958",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Jetis",
-        "label": "Jetis",
-        "color": "#D3968C",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Krajan",
-        "label": "Krajan",
-        "color": "#B3423A",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Ngawinan",
-        "label": "Ngawinan",
-        "color": "#4a5a3f",
-        "icon": "map-pin"
-      }
-    ],
+    "categories": [],
     "photo": {
       "mode": "none"
     },
