@@ -138,5 +138,67 @@
       }
     },
     "order": 3
+  },
+  {
+    "id": "b0825edf-9b2b-4968-be4e-0830a1ae9fa8",
+    "slug": "batas-dusun-desa-jetis",
+    "title": "Batas Dusun Desa Jetis",
+    "geojsonUrls": [
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/batas-dusun-desa-jetis/geojson/Batas%20Dusun%20Desa%20Jetis.geojson"
+    ],
+    "fields": {
+      "name": "Dusun",
+      "category": "Dusun",
+      "info": []
+    },
+    "categories": [
+      {
+        "value": "Ngunut",
+        "label": "Ngunut",
+        "color": "#C9793A",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Deso",
+        "label": "Deso",
+        "color": "#105666",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Ngasem",
+        "label": "Ngasem",
+        "color": "#6C5B9E",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Jombor",
+        "label": "Jombor",
+        "color": "#839958",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Jetis",
+        "label": "Jetis",
+        "color": "#D3968C",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Krajan",
+        "label": "Krajan",
+        "color": "#B3423A",
+        "icon": "map-pin"
+      },
+      {
+        "value": "Ngawinan",
+        "label": "Ngawinan",
+        "color": "#4a5a3f",
+        "icon": "map-pin"
+      }
+    ],
+    "photo": {
+      "mode": "none"
+    },
+    "downloadUrl": "https://drive.google.com/file/d/1kofmEmGmpYS9wFS6ZIPTsvxJm5fS_sPm/view?usp=drive_link",
+    "order": 3
   }
 ]
