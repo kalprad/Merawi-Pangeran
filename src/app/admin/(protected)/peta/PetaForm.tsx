@@ -28,6 +28,8 @@ import {
   Mountain,
   BookOpen,
   Camera,
+  Hospital,
+  createLucideIcon,
   type LucideIcon,
 } from "lucide-react";
 import type {
@@ -45,6 +47,15 @@ type Props = {
 };
 
 type RawFeature = { properties?: Record<string, unknown> };
+
+const Mosque = createLucideIcon("mosque", [
+  ["path", { d: "M5 21V13a7 7 0 0 1 14 0v8" }],
+  ["path", { d: "M10 21v-4a2 2 0 0 1 4 0v4" }],
+  ["path", { d: "M2 21h20" }],
+  ["path", { d: "M4 21V8" }],
+  ["path", { d: "M20 21V8" }],
+  ["path", { d: "M13 2a2 2 0 1 0 2 3.2A2.5 2.5 0 0 1 13 2Z" }],
+]);
 
 const ICON_OPTIONS: { value: MapIconKey; label: string; Icon: LucideIcon }[] = [
   { value: "map-pin", label: "Penanda Umum", Icon: MapPin },
@@ -71,6 +82,8 @@ const ICON_OPTIONS: { value: MapIconKey; label: string; Icon: LucideIcon }[] = [
   { value: "mountain", label: "Wisata Alam", Icon: Mountain },
   { value: "book-open", label: "Perpustakaan", Icon: BookOpen },
   { value: "camera", label: "Wisata / Dokumentasi", Icon: Camera },
+  { value: "hospital", label: "Fasilitas Medis", Icon: Hospital },
+  { value: "mosque", label: "Masjid / Musala", Icon: Mosque },
 ];
 
 function IconPicker({

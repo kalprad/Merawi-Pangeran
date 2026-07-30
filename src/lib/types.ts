@@ -100,7 +100,9 @@ export type MapIconKey =
   | "trash-2"
   | "mountain"
   | "book-open"
-  | "camera";
+  | "camera"
+  | "hospital"
+  | "mosque";
 
 export type MapLayerCategory = {
   value: string;

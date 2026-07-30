@@ -38,10 +38,12 @@ import {
   Mountain,
   BookOpen,
   Camera,
+  Hospital,
   Download,
   Layers,
   ChevronDown,
   Check,
+  createLucideIcon,
   type LucideIcon,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
@@ -52,6 +54,15 @@ import type {
 } from "@/lib/types";
 
 const BOUNDARY_COLOR = "#E4402F";
+
+const Mosque = createLucideIcon("mosque", [
+  ["path", { d: "M5 21V13a7 7 0 0 1 14 0v8" }],
+  ["path", { d: "M10 21v-4a2 2 0 0 1 4 0v4" }],
+  ["path", { d: "M2 21h20" }],
+  ["path", { d: "M4 21V8" }],
+  ["path", { d: "M20 21V8" }],
+  ["path", { d: "M13 2a2 2 0 1 0 2 3.2A2.5 2.5 0 0 1 13 2Z" }],
+]);
 
 const ICON_COMPONENTS: Record<MapIconKey, LucideIcon> = {
   utensils: Utensils,
@@ -78,6 +89,8 @@ const ICON_COMPONENTS: Record<MapIconKey, LucideIcon> = {
   mountain: Mountain,
   "book-open": BookOpen,
   camera: Camera,
+  hospital: Hospital,
+  mosque: Mosque,
 };
 
 const ICON_PATHS: Record<MapIconKey, string> = {
@@ -127,6 +140,10 @@ const ICON_PATHS: Record<MapIconKey, string> = {
     '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
   camera:
     '<path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/>',
+  hospital:
+    '<path d="M12 7v4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M14 9h-4"/><path d="M18 11h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16"/>',
+  mosque:
+    '<path d="M5 21V13a7 7 0 0 1 14 0v8"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/><path d="M2 21h20"/><path d="M4 21V8"/><path d="M20 21V8"/><path d="M13 2a2 2 0 1 0 2 3.2A2.5 2.5 0 0 1 13 2Z"/>',
 };
 
 const FALLBACK_CATEGORY: MapLayerCategory = {
