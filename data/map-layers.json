@@ -292,14 +292,22 @@
     "slug": "peta-sebaran-bangunan",
     "title": "Peta Sebaran Bangunan",
     "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Data%20Jalan%20ALL.geojson",
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Bangunan.geojson"
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Bangunan.geojson",
+      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Data%20Jalan%20ALL.geojson"
     ],
     "fields": {
-      "name": "Nama Jalan",
+      "name": "Bangunan",
+      "category": "Bangunan",
       "info": []
     },
-    "categories": [],
+    "categories": [
+      {
+        "value": "Bangunan",
+        "label": "Bangunan",
+        "color": "#b93bc9",
+        "icon": "home"
+      }
+    ],
     "photo": {
       "mode": "none"
     },
