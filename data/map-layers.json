@@ -300,14 +300,7 @@
       "category": "Bangunan",
       "info": []
     },
-    "categories": [
-      {
-        "value": "Bangunan",
-        "label": "Bangunan",
-        "color": "#b93bc9",
-        "icon": "home"
-      }
-    ],
+    "categories": [],
     "photo": {
       "mode": "none"
     },
