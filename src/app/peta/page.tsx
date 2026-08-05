@@ -29,10 +29,6 @@ export default async function PetaPage() {
             title="Sebaran data Desa Jetis"
             description="Pilih jenis peta lewat menu di atas peta untuk menjelajahi titik kerusakan irigasi, sebaran UMKM, dan fasilitas umum."
           />
-          <p className="glass-card mt-3 max-w-2xl rounded-2xl px-4 py-3 text-xs text-[var(--color-muted-foreground)]">
-            Catatan: titik pada peta ini masih berupa data contoh dan akan
-            diperbarui bertahap seiring hasil survei lapangan tim KKN.
-          </p>
         </Reveal>
         <Reveal delay={100} className="mt-8">
           <MapLoader layers={layers} boundary={boundary} />
