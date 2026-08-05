@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: "Blog Kegiatan",
   description:
     "Berita dan dokumentasi kegiatan KKN Merawi Pangeran 2026 di Desa Jetis, Kecamatan Bandungan.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Blog Kegiatan — Merawi Pangeran 2026",
+    description:
+      "Berita dan dokumentasi kegiatan KKN Merawi Pangeran 2026 di Desa Jetis, Kecamatan Bandungan.",
+    url: "/blog",
+  },
 };
 
 export const dynamic = "force-dynamic";

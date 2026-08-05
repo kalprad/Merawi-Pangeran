@@ -7,13 +7,43 @@ import ReleaseCountdown from "@/components/ReleaseCountdown";
 import { getSettings } from "@/lib/data";
 import "./globals.css";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://merawi-pangeran.vercel.app";
+const SITE_NAME = "Merawi Pangeran 2026";
+const SITE_DESCRIPTION =
+  "Portal resmi KKN Merawi Pangeran 2026 di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang. Berita kegiatan, materi sosialisasi, peta interaktif desa, dan aplikasi SI-Bening.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
     default: "Merawi Pangeran 2026 — KKN Desa Jetis, Bandungan",
     template: "%s — Merawi Pangeran 2026",
   },
-  description:
-    "Portal resmi KKN Merawi Pangeran 2026 di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang. Berita kegiatan, materi sosialisasi, peta interaktif desa, dan aplikasi SI-Bening.",
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "KKN Merawi Pangeran",
+    "KKN Desa Jetis",
+    "KKN Bandungan",
+    "KKN Kabupaten Semarang",
+    "SI-Bening",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "/",
+    siteName: SITE_NAME,
+    title: "Merawi Pangeran 2026 — KKN Desa Jetis, Bandungan",
+    description: SITE_DESCRIPTION,
+    images: [{ url: "/images/hero-gunung.jpg", width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Merawi Pangeran 2026 — KKN Desa Jetis, Bandungan",
+    description: SITE_DESCRIPTION,
+    images: ["/images/hero-gunung.jpg"],
+  },
 };
 
 export default async function RootLayout({

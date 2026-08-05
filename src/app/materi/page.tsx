@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: "Materi Sosialisasi",
   description:
     "Kumpulan materi sosialisasi hukum, kesehatan, ekonomi, dan teknologi yang telah dilaksanakan oleh KKN Merawi Pangeran 2026.",
+  alternates: {
+    canonical: "/materi",
+  },
+  openGraph: {
+    title: "Materi Sosialisasi — Merawi Pangeran 2026",
+    description:
+      "Kumpulan materi sosialisasi hukum, kesehatan, ekonomi, dan teknologi yang telah dilaksanakan oleh KKN Merawi Pangeran 2026.",
+    url: "/materi",
+  },
 };
 
 export const dynamic = "force-dynamic";

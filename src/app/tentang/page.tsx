@@ -13,6 +13,15 @@ export const metadata: Metadata = {
   title: "Tentang Kami",
   description:
     "Mengenal Tim KKN Merawi Pangeran 2026 dan program kerja di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang.",
+  alternates: {
+    canonical: "/tentang",
+  },
+  openGraph: {
+    title: "Tentang Kami — Merawi Pangeran 2026",
+    description:
+      "Mengenal Tim KKN Merawi Pangeran 2026 dan program kerja di Desa Jetis, Kecamatan Bandungan, Kabupaten Semarang.",
+    url: "/tentang",
+  },
 };
 
 export const dynamic = "force-dynamic";

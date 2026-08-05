@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "Cari",
   description:
     "Cari berita kegiatan, materi sosialisasi, dan video tutorial KKN Merawi Pangeran 2026 dalam satu pencarian.",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export const dynamic = "force-dynamic";

@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: "Peta Interaktif",
   description:
     "Peta interaktif sebaran kerusakan irigasi, UMKM, dan fasilitas umum di Desa Jetis, Kecamatan Bandungan.",
+  alternates: {
+    canonical: "/peta",
+  },
+  openGraph: {
+    title: "Peta Interaktif — Merawi Pangeran 2026",
+    description:
+      "Peta interaktif sebaran kerusakan irigasi, UMKM, dan fasilitas umum di Desa Jetis, Kecamatan Bandungan.",
+    url: "/peta",
+  },
 };
 
 export const dynamic = "force-dynamic";

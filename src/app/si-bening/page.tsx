@@ -30,6 +30,15 @@ export const metadata: Metadata = {
   title: "SI-Bening",
   description:
     "SI-Bening (Sistem Informasi Bangunan dan Engineering) — aplikasi untuk membantu desain dan perencanaan infrastruktur desa.",
+  alternates: {
+    canonical: "/si-bening",
+  },
+  openGraph: {
+    title: "SI-Bening — Merawi Pangeran 2026",
+    description:
+      "SI-Bening (Sistem Informasi Bangunan dan Engineering) — aplikasi untuk membantu desain dan perencanaan infrastruktur desa.",
+    url: "/si-bening",
+  },
 };
 
 export const dynamic = "force-dynamic";
