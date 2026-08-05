@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "Geojson peta bendung",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 34, "Nama_DI": "DI Dawuhan Bd", "X": 110.379398, "Y": -7.227602, "Kecamatan": "Bandungan", "Desa": "Jetis", "NO_DI": 51.0, "long": "7° 13' 39,367\" S", "lat": "110° 22' 45,833\" E" }, "geometry": { "type": "Point", "coordinates": [ 110.379398, -7.227602 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 199, "Nama_DI": "DI Sibening Bd", "X": 110.38589641900001, "Y": -7.23242415112, "Kecamatan": "Bandungan", "Desa": "Jetis", "NO_DI": 314.0, "long": "7° 13' 56,727\" S", "lat": "110° 23' 9,227\" E" }, "geometry": { "type": "Point", "coordinates": [ 110.385896419055229, -7.232424151115098 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 263, "Nama_DI": "DI Sipengkok A", "X": 110.389892, "Y": -7.2346359999200001, "Kecamatan": "Ambarawa", "Desa": "Bandungan", "NO_DI": 397.0, "long": "7° 14' 4,690\" S", "lat": "110° 23' 23,611\" E" }, "geometry": { "type": "Point", "coordinates": [ 110.389891999916287, -7.234635999917583 ] } }
+]
+}
