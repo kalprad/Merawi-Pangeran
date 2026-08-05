@@ -318,9 +318,59 @@
     ],
     "fields": {
       "name": "KETERANGAN",
+      "category": "LUAS_HA",
       "info": []
     },
-    "categories": [],
+    "categories": [
+      {
+        "value": "25",
+        "label": "25",
+        "color": "#C9793A",
+        "icon": "map-pin"
+      },
+      {
+        "value": "64",
+        "label": "64",
+        "color": "#105666",
+        "icon": "map-pin"
+      },
+      {
+        "value": "39",
+        "label": "39",
+        "color": "#6C5B9E",
+        "icon": "map-pin"
+      },
+      {
+        "value": "12",
+        "label": "12",
+        "color": "#839958",
+        "icon": "map-pin"
+      },
+      {
+        "value": "83",
+        "label": "83",
+        "color": "#D3968C",
+        "icon": "map-pin"
+      },
+      {
+        "value": "41",
+        "label": "41",
+        "color": "#B3423A",
+        "icon": "map-pin"
+      },
+      {
+        "value": "15",
+        "label": "15",
+        "color": "#4a5a3f",
+        "icon": "map-pin"
+      },
+      {
+        "value": "28",
+        "label": "28",
+        "color": "#0a3323",
+        "icon": "map-pin"
+      }
+    ],
     "photo": {
       "mode": "none"
     },
