@@ -521,7 +521,13 @@ export default function InteractiveMap({
               style={(feature) => {
                 const category = feature ? getFeatureCategory(feature, activeLayer) : undefined;
                 const color = category?.color ?? FALLBACK_CATEGORY.color;
-                return { color, weight: 2, fillColor: color, fillOpacity: 0.35 };
+                return {
+                  color,
+                  weight: category?.weight ?? 2,
+                  dashArray: category?.dashArray || undefined,
+                  fillColor: color,
+                  fillOpacity: category?.fillOpacity ?? 0.35,
+                };
               }}
               onEachFeature={(feature, layerInstance) => {
                 layerInstance.bindPopup(buildPopupHtml(feature, activeLayer));

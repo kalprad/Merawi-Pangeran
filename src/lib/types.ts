@@ -109,6 +109,12 @@ export type MapLayerCategory = {
   label: string;
   color: string;
   icon: MapIconKey;
+  /** Ketebalan garis/outline (px) untuk fitur garis & poligon. Default: 2. */
+  weight?: number;
+  /** Pola garis Leaflet, mis. "8,6" (putus-putus). Kosong/undefined = garis solid. */
+  dashArray?: string;
+  /** Opasitas isian poligon, 0-1. Default: 0.35. */
+  fillOpacity?: number;
 };
 
 export type MapLayerFieldMapping = {

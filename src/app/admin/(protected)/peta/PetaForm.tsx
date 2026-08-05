@@ -46,7 +46,17 @@ type Props = {
   defaultOrder: number;
 };
 
-type RawFeature = { properties?: Record<string, unknown> };
+type RawFeature = {
+  properties?: Record<string, unknown>;
+  geometry?: { type?: string } | null;
+};
+
+const DASH_ARRAY_OPTIONS: { value: string; label: string }[] = [
+  { value: "", label: "Solid" },
+  { value: "8,6", label: "Putus-putus" },
+  { value: "2,6", label: "Titik-titik" },
+  { value: "8,4,2,4", label: "Garis-titik" },
+];
 
 const Mosque = createLucideIcon("mosque", [
   ["path", { d: "M5 21V13a7 7 0 0 1 14 0v8" }],
@@ -235,6 +245,14 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
 
   const features = geojsonSources.flatMap((s) => s.features);
   const detectedProperties = detectProperties(features);
+  const hasLineOrPolygon = features.some((f) =>
+    ["LineString", "MultiLineString", "Polygon", "MultiPolygon"].includes(
+      f.geometry?.type ?? "",
+    ),
+  );
+  const hasPolygon = features.some((f) =>
+    ["Polygon", "MultiPolygon"].includes(f.geometry?.type ?? ""),
+  );
 
   const [nameProperty, setNameProperty] = useState(initialData?.fields.name ?? "");
   const [categoryProperty, setCategoryProperty] = useState(
@@ -731,27 +749,87 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
           <p className="text-sm font-semibold text-[var(--color-dark-green)]">
             Setting Tampilan Legenda
           </p>
+          {hasLineOrPolygon && (
+            <p className="text-xs text-[var(--color-muted-foreground)]">
+              GeoJSON ini berisi garis/poligon — atur juga ketebalan, jenis garis, dan opasitas
+              isian per kategori (mirip properti layer pada aplikasi GIS).
+            </p>
+          )}
           {categories.map((cat, i) => (
-            <div key={cat.value} className="flex flex-wrap items-center gap-2">
-              <span className="w-32 shrink-0 truncate text-xs text-[var(--color-muted-foreground)]">
-                {cat.value}
-              </span>
-              <input
-                value={cat.label}
-                onChange={(e) => updateCategory(i, { label: e.target.value })}
-                placeholder="Label legenda"
-                className={`${inputClass} w-40`}
-              />
-              <input
-                type="color"
-                value={cat.color}
-                onChange={(e) => updateCategory(i, { color: e.target.value })}
-                className="h-10 w-12 cursor-pointer rounded-lg border border-[var(--color-border)]"
-              />
-              <IconPicker
-                value={cat.icon}
-                onChange={(icon) => updateCategory(i, { icon })}
-              />
+            <div
+              key={cat.value}
+              className="space-y-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="w-32 shrink-0 truncate text-xs text-[var(--color-muted-foreground)]">
+                  {cat.value}
+                </span>
+                <input
+                  value={cat.label}
+                  onChange={(e) => updateCategory(i, { label: e.target.value })}
+                  placeholder="Label legenda"
+                  className={`${inputClass} w-40`}
+                />
+                <input
+                  type="color"
+                  value={cat.color}
+                  onChange={(e) => updateCategory(i, { color: e.target.value })}
+                  className="h-10 w-12 cursor-pointer rounded-lg border border-[var(--color-border)]"
+                />
+                <IconPicker
+                  value={cat.icon}
+                  onChange={(icon) => updateCategory(i, { icon })}
+                />
+              </div>
+
+              {hasLineOrPolygon && (
+                <div className="flex flex-wrap items-center gap-4 pl-1">
+                  <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                    Ketebalan garis
+                    <input
+                      type="number"
+                      min={1}
+                      max={12}
+                      step={0.5}
+                      value={cat.weight ?? 2}
+                      onChange={(e) =>
+                        updateCategory(i, { weight: Number(e.target.value) || 1 })
+                      }
+                      className="w-16 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                    Jenis garis
+                    <select
+                      value={cat.dashArray ?? ""}
+                      onChange={(e) => updateCategory(i, { dashArray: e.target.value })}
+                      className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
+                    >
+                      {DASH_ARRAY_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {hasPolygon && (
+                    <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                      Opasitas isian ({Math.round((cat.fillOpacity ?? 0.35) * 100)}%)
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={cat.fillOpacity ?? 0.35}
+                        onChange={(e) =>
+                          updateCategory(i, { fillOpacity: Number(e.target.value) })
+                        }
+                        className="w-28 cursor-pointer"
+                      />
+                    </label>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
