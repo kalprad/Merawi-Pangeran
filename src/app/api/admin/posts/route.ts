@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPosts, savePosts } from "@/lib/data";
 import { uniqueSlug } from "@/lib/slug";
+import { extractFirstImageUrl } from "@/lib/postImage";
 import type { Post } from "@/lib/types";
 
 export async function GET() {
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
     title,
     excerpt,
     content,
-    coverImage: coverImage || "/images/hero-sawah.jpg",
+    coverImage: coverImage || extractFirstImageUrl(content) || "/images/hero-sawah.jpg",
     date,
     author,
     category,

@@ -8,7 +8,10 @@ import { compressImage } from "@/lib/compressImage";
 import { parseCategories, formatCategories } from "@/lib/categories";
 import type { Post, Materi } from "@/lib/types";
 
+const AUTO_COVER_IMAGE_VALUE = "";
+
 const IMAGE_OPTIONS = [
+  { value: AUTO_COVER_IMAGE_VALUE, label: "Otomatis (foto pertama di isi berita)" },
   { value: "/images/hero-sawah.jpg", label: "Sawah Desa Jetis" },
   { value: "/images/hero-gunung.jpg", label: "Gunung Bandungan" },
   { value: "/images/si-bening-banner.png", label: "Banner SI-Bening" },
@@ -239,6 +242,12 @@ export default function PostForm({ mode, initialData }: Props) {
             </option>
           ))}
         </select>
+        {form.coverImage === AUTO_COVER_IMAGE_VALUE && !customFile && (
+          <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
+            Gambar sampul akan memakai foto pertama yang disisipkan di isi berita. Kalau isi
+            berita belum punya foto, sampul akan memakai gambar bawaan.
+          </p>
+        )}
       </Field>
 
       <Field label="Atau unggah foto sendiri (opsional, foto besar otomatis dikecilkan)" htmlFor="customFile">
