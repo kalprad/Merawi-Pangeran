@@ -3,387 +3,582 @@
     "id": "5b989189-41af-48ec-add2-0e1b88df4a56",
     "slug": "saluran-irigasi",
     "title": "Saluran Irigasi",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/Foto%20dan%20deskripsi%20Irigasi.geojson",
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/saluran%20irigasi%20new.geojson"
-    ],
-    "fields": {
-      "name": "Name",
-      "category": "Name",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Bendung Pleret",
-        "label": "Bendung Pleret",
-        "color": "#C9793A",
-        "icon": "droplet"
-      },
-      {
-        "value": "Bendung Kemiri",
-        "label": "Bendung Kemiri",
-        "color": "#105666",
-        "icon": "droplet"
-      },
-      {
-        "value": "Kerusakan Buis U pada Belokan",
-        "label": "Kerusakan Buis U pada Belokan",
-        "color": "#6C5B9E",
-        "icon": "wrench"
-      },
-      {
-        "value": "Kebocoran Saluran Buis U dan Sedimentasi",
-        "label": "Kebocoran Saluran Buis U dan Sedimentasi",
-        "color": "#839958",
-        "icon": "wrench"
-      },
-      {
-        "value": "Kebocoran Saluran Buis U 1",
-        "label": "Kebocoran Saluran Buis U 1",
-        "color": "#D3968C",
-        "icon": "wrench"
-      },
-      {
-        "value": "Kebocoran Saluran Buis U 2",
-        "label": "Kebocoran Saluran Buis U 2",
-        "color": "#B3423A",
-        "icon": "wrench"
-      },
-      {
-        "value": "Kebocoran Saluran Buis U 3",
-        "label": "Kebocoran Saluran Buis U 3",
-        "color": "#4a5a3f",
-        "icon": "wrench"
-      },
-      {
-        "value": "Kalikupang",
-        "label": "Kalikupang",
-        "color": "#0a3323",
-        "icon": "droplet"
-      }
-    ],
-    "photo": {
-      "mode": "property",
-      "property": "Path Foto"
-    },
     "downloadUrl": "https://drive.google.com/file/d/1gzCfsn4fw80Vh2Yv90YPAMrPGn7ykg33/view?usp=sharing",
-    "order": 2
+    "order": 2,
+    "sublayers": [
+      {
+        "id": "30c6abe2-1df2-4ed0-814f-5a6aaf4a1fc5",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/Foto%20dan%20deskripsi%20Irigasi.geojson",
+        "name": "Foto dan deskripsi Irigasi",
+        "fields": {
+          "name": "Name",
+          "category": "Name",
+          "info": [
+            {
+              "label": "Deskripsi",
+              "property": "Deskripsi"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "Bendung Pleret",
+            "label": "Bendung Pleret",
+            "color": "#C9793A",
+            "icon": "droplet"
+          },
+          {
+            "value": "Bendung Kemiri",
+            "label": "Bendung Kemiri",
+            "color": "#105666",
+            "icon": "droplet"
+          },
+          {
+            "value": "Kerusakan Buis U pada Belokan",
+            "label": "Kerusakan Buis U pada Belokan",
+            "color": "#6C5B9E",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U dan Sedimentasi",
+            "label": "Kebocoran Saluran Buis U dan Sedimentasi",
+            "color": "#839958",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 1",
+            "label": "Kebocoran Saluran Buis U 1",
+            "color": "#D3968C",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 2",
+            "label": "Kebocoran Saluran Buis U 2",
+            "color": "#B3423A",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 3",
+            "label": "Kebocoran Saluran Buis U 3",
+            "color": "#4a5a3f",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kalikupang",
+            "label": "Kalikupang",
+            "color": "#0a3323",
+            "icon": "droplet"
+          }
+        ],
+        "photo": {
+          "mode": "property",
+          "property": "Path Foto"
+        },
+        "visible": true
+      },
+      {
+        "id": "71f60b47-4796-4867-b515-7b63dd407b3a",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/saluran-irigasi/geojson/saluran%20irigasi%20new.geojson",
+        "name": "saluran irigasi new",
+        "fields": {
+          "name": "Name",
+          "category": "Name",
+          "info": [
+            {
+              "label": "Deskripsi",
+              "property": "Deskripsi"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "Bendung Pleret",
+            "label": "Bendung Pleret",
+            "color": "#C9793A",
+            "icon": "droplet"
+          },
+          {
+            "value": "Bendung Kemiri",
+            "label": "Bendung Kemiri",
+            "color": "#105666",
+            "icon": "droplet"
+          },
+          {
+            "value": "Kerusakan Buis U pada Belokan",
+            "label": "Kerusakan Buis U pada Belokan",
+            "color": "#6C5B9E",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U dan Sedimentasi",
+            "label": "Kebocoran Saluran Buis U dan Sedimentasi",
+            "color": "#839958",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 1",
+            "label": "Kebocoran Saluran Buis U 1",
+            "color": "#D3968C",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 2",
+            "label": "Kebocoran Saluran Buis U 2",
+            "color": "#B3423A",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kebocoran Saluran Buis U 3",
+            "label": "Kebocoran Saluran Buis U 3",
+            "color": "#4a5a3f",
+            "icon": "wrench"
+          },
+          {
+            "value": "Kalikupang",
+            "label": "Kalikupang",
+            "color": "#0a3323",
+            "icon": "droplet"
+          }
+        ],
+        "photo": {
+          "mode": "property",
+          "property": "Path Foto"
+        },
+        "visible": true
+      }
+    ]
   },
   {
     "id": "layer-umkm",
     "slug": "umkm",
     "title": "Sebaran UMKM",
-    "geojsonUrls": [
-      "Peta Interaktif/UMKM/Data_UMKM.geojson"
-    ],
-    "fields": {
-      "name": "Nama",
-      "category": "Jenis",
-      "googleMaps": "Google Maps",
-      "info": [
-        {
-          "label": "Dusun",
-          "property": "Dusun"
-        }
-      ]
-    },
-    "categories": [
+    "order": 3,
+    "sublayers": [
       {
-        "value": "Makanan",
-        "label": "Makanan",
-        "color": "#C9793A",
-        "icon": "utensils"
-      },
-      {
-        "value": "Jasa",
-        "label": "Jasa",
-        "color": "#105666",
-        "icon": "wrench"
-      },
-      {
-        "value": "Barang",
-        "label": "Barang",
-        "color": "#6C5B9E",
-        "icon": "shopping-bag"
+        "id": "446e39c1-7a5f-43b5-ad01-ab988551402b",
+        "geojsonUrl": "Peta Interaktif/UMKM/Data_UMKM.geojson",
+        "name": "Data_UMKM",
+        "fields": {
+          "name": "Nama",
+          "category": "Jenis",
+          "googleMaps": "Google Maps",
+          "info": [
+            {
+              "label": "Dusun",
+              "property": "Dusun"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "Makanan",
+            "label": "Makanan",
+            "color": "#C9793A",
+            "icon": "utensils"
+          },
+          {
+            "value": "Jasa",
+            "label": "Jasa",
+            "color": "#105666",
+            "icon": "wrench"
+          },
+          {
+            "value": "Barang",
+            "label": "Barang",
+            "color": "#6C5B9E",
+            "icon": "shopping-bag"
+          }
+        ],
+        "photo": {
+          "mode": "map",
+          "photoMap": {
+            "Agung Flower Decoration": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Agung%20Flower%20Decoration.png",
+            "Ardy Photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ardy%20Photo.png",
+            "Ariih Catering": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ariih%20Catering.png",
+            "Bengkel AFI MOTOR": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Bengkel%20AFI%20MOTOR.png",
+            "Berkah Bapak Flowers": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Bapak%20Flowers.png",
+            "Berkah Jaya": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Jaya.png",
+            "Dapur Noknie": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Dapur%20Noknie.png",
+            "Es Puter Srinoto": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Es%20Puter%20Srinoto.png",
+            "Flowriska Nursery": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Flowriska%20Nursery.png",
+            "Jadah Ibu Lasmirah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jadah%20Ibu%20Lasmirah.png",
+            "Jamu Yu Qodriyah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jamu%20Yu%20Qodriyah.png",
+            "Mibas Ojo Lali": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Mibas%20Ojo%20Lali.png",
+            "Omah Jahit ka ef we": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Jahit%20ka%20ef%20we.png",
+            "Omah Rajut Kalita Tegar": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Rajut%20Kalita%20Tegar.png",
+            "Penjahit Barokah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Barokah.png",
+            "Penjahit Ibu Siti Chofsah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Ibu%20Siti%20Chofsah.png",
+            "Pillow and Paint and Wellding": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Pillow%20and%20Paint%20and%20Wellding.png",
+            "Toko Berkah Ninu": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Toko%20Berkah%20Ninu.png",
+            "[Berkah Avocado_Sujatmiko]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BBerkah%20Avocado_Sujatmiko%5D.png",
+            "[Yola_Seblak dan Sosis Bakar Bandungan]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BYola_Seblak%20dan%20Sosis%20Bakar%20Bandungan%5D.png"
+          }
+        },
+        "visible": true
       }
-    ],
-    "photo": {
-      "mode": "map",
-      "photoMap": {
-        "Agung Flower Decoration": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Agung%20Flower%20Decoration.png",
-        "Ardy Photo": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ardy%20Photo.png",
-        "Ariih Catering": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Ariih%20Catering.png",
-        "Bengkel AFI MOTOR": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Bengkel%20AFI%20MOTOR.png",
-        "Berkah Bapak Flowers": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Bapak%20Flowers.png",
-        "Berkah Jaya": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Berkah%20Jaya.png",
-        "Dapur Noknie": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Dapur%20Noknie.png",
-        "Es Puter Srinoto": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Es%20Puter%20Srinoto.png",
-        "Flowriska Nursery": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Flowriska%20Nursery.png",
-        "Jadah Ibu Lasmirah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jadah%20Ibu%20Lasmirah.png",
-        "Jamu Yu Qodriyah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Jamu%20Yu%20Qodriyah.png",
-        "Mibas Ojo Lali": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Mibas%20Ojo%20Lali.png",
-        "Omah Jahit ka ef we": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Jahit%20ka%20ef%20we.png",
-        "Omah Rajut Kalita Tegar": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Omah%20Rajut%20Kalita%20Tegar.png",
-        "Penjahit Barokah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Barokah.png",
-        "Penjahit Ibu Siti Chofsah": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Penjahit%20Ibu%20Siti%20Chofsah.png",
-        "Pillow and Paint and Wellding": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Pillow%20and%20Paint%20and%20Wellding.png",
-        "Toko Berkah Ninu": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/Toko%20Berkah%20Ninu.png",
-        "[Berkah Avocado_Sujatmiko]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BBerkah%20Avocado_Sujatmiko%5D.png",
-        "[Yola_Seblak dan Sosis Bakar Bandungan]": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/UMKM/%5BYola_Seblak%20dan%20Sosis%20Bakar%20Bandungan%5D.png"
-      }
-    },
-    "order": 3
+    ]
   },
   {
     "id": "b0825edf-9b2b-4968-be4e-0830a1ae9fa8",
     "slug": "batas-dusun-desa-jetis",
     "title": "Batas Dusun Desa Jetis",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/batas-dusun-desa-jetis/geojson/Batas%20Dusun%20Desa%20Jetis.geojson"
-    ],
-    "fields": {
-      "name": "Dusun",
-      "category": "Dusun",
-      "info": [
-        {
-          "label": "Deskripsi",
-          "property": "Deskripsi"
-        }
-      ]
-    },
-    "categories": [
-      {
-        "value": "Ngunut",
-        "label": "Ngunut",
-        "color": "#C9793A",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Deso",
-        "label": "Deso",
-        "color": "#105666",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Ngasem",
-        "label": "Ngasem",
-        "color": "#6C5B9E",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Jombor",
-        "label": "Jombor",
-        "color": "#839958",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Jetis",
-        "label": "Jetis",
-        "color": "#D3968C",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Krajan",
-        "label": "Krajan",
-        "color": "#B3423A",
-        "icon": "map-pin"
-      },
-      {
-        "value": "Ngawinan",
-        "label": "Ngawinan",
-        "color": "#4a5a3f",
-        "icon": "map-pin"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
     "downloadUrl": "https://drive.google.com/file/d/1kofmEmGmpYS9wFS6ZIPTsvxJm5fS_sPm/view?usp=drive_link",
-    "order": 3
+    "order": 3,
+    "sublayers": [
+      {
+        "id": "dc10fe65-94f7-4378-8712-d9ac214d853b",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/batas-dusun-desa-jetis/geojson/Batas%20Dusun%20Desa%20Jetis.geojson",
+        "name": "Batas Dusun Desa Jetis",
+        "fields": {
+          "name": "Dusun",
+          "category": "Dusun",
+          "info": [
+            {
+              "label": "Deskripsi",
+              "property": "Deskripsi"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "Ngunut",
+            "label": "Ngunut",
+            "color": "#C9793A",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Deso",
+            "label": "Deso",
+            "color": "#105666",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Ngasem",
+            "label": "Ngasem",
+            "color": "#6C5B9E",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Jombor",
+            "label": "Jombor",
+            "color": "#839958",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Jetis",
+            "label": "Jetis",
+            "color": "#D3968C",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Krajan",
+            "label": "Krajan",
+            "color": "#B3423A",
+            "icon": "map-pin"
+          },
+          {
+            "value": "Ngawinan",
+            "label": "Ngawinan",
+            "color": "#4a5a3f",
+            "icon": "map-pin"
+          }
+        ],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
+      }
+    ]
   },
   {
     "id": "da10e484-8ab3-429d-b46b-e2b6a5ea013e",
     "slug": "fasilitas-umum-desa-jetis",
     "title": "Fasilitas Umum Desa Jetis",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/fasilitas-umum-desa-jetis/geojson/Fasum%20geojson.geojson"
-    ],
-    "fields": {
-      "name": "Name",
-      "category": "Jenis",
-      "googleMaps": "Google Maps",
-      "info": []
-    },
-    "categories": [
-      {
-        "value": "PAUD",
-        "label": "PAUD",
-        "color": "#9c3bc9",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Sarana Ibadah",
-        "label": "Sarana Ibadah",
-        "color": "#14db06",
-        "icon": "building"
-      },
-      {
-        "value": "Sarana Perekonomian",
-        "label": "Sarana Perekonomian",
-        "color": "#839958",
-        "icon": "shopping-bag"
-      },
-      {
-        "value": "Sarana Prasana Lainnya",
-        "label": "Sarana Prasana Lainnya",
-        "color": "#D3968C",
-        "icon": "landmark"
-      },
-      {
-        "value": "Sekolah Dasar",
-        "label": "Sekolah Dasar",
-        "color": "#B3423A",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Madrasah Ibtidaiyah",
-        "label": "Madrasah Ibtidaiyah",
-        "color": "#4a5a3f",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Sekolah Menengah Pertama",
-        "label": "Sekolah Menengah Pertama",
-        "color": "#0a3323",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Madrasah Tsanawiyah",
-        "label": "Madrasah Tsanawiyah",
-        "color": "#C9793A",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Taman Kanak-Kanak",
-        "label": "Taman Kanak-Kanak",
-        "color": "#105666",
-        "icon": "graduation-cap"
-      },
-      {
-        "value": "Raudhatul Athfal",
-        "label": "Raudhatul Athfal",
-        "color": "#5b9a9f",
-        "icon": "graduation-cap"
-      }
-    ],
-    "photo": {
-      "mode": "none"
-    },
     "downloadUrl": "https://drive.google.com/file/d/1QJ478iOiYMn1f0ckB7Sd51WGUTEQzVYI/view?usp=drive_link",
-    "order": 4
+    "order": 4,
+    "sublayers": [
+      {
+        "id": "8bd4a684-9be0-482c-9287-b00ae423d516",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/fasilitas-umum-desa-jetis/geojson/Fasum%20geojson.geojson",
+        "name": "Fasum geojson",
+        "fields": {
+          "name": "Name",
+          "category": "Jenis",
+          "googleMaps": "Google Maps",
+          "info": []
+        },
+        "categories": [
+          {
+            "value": "PAUD",
+            "label": "PAUD",
+            "color": "#9c3bc9",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Sarana Ibadah",
+            "label": "Sarana Ibadah",
+            "color": "#14db06",
+            "icon": "building"
+          },
+          {
+            "value": "Sarana Perekonomian",
+            "label": "Sarana Perekonomian",
+            "color": "#839958",
+            "icon": "shopping-bag"
+          },
+          {
+            "value": "Sarana Prasana Lainnya",
+            "label": "Sarana Prasana Lainnya",
+            "color": "#D3968C",
+            "icon": "landmark"
+          },
+          {
+            "value": "Sekolah Dasar",
+            "label": "Sekolah Dasar",
+            "color": "#B3423A",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Madrasah Ibtidaiyah",
+            "label": "Madrasah Ibtidaiyah",
+            "color": "#4a5a3f",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Sekolah Menengah Pertama",
+            "label": "Sekolah Menengah Pertama",
+            "color": "#0a3323",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Madrasah Tsanawiyah",
+            "label": "Madrasah Tsanawiyah",
+            "color": "#C9793A",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Taman Kanak-Kanak",
+            "label": "Taman Kanak-Kanak",
+            "color": "#105666",
+            "icon": "graduation-cap"
+          },
+          {
+            "value": "Raudhatul Athfal",
+            "label": "Raudhatul Athfal",
+            "color": "#5b9a9f",
+            "icon": "graduation-cap"
+          }
+        ],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
+      }
+    ]
   },
   {
     "id": "bdf4ee0e-e824-412c-8dea-7f69c621f54d",
     "slug": "peta-sebaran-bangunan",
     "title": "Peta Sebaran Bangunan",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Bangunan.geojson",
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Data%20Jalan%20ALL.geojson"
-    ],
-    "fields": {
-      "name": "Bangunan",
-      "category": "Bangunan",
-      "info": []
-    },
-    "categories": [],
-    "photo": {
-      "mode": "none"
-    },
     "downloadUrl": "https://drive.google.com/file/d/143AcZOkZrJN1NZtmNZJextu7_pttdKxJ/view?usp=drive_link",
-    "order": 5
+    "order": 5,
+    "sublayers": [
+      {
+        "id": "4f0c8391-a5af-4e4f-9c9e-b74e51619cb1",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Bangunan.geojson",
+        "name": "Bangunan",
+        "fields": {
+          "name": "Bangunan",
+          "category": "Bangunan",
+          "info": []
+        },
+        "categories": [],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
+      },
+      {
+        "id": "fd5099c0-5237-474a-bace-37157543b65e",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-sebaran-bangunan/geojson/Data%20Jalan%20ALL.geojson",
+        "name": "Data Jalan ALL",
+        "fields": {
+          "name": "Bangunan",
+          "category": "Bangunan",
+          "info": []
+        },
+        "categories": [],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
+      }
+    ]
   },
   {
     "id": "aa25fc7e-d32a-4c95-80a0-447464737ff0",
     "slug": "peta-bangunan-irigasi-desa-jetis",
     "title": "Peta Bangunan Irigasi Desa Jetis",
-    "geojsonUrls": [
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-bangunan-irigasi-desa-jetis/geojson/GeoJson%20Peta%20Irigasi%20Desa%20Jetis.geojson",
-      "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-bangunan-irigasi-desa-jetis/geojson/Geojson%20Peta%20sawah%20jetis.geojson"
-    ],
-    "fields": {
-      "name": "NAMA_DI",
-      "category": "NAMA_DI",
-      "info": [
-        {
-          "label": "Daerah Irigasi ",
-          "property": "NAMA_DI"
-        }
-      ]
-    },
-    "categories": [
+    "order": 6,
+    "sublayers": [
       {
-        "value": "DI Siblender",
-        "label": "Saluran DI Siblender",
-        "color": "#C9793A",
-        "icon": "map-pin",
-        "weight": 5
+        "id": "02089dd8-1692-4de4-adf7-89c56f5eb55a",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-bangunan-irigasi-desa-jetis/geojson/GeoJson%20Peta%20Irigasi%20Desa%20Jetis.geojson",
+        "name": "GeoJson Peta Irigasi Desa Jetis",
+        "fields": {
+          "name": "NAMA_DI",
+          "category": "NAMA_DI",
+          "info": [
+            {
+              "label": "Daerah Irigasi ",
+              "property": "NAMA_DI"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "DI Siblender",
+            "label": "Saluran DI Siblender",
+            "color": "#C9793A",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Keji Panjang",
+            "label": "Saluran DI Keji Panjang",
+            "color": "#105666",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Gintungan Bd",
+            "label": "Saluran DI Gintungan Bd",
+            "color": "#6C5B9E",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Sibening Bd",
+            "label": "Saluran DI Sibening Bd",
+            "color": "#839958",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Dawuhan Bd",
+            "label": "Saluran DI Dawuhan Bd",
+            "color": "#D3968C",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Sipengkok A",
+            "label": "Saluran DI Sipengkok A",
+            "color": "#B3423A",
+            "icon": "map-pin",
+            "weight": 5,
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Duren Selo",
+            "label": "Saluran DI Duren Selo",
+            "color": "#4a5a3f",
+            "icon": "map-pin",
+            "dashArray": "8,6"
+          },
+          {
+            "value": "DI Kaliluruk",
+            "label": "DI Kaliluruk",
+            "color": "#0a3323",
+            "icon": "map-pin",
+            "dashArray": "8,6"
+          }
+        ],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
       },
       {
-        "value": "DI Keji Panjang",
-        "label": "Saluran DI Keji Panjang",
-        "color": "#105666",
-        "icon": "map-pin",
-        "weight": 5
-      },
-      {
-        "value": "DI Gintungan Bd",
-        "label": "Saluran DI Gintungan Bd",
-        "color": "#6C5B9E",
-        "icon": "map-pin",
-        "weight": 5
-      },
-      {
-        "value": "DI Sibening Bd",
-        "label": "Saluran DI Sibening Bd",
-        "color": "#839958",
-        "icon": "map-pin",
-        "weight": 5
-      },
-      {
-        "value": "DI Dawuhan Bd",
-        "label": "Saluran DI Dawuhan Bd",
-        "color": "#D3968C",
-        "icon": "map-pin",
-        "weight": 5
-      },
-      {
-        "value": "DI Sipengkok A",
-        "label": "Saluran DI Sipengkok A",
-        "color": "#B3423A",
-        "icon": "map-pin",
-        "weight": 5
-      },
-      {
-        "value": "DI Duren Selo",
-        "label": "DI Duren Selo",
-        "color": "#4a5a3f",
-        "icon": "map-pin"
-      },
-      {
-        "value": "DI Kaliluruk",
-        "label": "DI Kaliluruk",
-        "color": "#0a3323",
-        "icon": "map-pin"
+        "id": "8882efd5-819b-4bb1-9bbd-be0dfe202e9a",
+        "geojsonUrl": "https://raw.githubusercontent.com/kalprad/Merawi-Pangeran/main/Peta%20Interaktif/peta-bangunan-irigasi-desa-jetis/geojson/Geojson%20Peta%20sawah%20jetis.geojson",
+        "name": "Geojson Peta sawah jetis",
+        "fields": {
+          "name": "NAMA_DI",
+          "category": "NAMA_DI",
+          "info": [
+            {
+              "label": "Daerah Irigasi ",
+              "property": "NAMA_DI"
+            }
+          ]
+        },
+        "categories": [
+          {
+            "value": "DI Siblender",
+            "label": "DI Siblender",
+            "color": "#C9793A",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Keji Panjang",
+            "label": "DI Keji Panjang",
+            "color": "#105666",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Gintungan Bd",
+            "label": "DI Gintungan Bd",
+            "color": "#6C5B9E",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Sibening Bd",
+            "label": "DI Sibening Bd",
+            "color": "#839958",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Dawuhan Bd",
+            "label": "DI Dawuhan Bd",
+            "color": "#D3968C",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Sipengkok A",
+            "label": "DI Sipengkok A",
+            "color": "#B3423A",
+            "icon": "map-pin",
+            "weight": 2
+          },
+          {
+            "value": "DI Duren Selo",
+            "label": "DI Duren Selo",
+            "color": "#4a5a3f",
+            "icon": "map-pin"
+          },
+          {
+            "value": "DI Kaliluruk",
+            "label": "DI Kaliluruk",
+            "color": "#0a3323",
+            "icon": "map-pin"
+          }
+        ],
+        "photo": {
+          "mode": "none"
+        },
+        "visible": true
       }
-    ],
-    "photo": {
-      "mode": "none"
-    },
-    "order": 6
+    ]
   }
 ]

@@ -50,6 +50,7 @@ import "leaflet/dist/leaflet.css";
 import type {
   MapIconKey,
   MapLayerCategory,
+  MapSubLayer,
   ResolvedMapLayer,
 } from "@/lib/types";
 
@@ -153,6 +154,20 @@ const FALLBACK_CATEGORY: MapLayerCategory = {
   icon: "map-pin",
 };
 
+function defaultActiveCategories(layer?: ResolvedMapLayer): Record<string, Set<string>> {
+  const result: Record<string, Set<string>> = {};
+  for (const sl of layer?.sublayers ?? []) {
+    result[sl.id] = new Set(sl.categories.map((c) => c.value));
+  }
+  return result;
+}
+
+function defaultSubLayerVisibility(layer?: ResolvedMapLayer): Record<string, boolean> {
+  const result: Record<string, boolean> = {};
+  for (const sl of layer?.sublayers ?? []) result[sl.id] = sl.visible;
+  return result;
+}
+
 function createDivIcon(color: string, icon: MapIconKey): L.DivIcon {
   return L.divIcon({
     html: `<span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9999px;background:${color};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.35);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${ICON_PATHS[icon]}</svg></span>`,
@@ -171,36 +186,36 @@ function escapeHtml(value: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function getFeatureName(feature: Feature, layer: ResolvedMapLayer): string {
+function getFeatureName(feature: Feature, subLayer: MapSubLayer): string {
   const props = (feature.properties ?? {}) as Record<string, unknown>;
-  return String(props[layer.fields.name] ?? "").trim();
+  return String(props[subLayer.fields.name] ?? "").trim();
 }
 
 function getFeatureCategory(
   feature: Feature,
-  layer: ResolvedMapLayer,
+  subLayer: MapSubLayer,
 ): MapLayerCategory | undefined {
-  if (!layer.fields.category) return undefined;
+  if (!subLayer.fields.category) return undefined;
   const props = (feature.properties ?? {}) as Record<string, unknown>;
-  const raw = props[layer.fields.category];
+  const raw = props[subLayer.fields.category];
   if (raw == null) return undefined;
   const value = String(raw).trim().toLowerCase();
-  return layer.categories.find((c) => c.value.trim().toLowerCase() === value);
+  return subLayer.categories.find((c) => c.value.trim().toLowerCase() === value);
 }
 
-function getFeatureGoogleMaps(feature: Feature, layer: ResolvedMapLayer): string | null {
-  if (!layer.fields.googleMaps) return null;
+function getFeatureGoogleMaps(feature: Feature, subLayer: MapSubLayer): string | null {
+  if (!subLayer.fields.googleMaps) return null;
   const props = (feature.properties ?? {}) as Record<string, unknown>;
-  const raw = props[layer.fields.googleMaps];
+  const raw = props[subLayer.fields.googleMaps];
   return typeof raw === "string" && raw.trim() ? raw : null;
 }
 
 function getFeatureInfo(
   feature: Feature,
-  layer: ResolvedMapLayer,
+  subLayer: MapSubLayer,
 ): { label: string; value: string }[] {
   const props = (feature.properties ?? {}) as Record<string, unknown>;
-  return (layer.fields.info ?? [])
+  return (subLayer.fields.info ?? [])
     .map((f) => ({ label: f.label, value: props[f.property] }))
     .filter((f): f is { label: string; value: string | number } => {
       return f.value != null && String(f.value).trim() !== "";
@@ -210,23 +225,23 @@ function getFeatureInfo(
 
 function getFeaturePhoto(
   feature: Feature,
-  layer: ResolvedMapLayer,
+  subLayer: MapSubLayer,
   name: string,
 ): string | null {
-  if (layer.photo.mode === "map") return layer.photo.photoMap[name] ?? null;
-  if (layer.photo.mode === "property") {
+  if (subLayer.photo.mode === "map") return subLayer.photo.photoMap[name] ?? null;
+  if (subLayer.photo.mode === "property") {
     const props = (feature.properties ?? {}) as Record<string, unknown>;
-    const raw = props[layer.photo.property];
+    const raw = props[subLayer.photo.property];
     return typeof raw === "string" && raw.trim() ? raw : null;
   }
   return null;
 }
 
-function buildPopupHtml(feature: Feature, layer: ResolvedMapLayer): string {
-  const name = getFeatureName(feature, layer);
-  const category = getFeatureCategory(feature, layer);
-  const info = getFeatureInfo(feature, layer);
-  const gmaps = getFeatureGoogleMaps(feature, layer);
+function buildPopupHtml(feature: Feature, subLayer: MapSubLayer): string {
+  const name = getFeatureName(feature, subLayer);
+  const category = getFeatureCategory(feature, subLayer);
+  const info = getFeatureInfo(feature, subLayer);
+  const gmaps = getFeatureGoogleMaps(feature, subLayer);
 
   const parts: string[] = ['<div style="min-width:180px">'];
   if (category) {
@@ -382,9 +397,17 @@ export default function InteractiveMap({
   boundary: FeatureCollection<Polygon | MultiPolygon>;
 }) {
   const [activeLayerId, setActiveLayerId] = useState(layers[0]?.id ?? "");
-  const [activeCategories, setActiveCategories] = useState<Set<string>>(
-    new Set(layers[0]?.categories.map((c) => c.value) ?? []),
+
+  // Filter kategori aktif, per sub-layer: subLayerId -> Set nilai kategori aktif.
+  const [activeCategoriesBySubLayer, setActiveCategoriesBySubLayer] = useState<
+    Record<string, Set<string>>
+  >(() => defaultActiveCategories(layers[0]));
+
+  // Status tampil/sembunyi per sub-layer: subLayerId -> boolean.
+  const [subLayerVisibility, setSubLayerVisibility] = useState<Record<string, boolean>>(
+    () => defaultSubLayerVisibility(layers[0]),
   );
+
   const [boundaryVisible, setBoundaryVisible] = useState(true);
 
   const activeLayer = useMemo(
@@ -392,45 +415,64 @@ export default function InteractiveMap({
     [layers, activeLayerId],
   );
 
-  // Reset kategori aktif saat jenis peta berganti (pola "adjust state saat
-  // prop berubah" dari dokumentasi React: setState di badan render, bukan
-  // di dalam efek, supaya tidak memicu render tambahan yang tidak perlu).
-  const [categoriesResetForLayerId, setCategoriesResetForLayerId] = useState(activeLayerId);
-  if (activeLayer && categoriesResetForLayerId !== activeLayer.id) {
-    setCategoriesResetForLayerId(activeLayer.id);
-    setActiveCategories(new Set(activeLayer.categories.map((c) => c.value)));
+  // Reset filter kategori & visibilitas sub-layer saat jenis peta berganti
+  // (pola "adjust state saat prop berubah" dari dokumentasi React: setState
+  // di badan render, bukan di dalam efek, supaya tidak memicu render
+  // tambahan yang tidak perlu).
+  const [resetForLayerId, setResetForLayerId] = useState(activeLayerId);
+  if (activeLayer && resetForLayerId !== activeLayer.id) {
+    setResetForLayerId(activeLayer.id);
+    setActiveCategoriesBySubLayer(defaultActiveCategories(activeLayer));
+    setSubLayerVisibility(defaultSubLayerVisibility(activeLayer));
   }
 
-  const pointFeatures = useMemo(
-    () =>
-      (activeLayer?.geojson.features ?? []).filter(
-        (f) => f.geometry?.type === "Point",
-      ),
+  // Urutan panel: indeks 0 = paling atas panel = paling atas tumpukan peta.
+  // Untuk menggambar (GeoJSON lalu Marker), balik urutan supaya indeks 0
+  // digambar TERAKHIR (di atas fitur sub-layer lain).
+  const stackedSubLayers = useMemo(
+    () => (activeLayer ? [...activeLayer.sublayers].reverse() : []),
     [activeLayer],
   );
 
-  const otherFeatures = useMemo(
-    () =>
-      (activeLayer?.geojson.features ?? []).filter(
-        (f) => f.geometry && f.geometry.type !== "Point",
-      ),
+  const visibleStackedSubLayers = useMemo(
+    () => stackedSubLayers.filter((sl) => subLayerVisibility[sl.id] ?? sl.visible),
+    [stackedSubLayers, subLayerVisibility],
+  );
+
+  // Data gabungan lintas sub-layer hanya untuk fit-bounds; render tetap per
+  // sub-layer di bawah supaya style/legenda masing-masing terjaga.
+  const mergedGeojson: FeatureCollection = useMemo(
+    () => ({
+      type: "FeatureCollection",
+      features: (activeLayer?.sublayers ?? []).flatMap((sl) => sl.geojson.features),
+    }),
     [activeLayer],
   );
 
-  const otherFeaturesCollection: FeatureCollection = useMemo(
-    () => ({ type: "FeatureCollection", features: otherFeatures }),
-    [otherFeatures],
-  );
-
-  const visiblePointFeatures = useMemo(
+  const renderableSubLayers = useMemo(
     () =>
-      pointFeatures.filter((f) => {
-        if (!activeLayer) return false;
-        const category = getFeatureCategory(f, activeLayer);
-        const value = category?.value ?? FALLBACK_CATEGORY.value;
-        return activeCategories.has(value) || !category;
+      visibleStackedSubLayers.map((sl) => {
+        const pointFeatures = sl.geojson.features.filter((f) => f.geometry?.type === "Point");
+        const otherFeatures = sl.geojson.features.filter(
+          (f) => f.geometry && f.geometry.type !== "Point",
+        );
+        const activeCategories = activeCategoriesBySubLayer[sl.id] ?? new Set<string>();
+        const visiblePointFeatures = pointFeatures.filter((f) => {
+          const category = getFeatureCategory(f, sl);
+          const value = category?.value ?? FALLBACK_CATEGORY.value;
+          return activeCategories.has(value) || !category;
+        });
+        const otherFeaturesCollection: FeatureCollection = {
+          type: "FeatureCollection",
+          features: otherFeatures.filter((f) => {
+            const category = getFeatureCategory(f, sl);
+            const value = category?.value ?? FALLBACK_CATEGORY.value;
+            return activeCategories.has(value) || !category;
+          }),
+        };
+        return { subLayer: sl, otherFeaturesCollection, visiblePointFeatures };
       }),
-    [pointFeatures, activeCategories, activeLayer],
+    [visibleStackedSubLayers, activeCategoriesBySubLayer],
   );
 
   if (!activeLayer) {
@@ -441,13 +483,20 @@ export default function InteractiveMap({
     );
   }
 
-  function toggleCategory(value: string) {
-    setActiveCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(value)) next.delete(value);
-      else next.add(value);
-      return next;
+  function toggleCategory(subLayerId: string, value: string) {
+    setActiveCategoriesBySubLayer((prev) => {
+      const current = new Set(prev[subLayerId] ?? []);
+      if (current.has(value)) current.delete(value);
+      else current.add(value);
+      return { ...prev, [subLayerId]: current };
     });
+  }
+
+  function toggleSubLayerVisibility(subLayerId: string, fallbackDefault: boolean) {
+    setSubLayerVisibility((prev) => ({
+      ...prev,
+      [subLayerId]: !(prev[subLayerId] ?? fallbackDefault),
+    }));
   }
 
   return (
@@ -500,7 +549,7 @@ export default function InteractiveMap({
             </LayersControl.BaseLayer>
           </LayersControl>
 
-          <FitToData boundary={boundary} activeGeojson={activeLayer.geojson} />
+          <FitToData boundary={boundary} activeGeojson={mergedGeojson} />
 
           {boundaryVisible && boundary.features.length > 0 && (
             <GeoJSON
@@ -514,141 +563,176 @@ export default function InteractiveMap({
             />
           )}
 
-          {otherFeatures.length > 0 && (
-            <GeoJSON
-              key={activeLayer.id}
-              data={otherFeaturesCollection}
-              style={(feature) => {
-                const category = feature ? getFeatureCategory(feature, activeLayer) : undefined;
-                const color = category?.color ?? FALLBACK_CATEGORY.color;
-                return {
-                  color,
-                  weight: category?.weight ?? 2,
-                  dashArray: category?.dashArray || undefined,
-                  fillColor: color,
-                  fillOpacity: category?.fillOpacity ?? 0.35,
-                };
-              }}
-              onEachFeature={(feature, layerInstance) => {
-                layerInstance.bindPopup(buildPopupHtml(feature, activeLayer));
-              }}
-            />
+          {renderableSubLayers.map(({ subLayer, otherFeaturesCollection }) =>
+            otherFeaturesCollection.features.length > 0 ? (
+              <GeoJSON
+                key={`${activeLayer.id}-${subLayer.id}-lines`}
+                data={otherFeaturesCollection}
+                style={(feature) => {
+                  const category = feature ? getFeatureCategory(feature, subLayer) : undefined;
+                  const color = category?.color ?? FALLBACK_CATEGORY.color;
+                  return {
+                    color,
+                    weight: category?.weight ?? 2,
+                    dashArray: category?.dashArray || undefined,
+                    fillColor: color,
+                    fillOpacity: category?.fillOpacity ?? 0.35,
+                  };
+                }}
+                onEachFeature={(feature, layerInstance) => {
+                  layerInstance.bindPopup(buildPopupHtml(feature, subLayer));
+                }}
+              />
+            ) : null,
           )}
 
-          {visiblePointFeatures.map((feature, index) => {
-            const name = getFeatureName(feature, activeLayer);
-            const category = getFeatureCategory(feature, activeLayer) ?? FALLBACK_CATEGORY;
-            const info = getFeatureInfo(feature, activeLayer);
-            const gmaps = getFeatureGoogleMaps(feature, activeLayer);
-            const photo = getFeaturePhoto(feature, activeLayer, name);
-            const coords =
-              feature.geometry.type === "Point" ? feature.geometry.coordinates : null;
-            if (!coords) return null;
-            const [lng, lat] = coords;
+          {renderableSubLayers.flatMap(({ subLayer, visiblePointFeatures }) =>
+            visiblePointFeatures.map((feature, index) => {
+              const name = getFeatureName(feature, subLayer);
+              const category = getFeatureCategory(feature, subLayer) ?? FALLBACK_CATEGORY;
+              const info = getFeatureInfo(feature, subLayer);
+              const gmaps = getFeatureGoogleMaps(feature, subLayer);
+              const photo = getFeaturePhoto(feature, subLayer, name);
+              const coords =
+                feature.geometry.type === "Point" ? feature.geometry.coordinates : null;
+              if (!coords) return null;
+              const [lng, lat] = coords;
 
-            return (
-              <Marker
-                key={`${activeLayer.id}-${index}`}
-                position={[lat, lng]}
-                icon={createDivIcon(category.color, category.icon)}
-              >
-                <Popup>
-                  <div className="w-56">
-                    {activeLayer.photo.mode !== "none" &&
-                      (photo ? (
-                        <Image
-                          src={photo}
-                          alt={name}
-                          width={224}
-                          height={128}
-                          unoptimized
-                          className="h-32 w-full rounded-lg object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-[var(--color-muted)] text-center text-xs text-[var(--color-muted-foreground)]">
-                          Foto belum tersedia
-                        </div>
-                      ))}
-                    {activeLayer.fields.category && (
-                      <span
-                        className="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white uppercase"
-                        style={{ background: category.color }}
-                      >
-                        {category.label}
-                      </span>
-                    )}
-                    <p className="mt-1 font-semibold text-[var(--color-dark-green)]">
-                      {name}
-                    </p>
-                    {info.map((f) => (
-                      <p key={f.label} className="text-xs text-gray-500">
-                        <span className="font-medium text-gray-600">{f.label}:</span>{" "}
-                        {f.value}
+              return (
+                <Marker
+                  key={`${activeLayer.id}-${subLayer.id}-${index}`}
+                  position={[lat, lng]}
+                  icon={createDivIcon(category.color, category.icon)}
+                >
+                  <Popup>
+                    <div className="w-56">
+                      {subLayer.photo.mode !== "none" &&
+                        (photo ? (
+                          <Image
+                            src={photo}
+                            alt={name}
+                            width={224}
+                            height={128}
+                            unoptimized
+                            className="h-32 w-full rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-32 w-full items-center justify-center rounded-lg bg-[var(--color-muted)] text-center text-xs text-[var(--color-muted-foreground)]">
+                            Foto belum tersedia
+                          </div>
+                        ))}
+                      {subLayer.fields.category && (
+                        <span
+                          className="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white uppercase"
+                          style={{ background: category.color }}
+                        >
+                          {category.label}
+                        </span>
+                      )}
+                      <p className="mt-1 font-semibold text-[var(--color-dark-green)]">
+                        {name}
                       </p>
-                    ))}
-                    {gmaps && (
-                      <a
-                        href={gmaps}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#fff" }}
-                        className="mt-2 inline-flex items-center gap-1 rounded-full bg-[var(--color-midnight-teal)] px-3 py-1 text-xs font-medium transition-opacity hover:opacity-90"
-                      >
-                        <MapPin size={12} />
-                        Buka di Google Maps
-                      </a>
-                    )}
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
+                      {info.map((f) => (
+                        <p key={f.label} className="text-xs text-gray-500">
+                          <span className="font-medium text-gray-600">{f.label}:</span>{" "}
+                          {f.value}
+                        </p>
+                      ))}
+                      {gmaps && (
+                        <a
+                          href={gmaps}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#fff" }}
+                          className="mt-2 inline-flex items-center gap-1 rounded-full bg-[var(--color-midnight-teal)] px-3 py-1 text-xs font-medium transition-opacity hover:opacity-90"
+                        >
+                          <MapPin size={12} />
+                          Buka di Google Maps
+                        </a>
+                      )}
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            }),
+          )}
         </MapContainer>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
-        <span className="text-xs font-semibold tracking-wide text-[var(--color-muted-foreground)] uppercase">
-          Legenda
-        </span>
-        {activeLayer.categories.map((cat) => {
-          const Icon = ICON_COMPONENTS[cat.icon];
-          const active = activeCategories.has(cat.value);
-          return (
-            <button
-              key={cat.value}
-              type="button"
-              onClick={() => toggleCategory(cat.value)}
-              aria-pressed={active}
-              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-beige)] px-3 py-1.5 text-xs font-medium transition-opacity duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
-                active ? "opacity-100" : "opacity-40"
-              }`}
-            >
-              <span
-                className="flex h-5 w-5 items-center justify-center rounded-full"
-                style={{ background: cat.color }}
-                aria-hidden="true"
-              >
-                <Icon size={11} color="#fff" />
-              </span>
-              {cat.label}
-            </button>
-          );
-        })}
-        <button
-          type="button"
-          onClick={() => setBoundaryVisible((v) => !v)}
-          aria-pressed={boundaryVisible}
-          className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-beige)] px-3 py-1.5 text-xs font-medium transition-opacity duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
-            boundaryVisible ? "opacity-100" : "opacity-40"
-          }`}
-        >
-          <span
-            className="h-0.5 w-5 rounded-full"
-            style={{ background: BOUNDARY_COLOR }}
-            aria-hidden="true"
-          />
-          Batas Desa Jetis
-        </button>
+      <div className="mt-4 space-y-3">
+        {activeLayer.sublayers.length > 1 && (
+          <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
+            <span className="text-xs font-semibold tracking-wide text-[var(--color-muted-foreground)] uppercase">
+              Layer
+            </span>
+            {stackedSubLayers.map((sl) => {
+              const visible = subLayerVisibility[sl.id] ?? sl.visible;
+              return (
+                <button
+                  key={sl.id}
+                  type="button"
+                  onClick={() => toggleSubLayerVisibility(sl.id, sl.visible)}
+                  aria-pressed={visible}
+                  className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-beige)] px-3 py-1.5 text-xs font-medium transition-opacity duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
+                    visible ? "opacity-100" : "opacity-40"
+                  }`}
+                >
+                  <Layers size={12} aria-hidden="true" />
+                  {sl.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
+          <span className="text-xs font-semibold tracking-wide text-[var(--color-muted-foreground)] uppercase">
+            Legenda
+          </span>
+          {stackedSubLayers.map((sl) =>
+            sl.categories.map((cat) => {
+              const Icon = ICON_COMPONENTS[cat.icon];
+              const activeCategories = activeCategoriesBySubLayer[sl.id] ?? new Set<string>();
+              const active = activeCategories.has(cat.value);
+              return (
+                <button
+                  key={`${sl.id}::${cat.value}`}
+                  type="button"
+                  onClick={() => toggleCategory(sl.id, cat.value)}
+                  aria-pressed={active}
+                  title={activeLayer.sublayers.length > 1 ? sl.name : undefined}
+                  className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-beige)] px-3 py-1.5 text-xs font-medium transition-opacity duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
+                    active ? "opacity-100" : "opacity-40"
+                  }`}
+                >
+                  <span
+                    className="flex h-5 w-5 items-center justify-center rounded-full"
+                    style={{ background: cat.color }}
+                    aria-hidden="true"
+                  >
+                    <Icon size={11} color="#fff" />
+                  </span>
+                  {cat.label}
+                </button>
+              );
+            }),
+          )}
+          <button
+            type="button"
+            onClick={() => setBoundaryVisible((v) => !v)}
+            aria-pressed={boundaryVisible}
+            className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-beige)] px-3 py-1.5 text-xs font-medium transition-opacity duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-ring)] ${
+              boundaryVisible ? "opacity-100" : "opacity-40"
+            }`}
+          >
+            <span
+              className="h-0.5 w-5 rounded-full"
+              style={{ background: BOUNDARY_COLOR }}
+              aria-hidden="true"
+            />
+            Batas Desa Jetis
+          </button>
+        </div>
       </div>
     </div>
   );

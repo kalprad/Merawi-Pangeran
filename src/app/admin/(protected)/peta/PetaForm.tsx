@@ -36,9 +36,12 @@ import type {
   MapIconKey,
   MapLayer,
   MapLayerCategory,
+  MapLayerFieldMapping,
   MapLayerPhotoConfig,
+  MapSubLayer,
 } from "@/lib/types";
 import { slugify } from "@/lib/slugify";
+import { guessNameProperty, stripExtension } from "@/lib/mapImport";
 
 type Props = {
   mode: "create" | "edit";
@@ -220,17 +223,32 @@ function computeCategories(
   });
 }
 
-type GeojsonSource =
-  | { kind: "existing"; url: string; name: string; features: RawFeature[] }
-  | { kind: "new"; file: File; name: string; features: RawFeature[] };
+type SubLayerSource = { kind: "existing"; url: string } | { kind: "new"; file: File };
 
-function filenameFromUrl(url: string): string {
-  const last = url.split("/").pop() ?? url;
-  try {
-    return decodeURIComponent(last);
-  } catch {
-    return last;
-  }
+type SubLayerDraft = {
+  id: string;
+  source: SubLayerSource;
+  features: RawFeature[];
+  name: string;
+  nameProperty: string;
+  categoryProperty: string;
+  googleMapsProperty: string;
+  infoFields: { label: string; property: string }[];
+  categories: MapLayerCategory[];
+  photoMode: MapLayerPhotoConfig["mode"];
+  photoMap: Record<string, string>;
+  photoProperty: string;
+  visible: boolean;
+};
+
+function draftHasLineOrPolygon(draft: SubLayerDraft): boolean {
+  return draft.features.some((f) =>
+    ["LineString", "MultiLineString", "Polygon", "MultiPolygon"].includes(f.geometry?.type ?? ""),
+  );
+}
+
+function draftHasPolygon(draft: SubLayerDraft): boolean {
+  return draft.features.some((f) => ["Polygon", "MultiPolygon"].includes(f.geometry?.type ?? ""));
 }
 
 export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
@@ -239,48 +257,20 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
   const [title, setTitle] = useState(initialData?.title ?? "");
   const slug = mode === "edit" ? (initialData?.slug ?? "") : slugify(title);
 
-  const [geojsonSources, setGeojsonSources] = useState<GeojsonSource[]>([]);
+  const [subLayerDrafts, setSubLayerDrafts] = useState<SubLayerDraft[]>([]);
   const [geojsonLoadingExisting, setGeojsonLoadingExisting] = useState(mode === "edit");
   const [isDraggingGeojson, setIsDraggingGeojson] = useState(false);
 
-  const features = geojsonSources.flatMap((s) => s.features);
-  const detectedProperties = detectProperties(features);
-  const hasLineOrPolygon = features.some((f) =>
-    ["LineString", "MultiLineString", "Polygon", "MultiPolygon"].includes(
-      f.geometry?.type ?? "",
-    ),
-  );
-  const hasPolygon = features.some((f) =>
-    ["Polygon", "MultiPolygon"].includes(f.geometry?.type ?? ""),
-  );
-
-  const [nameProperty, setNameProperty] = useState(initialData?.fields.name ?? "");
-  const [categoryProperty, setCategoryProperty] = useState(
-    initialData?.fields.category ?? "",
-  );
-  const [googleMapsProperty, setGoogleMapsProperty] = useState(
-    initialData?.fields.googleMaps ?? "",
-  );
-  const [infoFields, setInfoFields] = useState<{ label: string; property: string }[]>(
-    initialData?.fields.info ?? [],
-  );
-  const [categories, setCategories] = useState<MapLayerCategory[]>(
-    initialData?.categories ?? [],
-  );
-
-  const [photoMode, setPhotoMode] = useState<MapLayerPhotoConfig["mode"]>(
-    initialData?.photo.mode ?? "none",
-  );
-  const [photoMap, setPhotoMap] = useState<Record<string, string>>(
-    initialData?.photo.mode === "map" ? initialData.photo.photoMap : {},
-  );
-  const [photoProperty, setPhotoProperty] = useState(
-    initialData?.photo.mode === "property" ? initialData.photo.property : "",
-  );
-  const [uploadingPhotoFor, setUploadingPhotoFor] = useState<string | null>(null);
-  const [bulkUploading, setBulkUploading] = useState(false);
-  const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number } | null>(null);
+  const [uploadingPhotoFor, setUploadingPhotoFor] = useState<{
+    draftId: string;
+    name: string;
+  } | null>(null);
+  const [bulkUploading, setBulkUploading] = useState<string | null>(null);
+  const [bulkProgress, setBulkProgress] = useState<
+    { draftId: string; done: number; total: number } | null
+  >(null);
   const [bulkSummary, setBulkSummary] = useState<{
+    draftId: string;
     matched: number;
     failed: string[];
     unmatched: string[];
@@ -292,20 +282,34 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
   const [loading, setLoading] = useState(false);
   const [uploadingGeojson, setUploadingGeojson] = useState(false);
 
-  // Mode sunting: ambil isi semua GeoJSON yang sudah ada supaya daftar
-  // properti dan nama fitur untuk pemetaan foto ikut terisi otomatis.
+  // Mode sunting: ambil isi GeoJSON tiap sub-layer yang sudah ada, langsung
+  // dengan pemetaan properti/legenda/foto yang sudah tersimpan sebelumnya.
   useEffect(() => {
-    if (mode !== "edit" || !initialData?.geojsonUrls?.length) return;
+    if (mode !== "edit" || !initialData?.sublayers?.length) return;
     Promise.all(
-      initialData.geojsonUrls.map(async (url): Promise<GeojsonSource> => {
-        const res = await fetch(url);
+      initialData.sublayers.map(async (sl): Promise<SubLayerDraft> => {
+        const res = await fetch(sl.geojsonUrl);
         const json = await res.json();
         const feats: RawFeature[] = Array.isArray(json?.features) ? json.features : [];
-        return { kind: "existing", url, name: filenameFromUrl(url), features: feats };
+        return {
+          id: sl.id,
+          source: { kind: "existing", url: sl.geojsonUrl },
+          features: feats,
+          name: sl.name,
+          nameProperty: sl.fields.name,
+          categoryProperty: sl.fields.category ?? "",
+          googleMapsProperty: sl.fields.googleMaps ?? "",
+          infoFields: sl.fields.info ?? [],
+          categories: sl.categories,
+          photoMode: sl.photo.mode,
+          photoMap: sl.photo.mode === "map" ? sl.photo.photoMap : {},
+          photoProperty: sl.photo.mode === "property" ? sl.photo.property : "",
+          visible: sl.visible,
+        };
       }),
     )
-      .then((sources) => {
-        setGeojsonSources(sources);
+      .then((drafts) => {
+        setSubLayerDrafts(drafts);
         setGeojsonLoadingExisting(false);
       })
       .catch(() => {
@@ -315,17 +319,23 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  // Sinkronkan daftar kategori legenda saat properti kategori dipilih, atau
-  // saat nilai yang terdeteksi berubah (mis. setelah menambah/menghapus
-  // file GeoJSON). Dijalankan di badan render -- bukan di dalam efek --
-  // mengikuti pola "adjust state saat nilai turunan berubah" dari
-  // dokumentasi React, supaya tidak memicu render tambahan yang sia-sia.
-  const detectedCategoryValues = categoryProperty ? detectValues(features, categoryProperty) : [];
-  const categorySyncKey = `${categoryProperty}::${detectedCategoryValues.join("|")}`;
-  const [categoriesSyncedFor, setCategoriesSyncedFor] = useState("");
-  if (categoryProperty && categoriesSyncedFor !== categorySyncKey) {
-    setCategoriesSyncedFor(categorySyncKey);
-    setCategories((prev) => computeCategories(detectedCategoryValues, prev));
+  function updateDraft(
+    id: string,
+    patch: Partial<SubLayerDraft> | ((d: SubLayerDraft) => Partial<SubLayerDraft>),
+  ) {
+    setSubLayerDrafts((prev) =>
+      prev.map((d) =>
+        d.id === id ? { ...d, ...(typeof patch === "function" ? patch(d) : patch) } : d,
+      ),
+    );
+  }
+
+  function handleCategoryPropertyChange(draft: SubLayerDraft, newProperty: string) {
+    const values = newProperty ? detectValues(draft.features, newProperty) : [];
+    updateDraft(draft.id, (d) => ({
+      categoryProperty: newProperty,
+      categories: computeCategories(values, d.categories),
+    }));
   }
 
   function addGeojsonFiles(files: File[]) {
@@ -340,10 +350,25 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
             return;
           }
           const feats: RawFeature[] = json.features;
-          setGeojsonSources((prev) => [
-            ...prev,
-            { kind: "new", file, name: file.name, features: feats },
-          ]);
+          const guessedName = guessNameProperty(
+            (feats[0]?.properties ?? {}) as Record<string, unknown>,
+          );
+          const draft: SubLayerDraft = {
+            id: crypto.randomUUID(),
+            source: { kind: "new", file },
+            features: feats,
+            name: stripExtension(file.name),
+            nameProperty: guessedName,
+            categoryProperty: "",
+            googleMapsProperty: "",
+            infoFields: [],
+            categories: [],
+            photoMode: "none",
+            photoMap: {},
+            photoProperty: "",
+            visible: true,
+          };
+          setSubLayerDrafts((prev) => [...prev, draft]);
         })
         .catch(() => {
           setError(`Gagal membaca "${file.name}" sebagai GeoJSON (bukan JSON valid).`);
@@ -351,8 +376,19 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
     }
   }
 
-  function removeGeojsonSource(index: number) {
-    setGeojsonSources((prev) => prev.filter((_, i) => i !== index));
+  function removeSubLayerDraft(id: string) {
+    setSubLayerDrafts((prev) => prev.filter((d) => d.id !== id));
+  }
+
+  function moveSubLayerDraft(id: string, direction: -1 | 1) {
+    setSubLayerDrafts((prev) => {
+      const index = prev.findIndex((d) => d.id === id);
+      const target = index + direction;
+      if (index === -1 || target < 0 || target >= prev.length) return prev;
+      const next = [...prev];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
   }
 
   function handleGeojsonFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -366,24 +402,29 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
     addGeojsonFiles(Array.from(e.dataTransfer.files ?? []));
   }
 
-  function updateCategory(index: number, patch: Partial<MapLayerCategory>) {
-    setCategories((prev) => prev.map((c, i) => (i === index ? { ...c, ...patch } : c)));
+  function updateCategory(draftId: string, index: number, patch: Partial<MapLayerCategory>) {
+    updateDraft(draftId, (d) => ({
+      categories: d.categories.map((c, i) => (i === index ? { ...c, ...patch } : c)),
+    }));
   }
 
-  function addInfoField() {
-    setInfoFields((prev) => [...prev, { label: "", property: "" }]);
+  function addInfoField(draftId: string) {
+    updateDraft(draftId, (d) => ({ infoFields: [...d.infoFields, { label: "", property: "" }] }));
   }
 
-  function updateInfoField(index: number, patch: Partial<{ label: string; property: string }>) {
-    setInfoFields((prev) => prev.map((f, i) => (i === index ? { ...f, ...patch } : f)));
+  function updateInfoField(
+    draftId: string,
+    index: number,
+    patch: Partial<{ label: string; property: string }>,
+  ) {
+    updateDraft(draftId, (d) => ({
+      infoFields: d.infoFields.map((f, i) => (i === index ? { ...f, ...patch } : f)),
+    }));
   }
 
-  function removeInfoField(index: number) {
-    setInfoFields((prev) => prev.filter((_, i) => i !== index));
+  function removeInfoField(draftId: string, index: number) {
+    updateDraft(draftId, (d) => ({ infoFields: d.infoFields.filter((_, i) => i !== index) }));
   }
-
-  const featureNames =
-    photoMode === "map" && nameProperty ? detectValues(features, nameProperty) : [];
 
   async function uploadPhotoFile(name: string, file: File): Promise<string> {
     const form = new FormData();
@@ -399,13 +440,13 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
     return data.url as string;
   }
 
-  async function handlePhotoFileChange(name: string, file: File | null) {
+  async function handlePhotoFileChange(draftId: string, name: string, file: File | null) {
     if (!file || !slug) return;
-    setUploadingPhotoFor(name);
+    setUploadingPhotoFor({ draftId, name });
     setError(null);
     try {
       const url = await uploadPhotoFile(name, file);
-      setPhotoMap((prev) => ({ ...prev, [name]: url }));
+      updateDraft(draftId, (d) => ({ photoMap: { ...d.photoMap, [name]: url } }));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan jaringan saat mengunggah foto.");
     } finally {
@@ -413,16 +454,17 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
     }
   }
 
-  function stripExtension(fileName: string): string {
-    return fileName.replace(/\.[^./\\]+$/, "").trim();
-  }
-
-  async function handleBulkPhotoFiles(fileList: FileList | null) {
+  async function handleBulkPhotoFiles(draft: SubLayerDraft, fileList: FileList | null) {
     if (!fileList || fileList.length === 0) return;
     if (!slug) {
       setError("Isi judul peta dahulu sebelum unggah foto.");
       return;
     }
+
+    const featureNames =
+      draft.photoMode === "map" && draft.nameProperty
+        ? detectValues(draft.features, draft.nameProperty)
+        : [];
 
     const files = Array.from(fileList);
     const toUpload: { name: string; file: File }[] = [];
@@ -442,24 +484,29 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
 
     setError(null);
     setBulkSummary(null);
-    setBulkUploading(true);
-    setBulkProgress({ done: 0, total: toUpload.length });
+    setBulkUploading(draft.id);
+    setBulkProgress({ draftId: draft.id, done: 0, total: toUpload.length });
 
     const failed: string[] = [];
     for (let i = 0; i < toUpload.length; i++) {
       const { name, file } = toUpload[i];
       try {
         const url = await uploadPhotoFile(name, file);
-        setPhotoMap((prev) => ({ ...prev, [name]: url }));
+        updateDraft(draft.id, (d) => ({ photoMap: { ...d.photoMap, [name]: url } }));
       } catch {
         failed.push(file.name);
       }
-      setBulkProgress({ done: i + 1, total: toUpload.length });
+      setBulkProgress({ draftId: draft.id, done: i + 1, total: toUpload.length });
     }
 
-    setBulkUploading(false);
+    setBulkUploading(null);
     setBulkProgress(null);
-    setBulkSummary({ matched: toUpload.length - failed.length, failed, unmatched });
+    setBulkSummary({
+      draftId: draft.id,
+      matched: toUpload.length - failed.length,
+      failed,
+      unmatched,
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -470,49 +517,68 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
       setError("Judul peta wajib diisi.");
       return;
     }
-    if (!nameProperty) {
-      setError("Pilih properti yang menjadi nama fitur.");
+    if (subLayerDrafts.length === 0) {
+      setError("Unggah minimal satu file GeoJSON.");
       return;
     }
-    if (geojsonSources.length === 0) {
-      setError("Unggah minimal satu file GeoJSON.");
+    const missingName = subLayerDrafts.find((d) => !d.nameProperty);
+    if (missingName) {
+      setError(`Pilih properti nama fitur untuk sub-layer "${missingName.name}".`);
       return;
     }
 
     setUploadingGeojson(true);
-    const geojsonUrls: string[] = [];
-    for (const source of geojsonSources) {
-      if (source.kind === "existing") {
-        geojsonUrls.push(source.url);
-        continue;
-      }
-      try {
-        const form = new FormData();
-        form.append("file", source.file);
-        form.append("kind", "geojson");
-        form.append("slug", slug);
-        const res = await fetch("/api/admin/peta/upload", { method: "POST", body: form });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          setError(data.error ?? `Gagal mengunggah "${source.name}".`);
+    const sublayers: MapSubLayer[] = [];
+    for (const draft of subLayerDrafts) {
+      let geojsonUrl: string;
+      if (draft.source.kind === "existing") {
+        geojsonUrl = draft.source.url;
+      } else {
+        try {
+          const form = new FormData();
+          form.append("file", draft.source.file);
+          form.append("kind", "geojson");
+          form.append("slug", slug);
+          const res = await fetch("/api/admin/peta/upload", { method: "POST", body: form });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            setError(data.error ?? `Gagal mengunggah "${draft.name}".`);
+            setUploadingGeojson(false);
+            return;
+          }
+          geojsonUrl = data.url;
+        } catch {
+          setError(`Terjadi kesalahan jaringan saat mengunggah "${draft.name}".`);
           setUploadingGeojson(false);
           return;
         }
-        geojsonUrls.push(data.url);
-      } catch {
-        setError(`Terjadi kesalahan jaringan saat mengunggah "${source.name}".`);
-        setUploadingGeojson(false);
-        return;
       }
+
+      const photo: MapLayerPhotoConfig =
+        draft.photoMode === "map"
+          ? { mode: "map", photoMap: draft.photoMap }
+          : draft.photoMode === "property"
+            ? { mode: "property", property: draft.photoProperty }
+            : { mode: "none" };
+
+      const fields: MapLayerFieldMapping = {
+        name: draft.nameProperty,
+        category: draft.categoryProperty || undefined,
+        googleMaps: draft.googleMapsProperty || undefined,
+        info: draft.infoFields.filter((f) => f.label && f.property),
+      };
+
+      sublayers.push({
+        id: draft.id,
+        geojsonUrl,
+        name: draft.name || "Sub-layer",
+        fields,
+        categories: draft.categoryProperty ? draft.categories : [],
+        photo,
+        visible: draft.visible,
+      });
     }
     setUploadingGeojson(false);
-
-    const photo: MapLayerPhotoConfig =
-      photoMode === "map"
-        ? { mode: "map", photoMap }
-        : photoMode === "property"
-          ? { mode: "property", property: photoProperty }
-          : { mode: "none" };
 
     setLoading(true);
     const url = mode === "create" ? "/api/admin/peta" : `/api/admin/peta/${initialData?.id}`;
@@ -525,15 +591,7 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
         body: JSON.stringify({
           title,
           slug,
-          geojsonUrls,
-          fields: {
-            name: nameProperty,
-            category: categoryProperty || undefined,
-            googleMaps: googleMapsProperty || undefined,
-            info: infoFields.filter((f) => f.label && f.property),
-          },
-          categories: categoryProperty ? categories : [],
-          photo,
+          sublayers,
           downloadUrl: downloadUrl || undefined,
           order: defaultOrder,
         }),
@@ -551,8 +609,6 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
       setLoading(false);
     }
   }
-
-  const propertyOptions = ["", ...detectedProperties];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
@@ -593,8 +649,9 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
             className={`${inputClass} cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)]`}
           />
           <p className="mt-1.5 text-[11px] text-[var(--color-muted-foreground)]">
-            Bisa lebih dari satu file sekaligus -- semua fitur akan digabung jadi satu jenis
-            peta. Seret file ke sini atau pilih beberapa file sekaligus.
+            Tiap file jadi satu layer sendiri, mirip panel layer software GIS -- bisa diatur
+            pemetaan properti, legenda, dan foto masing-masing. Seret file ke sini atau pilih
+            beberapa file sekaligus.
           </p>
         </div>
 
@@ -604,22 +661,52 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
           </p>
         )}
 
-        {geojsonSources.length > 0 && (
+        {subLayerDrafts.length > 0 && (
           <ul className="mt-2 space-y-1">
-            {geojsonSources.map((source, i) => (
+            {subLayerDrafts.map((draft, i) => (
               <li
-                key={`${source.kind}-${source.name}-${i}`}
-                className="flex items-center justify-between gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs"
+                key={draft.id}
+                className="flex flex-wrap items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs"
               >
-                <span className="truncate text-[var(--color-dark-green)]">
-                  {source.name}{" "}
-                  <span className="text-[var(--color-muted-foreground)]">
-                    ({source.features.length} fitur{source.kind === "new" ? ", baru" : ""})
-                  </span>
+                <input
+                  value={draft.name}
+                  onChange={(e) => updateDraft(draft.id, { name: e.target.value })}
+                  placeholder="Nama layer"
+                  className="min-w-0 flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-xs"
+                />
+                <span className="shrink-0 text-[var(--color-muted-foreground)]">
+                  {draft.features.length} fitur
+                  {draft.source.kind === "new" ? ", baru" : ""}
                 </span>
+                <label className="flex shrink-0 cursor-pointer items-center gap-1 text-[var(--color-muted-foreground)]">
+                  <input
+                    type="checkbox"
+                    checked={draft.visible}
+                    onChange={(e) => updateDraft(draft.id, { visible: e.target.checked })}
+                  />
+                  Tampil default
+                </label>
                 <button
                   type="button"
-                  onClick={() => removeGeojsonSource(i)}
+                  onClick={() => moveSubLayerDraft(draft.id, -1)}
+                  disabled={i === 0}
+                  className="shrink-0 cursor-pointer rounded px-1.5 font-semibold text-[var(--color-dark-green)] disabled:cursor-not-allowed disabled:opacity-30"
+                  aria-label="Naikkan urutan"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveSubLayerDraft(draft.id, 1)}
+                  disabled={i === subLayerDrafts.length - 1}
+                  className="shrink-0 cursor-pointer rounded px-1.5 font-semibold text-[var(--color-dark-green)] disabled:cursor-not-allowed disabled:opacity-30"
+                  aria-label="Turunkan urutan"
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSubLayerDraft(draft.id)}
                   className="shrink-0 cursor-pointer font-semibold text-red-600 hover:underline"
                 >
                   Hapus
@@ -628,97 +715,284 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
             ))}
           </ul>
         )}
-
-        {geojsonSources.length > 0 && (
-          <p className="mt-1 text-xs font-medium text-[var(--color-midnight-teal)]">
-            Total {features.length} fitur dari {geojsonSources.length} file,{" "}
-            {detectedProperties.length} properti terdeteksi.
-          </p>
-        )}
       </Field>
 
-      {detectedProperties.length > 0 && (
-        <div className="space-y-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-muted)]/40 p-4">
-          <p className="text-sm font-semibold text-[var(--color-dark-green)]">
-            Pemetaan Properti
-          </p>
+      {subLayerDrafts.map((draft) => {
+        const detectedProperties = detectProperties(draft.features);
+        const propertyOptions = ["", ...detectedProperties];
+        const hasLineOrPolygon = draftHasLineOrPolygon(draft);
+        const hasPolygon = draftHasPolygon(draft);
+        const featureNames =
+          draft.photoMode === "map" && draft.nameProperty
+            ? detectValues(draft.features, draft.nameProperty)
+            : [];
+        const idPrefix = draft.id;
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Properti Nama Fitur" htmlFor="nameProperty">
-              <select
-                id="nameProperty"
-                required
-                value={nameProperty}
-                onChange={(e) => setNameProperty(e.target.value)}
-                className={inputClass}
-              >
-                <option value="" disabled>
-                  Pilih properti...
-                </option>
-                {detectedProperties.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label="Properti Kategori (opsional)" htmlFor="categoryProperty">
-              <select
-                id="categoryProperty"
-                value={categoryProperty}
-                onChange={(e) => setCategoryProperty(e.target.value)}
-                className={inputClass}
-              >
-                {propertyOptions.map((p) => (
-                  <option key={p || "none"} value={p}>
-                    {p || "(Tidak ada)"}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label="Properti Link Google Maps (opsional)" htmlFor="googleMapsProperty">
-              <select
-                id="googleMapsProperty"
-                value={googleMapsProperty}
-                onChange={(e) => setGoogleMapsProperty(e.target.value)}
-                className={inputClass}
-              >
-                {propertyOptions.map((p) => (
-                  <option key={p || "none"} value={p}>
-                    {p || "(Tidak ada)"}
-                  </option>
-                ))}
-              </select>
-            </Field>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <span className="block text-sm font-medium text-[var(--color-dark-green)]">
-                Info Tambahan pada Popup (opsional)
+        return (
+          <details
+            key={draft.id}
+            open
+            className="space-y-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-muted)]/40 p-4"
+          >
+            <summary className="cursor-pointer text-sm font-semibold text-[var(--color-dark-green)]">
+              {draft.name || "Sub-layer"}{" "}
+              <span className="font-normal text-[var(--color-muted-foreground)]">
+                ({detectedProperties.length} properti terdeteksi)
               </span>
-              <button
-                type="button"
-                onClick={addInfoField}
-                className="cursor-pointer text-xs font-semibold text-[var(--color-midnight-teal)]"
-              >
-                + Tambah baris
-              </button>
-            </div>
-            <div className="mt-2 space-y-2">
-              {infoFields.map((f, i) => (
-                <div key={i} className="flex gap-2">
+            </summary>
+
+            {detectedProperties.length > 0 && (
+              <div className="space-y-4">
+                <p className="text-sm font-semibold text-[var(--color-dark-green)]">
+                  Pemetaan Properti
+                </p>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Properti Nama Fitur" htmlFor={`nameProperty-${idPrefix}`}>
+                    <select
+                      id={`nameProperty-${idPrefix}`}
+                      required
+                      value={draft.nameProperty}
+                      onChange={(e) => updateDraft(draft.id, { nameProperty: e.target.value })}
+                      className={inputClass}
+                    >
+                      <option value="" disabled>
+                        Pilih properti...
+                      </option>
+                      {detectedProperties.map((p) => (
+                        <option key={p} value={p}>
+                          {p}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+
+                  <Field label="Properti Kategori (opsional)" htmlFor={`categoryProperty-${idPrefix}`}>
+                    <select
+                      id={`categoryProperty-${idPrefix}`}
+                      value={draft.categoryProperty}
+                      onChange={(e) => handleCategoryPropertyChange(draft, e.target.value)}
+                      className={inputClass}
+                    >
+                      {propertyOptions.map((p) => (
+                        <option key={p || "none"} value={p}>
+                          {p || "(Tidak ada)"}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+
+                  <Field
+                    label="Properti Link Google Maps (opsional)"
+                    htmlFor={`googleMapsProperty-${idPrefix}`}
+                  >
+                    <select
+                      id={`googleMapsProperty-${idPrefix}`}
+                      value={draft.googleMapsProperty}
+                      onChange={(e) =>
+                        updateDraft(draft.id, { googleMapsProperty: e.target.value })
+                      }
+                      className={inputClass}
+                    >
+                      {propertyOptions.map((p) => (
+                        <option key={p || "none"} value={p}>
+                          {p || "(Tidak ada)"}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="block text-sm font-medium text-[var(--color-dark-green)]">
+                      Info Tambahan pada Popup (opsional)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => addInfoField(draft.id)}
+                      className="cursor-pointer text-xs font-semibold text-[var(--color-midnight-teal)]"
+                    >
+                      + Tambah baris
+                    </button>
+                  </div>
+                  <div className="mt-2 space-y-2">
+                    {draft.infoFields.map((f, i) => (
+                      <div key={i} className="flex gap-2">
+                        <input
+                          value={f.label}
+                          onChange={(e) =>
+                            updateInfoField(draft.id, i, { label: e.target.value })
+                          }
+                          placeholder="Label, contoh: Dusun"
+                          className={inputClass}
+                        />
+                        <select
+                          value={f.property}
+                          onChange={(e) =>
+                            updateInfoField(draft.id, i, { property: e.target.value })
+                          }
+                          className={inputClass}
+                        >
+                          <option value="" disabled>
+                            Pilih properti...
+                          </option>
+                          {detectedProperties.map((p) => (
+                            <option key={p} value={p}>
+                              {p}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() => removeInfoField(draft.id, i)}
+                          className="cursor-pointer rounded-full px-3 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {draft.categoryProperty && draft.categories.length > 0 && (
+              <div className="space-y-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-3">
+                <p className="text-sm font-semibold text-[var(--color-dark-green)]">
+                  Setting Tampilan Legenda
+                </p>
+                {hasLineOrPolygon && (
+                  <p className="text-xs text-[var(--color-muted-foreground)]">
+                    GeoJSON ini berisi garis/poligon — atur juga ketebalan, jenis garis, dan
+                    opasitas isian per kategori (mirip properti layer pada aplikasi GIS).
+                  </p>
+                )}
+                {draft.categories.map((cat, i) => (
+                  <div
+                    key={cat.value}
+                    className="space-y-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="w-32 shrink-0 truncate text-xs text-[var(--color-muted-foreground)]">
+                        {cat.value}
+                      </span>
+                      <input
+                        value={cat.label}
+                        onChange={(e) => updateCategory(draft.id, i, { label: e.target.value })}
+                        placeholder="Label legenda"
+                        className={`${inputClass} w-40`}
+                      />
+                      <input
+                        type="color"
+                        value={cat.color}
+                        onChange={(e) => updateCategory(draft.id, i, { color: e.target.value })}
+                        className="h-10 w-12 cursor-pointer rounded-lg border border-[var(--color-border)]"
+                      />
+                      <IconPicker
+                        value={cat.icon}
+                        onChange={(icon) => updateCategory(draft.id, i, { icon })}
+                      />
+                    </div>
+
+                    {hasLineOrPolygon && (
+                      <div className="flex flex-wrap items-center gap-4 pl-1">
+                        <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                          Ketebalan garis
+                          <input
+                            type="number"
+                            min={1}
+                            max={12}
+                            step={0.5}
+                            value={cat.weight ?? 2}
+                            onChange={(e) =>
+                              updateCategory(draft.id, i, {
+                                weight: Number(e.target.value) || 1,
+                              })
+                            }
+                            className="w-16 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
+                          />
+                        </label>
+                        <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                          Jenis garis
+                          <select
+                            value={cat.dashArray ?? ""}
+                            onChange={(e) =>
+                              updateCategory(draft.id, i, { dashArray: e.target.value })
+                            }
+                            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
+                          >
+                            {DASH_ARRAY_OPTIONS.map((o) => (
+                              <option key={o.value} value={o.value}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        {hasPolygon && (
+                          <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+                            Opasitas isian ({Math.round((cat.fillOpacity ?? 0.35) * 100)}%)
+                            <input
+                              type="range"
+                              min={0}
+                              max={1}
+                              step={0.05}
+                              value={cat.fillOpacity ?? 0.35}
+                              onChange={(e) =>
+                                updateCategory(draft.id, i, {
+                                  fillOpacity: Number(e.target.value),
+                                })
+                              }
+                              className="w-28 cursor-pointer"
+                            />
+                          </label>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="space-y-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-3">
+              <p className="text-sm font-semibold text-[var(--color-dark-green)]">Foto</p>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <label className="flex cursor-pointer items-center gap-2">
                   <input
-                    value={f.label}
-                    onChange={(e) => updateInfoField(i, { label: e.target.value })}
-                    placeholder="Label, contoh: Dusun"
-                    className={inputClass}
+                    type="radio"
+                    name={`photoMode-${idPrefix}`}
+                    checked={draft.photoMode === "none"}
+                    onChange={() => updateDraft(draft.id, { photoMode: "none" })}
                   />
+                  Tidak ada
+                </label>
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name={`photoMode-${idPrefix}`}
+                    checked={draft.photoMode === "map"}
+                    onChange={() => updateDraft(draft.id, { photoMode: "map" })}
+                    disabled={!draft.nameProperty}
+                  />
+                  Isi manual per fitur (upload atau tempel link, termasuk Google Drive)
+                </label>
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name={`photoMode-${idPrefix}`}
+                    checked={draft.photoMode === "property"}
+                    onChange={() => updateDraft(draft.id, { photoMode: "property" })}
+                  />
+                  Sudah ada di properti GeoJSON
+                </label>
+              </div>
+
+              {draft.photoMode === "property" && (
+                <Field label="Properti Link Foto" htmlFor={`photoProperty-${idPrefix}`}>
                   <select
-                    value={f.property}
-                    onChange={(e) => updateInfoField(i, { property: e.target.value })}
+                    id={`photoProperty-${idPrefix}`}
+                    value={draft.photoProperty}
+                    onChange={(e) => updateDraft(draft.id, { photoProperty: e.target.value })}
                     className={inputClass}
                   >
                     <option value="" disabled>
@@ -730,256 +1004,123 @@ export default function PetaForm({ mode, initialData, defaultOrder }: Props) {
                       </option>
                     ))}
                   </select>
-                  <button
-                    type="button"
-                    onClick={() => removeInfoField(i)}
-                    className="cursor-pointer rounded-full px-3 text-xs font-semibold text-red-600 hover:bg-red-50"
-                  >
-                    Hapus
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+                </Field>
+              )}
 
-      {categoryProperty && categories.length > 0 && (
-        <div className="space-y-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-muted)]/40 p-4">
-          <p className="text-sm font-semibold text-[var(--color-dark-green)]">
-            Setting Tampilan Legenda
-          </p>
-          {hasLineOrPolygon && (
-            <p className="text-xs text-[var(--color-muted-foreground)]">
-              GeoJSON ini berisi garis/poligon — atur juga ketebalan, jenis garis, dan opasitas
-              isian per kategori (mirip properti layer pada aplikasi GIS).
-            </p>
-          )}
-          {categories.map((cat, i) => (
-            <div
-              key={cat.value}
-              className="space-y-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="w-32 shrink-0 truncate text-xs text-[var(--color-muted-foreground)]">
-                  {cat.value}
-                </span>
-                <input
-                  value={cat.label}
-                  onChange={(e) => updateCategory(i, { label: e.target.value })}
-                  placeholder="Label legenda"
-                  className={`${inputClass} w-40`}
-                />
-                <input
-                  type="color"
-                  value={cat.color}
-                  onChange={(e) => updateCategory(i, { color: e.target.value })}
-                  className="h-10 w-12 cursor-pointer rounded-lg border border-[var(--color-border)]"
-                />
-                <IconPicker
-                  value={cat.icon}
-                  onChange={(icon) => updateCategory(i, { icon })}
-                />
-              </div>
+              {draft.photoMode === "map" && (
+                <div>
+                  {!slug && (
+                    <p className="text-xs text-red-600">
+                      Isi judul peta dahulu sebelum unggah foto.
+                    </p>
+                  )}
 
-              {hasLineOrPolygon && (
-                <div className="flex flex-wrap items-center gap-4 pl-1">
-                  <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
-                    Ketebalan garis
-                    <input
-                      type="number"
-                      min={1}
-                      max={12}
-                      step={0.5}
-                      value={cat.weight ?? 2}
-                      onChange={(e) =>
-                        updateCategory(i, { weight: Number(e.target.value) || 1 })
-                      }
-                      className="w-16 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
-                    />
-                  </label>
-                  <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
-                    Jenis garis
-                    <select
-                      value={cat.dashArray ?? ""}
-                      onChange={(e) => updateCategory(i, { dashArray: e.target.value })}
-                      className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-sm"
+                  <div className="rounded-xl border border-dashed border-[var(--color-border)] bg-white/40 p-3">
+                    <label
+                      htmlFor={`bulkPhotos-${idPrefix}`}
+                      className="block text-xs font-medium text-[var(--color-dark-green)]"
                     >
-                      {DASH_ARRAY_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>
-                          {o.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  {hasPolygon && (
-                    <label className="flex items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
-                      Opasitas isian ({Math.round((cat.fillOpacity ?? 0.35) * 100)}%)
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        value={cat.fillOpacity ?? 0.35}
-                        onChange={(e) =>
-                          updateCategory(i, { fillOpacity: Number(e.target.value) })
-                        }
-                        className="w-28 cursor-pointer"
-                      />
+                      Unggah banyak foto sekaligus
                     </label>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="space-y-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-muted)]/40 p-4">
-        <p className="text-sm font-semibold text-[var(--color-dark-green)]">Foto</p>
-        <div className="flex flex-wrap gap-4 text-sm">
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="radio"
-              name="photoMode"
-              checked={photoMode === "none"}
-              onChange={() => setPhotoMode("none")}
-            />
-            Tidak ada
-          </label>
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="radio"
-              name="photoMode"
-              checked={photoMode === "map"}
-              onChange={() => setPhotoMode("map")}
-              disabled={!nameProperty}
-            />
-            Isi manual per fitur (upload atau tempel link, termasuk Google Drive)
-          </label>
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="radio"
-              name="photoMode"
-              checked={photoMode === "property"}
-              onChange={() => setPhotoMode("property")}
-            />
-            Sudah ada di properti GeoJSON
-          </label>
-        </div>
-
-        {photoMode === "property" && (
-          <Field label="Properti Link Foto" htmlFor="photoProperty">
-            <select
-              id="photoProperty"
-              value={photoProperty}
-              onChange={(e) => setPhotoProperty(e.target.value)}
-              className={inputClass}
-            >
-              <option value="" disabled>
-                Pilih properti...
-              </option>
-              {detectedProperties.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </Field>
-        )}
-
-        {photoMode === "map" && (
-          <div>
-            {!slug && (
-              <p className="text-xs text-red-600">Isi judul peta dahulu sebelum unggah foto.</p>
-            )}
-
-            <div className="rounded-xl border border-dashed border-[var(--color-border)] bg-white/40 p-3">
-              <label
-                htmlFor="bulkPhotos"
-                className="block text-xs font-medium text-[var(--color-dark-green)]"
-              >
-                Unggah banyak foto sekaligus
-              </label>
-              <p className="mt-0.5 text-[11px] text-[var(--color-muted-foreground)]">
-                Nama file (tanpa ekstensi) akan dicocokkan otomatis dengan nilai properti{" "}
-                <span className="font-semibold">{nameProperty || "nama fitur"}</span>, contoh:
-                &ldquo;Warung Kopi Bu Sri.jpg&rdquo; akan terpasang untuk fitur bernama &ldquo;Warung
-                Kopi Bu Sri&rdquo;.
-              </p>
-              <input
-                id="bulkPhotos"
-                type="file"
-                accept="image/*"
-                multiple
-                disabled={!slug || bulkUploading}
-                onChange={(e) => {
-                  handleBulkPhotoFiles(e.target.files);
-                  e.target.value = "";
-                }}
-                className={`${inputClass} mt-2 cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)] disabled:cursor-not-allowed disabled:opacity-60`}
-              />
-              {bulkProgress && (
-                <p className="mt-1.5 text-xs font-medium text-[var(--color-midnight-teal)]">
-                  Mengunggah {bulkProgress.done}/{bulkProgress.total}...
-                </p>
-              )}
-              {bulkSummary && (
-                <div className="mt-1.5 text-xs">
-                  <p className="font-medium text-[var(--color-dark-green)]">
-                    {bulkSummary.matched} foto berhasil diunggah dan dicocokkan.
-                  </p>
-                  {bulkSummary.failed.length > 0 && (
-                    <p className="mt-0.5 text-red-600">
-                      Gagal diunggah: {bulkSummary.failed.join(", ")}
+                    <p className="mt-0.5 text-[11px] text-[var(--color-muted-foreground)]">
+                      Nama file (tanpa ekstensi) akan dicocokkan otomatis dengan nilai properti{" "}
+                      <span className="font-semibold">{draft.nameProperty || "nama fitur"}</span>,
+                      contoh: &ldquo;Warung Kopi Bu Sri.jpg&rdquo; akan terpasang untuk fitur
+                      bernama &ldquo;Warung Kopi Bu Sri&rdquo;.
                     </p>
-                  )}
-                  {bulkSummary.unmatched.length > 0 && (
-                    <p className="mt-0.5 text-amber-700">
-                      Tidak ada fitur yang cocok untuk: {bulkSummary.unmatched.join(", ")}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="mt-3 max-h-96 space-y-2 overflow-y-auto pr-1">
-              {featureNames.map((name) => (
-                <div key={name} className="flex items-center gap-2">
-                  {photoMap[name] ? (
-                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[var(--color-border)]">
-                      <Image src={photoMap[name]} alt={name} fill unoptimized className="object-cover" />
-                    </div>
-                  ) : (
-                    <div className="h-10 w-10 shrink-0 rounded-lg border border-dashed border-[var(--color-border)]" />
-                  )}
-                  <span className="w-40 shrink-0 truncate text-xs text-[var(--color-dark-green)]">
-                    {name}
-                  </span>
-                  <input
-                    value={photoMap[name] ?? ""}
-                    onChange={(e) =>
-                      setPhotoMap((prev) => ({ ...prev, [name]: e.target.value }))
-                    }
-                    placeholder="Tempel link foto (Google Drive dll.)"
-                    className={`${inputClass} flex-1`}
-                  />
-                  <label className="cursor-pointer rounded-full bg-[var(--color-dark-green)] px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-[var(--color-beige)]">
-                    {uploadingPhotoFor === name ? "Mengunggah..." : "Unggah"}
                     <input
+                      id={`bulkPhotos-${idPrefix}`}
                       type="file"
                       accept="image/*"
-                      className="hidden"
-                      disabled={!slug || uploadingPhotoFor === name}
-                      onChange={(e) => handlePhotoFileChange(name, e.target.files?.[0] ?? null)}
+                      multiple
+                      disabled={!slug || bulkUploading === draft.id}
+                      onChange={(e) => {
+                        handleBulkPhotoFiles(draft, e.target.files);
+                        e.target.value = "";
+                      }}
+                      className={`${inputClass} mt-2 cursor-pointer file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--color-dark-green)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[var(--color-beige)] disabled:cursor-not-allowed disabled:opacity-60`}
                     />
-                  </label>
+                    {bulkProgress && bulkProgress.draftId === draft.id && (
+                      <p className="mt-1.5 text-xs font-medium text-[var(--color-midnight-teal)]">
+                        Mengunggah {bulkProgress.done}/{bulkProgress.total}...
+                      </p>
+                    )}
+                    {bulkSummary && bulkSummary.draftId === draft.id && (
+                      <div className="mt-1.5 text-xs">
+                        <p className="font-medium text-[var(--color-dark-green)]">
+                          {bulkSummary.matched} foto berhasil diunggah dan dicocokkan.
+                        </p>
+                        {bulkSummary.failed.length > 0 && (
+                          <p className="mt-0.5 text-red-600">
+                            Gagal diunggah: {bulkSummary.failed.join(", ")}
+                          </p>
+                        )}
+                        {bulkSummary.unmatched.length > 0 && (
+                          <p className="mt-0.5 text-amber-700">
+                            Tidak ada fitur yang cocok untuk: {bulkSummary.unmatched.join(", ")}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-3 max-h-96 space-y-2 overflow-y-auto pr-1">
+                    {featureNames.map((name) => (
+                      <div key={name} className="flex items-center gap-2">
+                        {draft.photoMap[name] ? (
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[var(--color-border)]">
+                            <Image
+                              src={draft.photoMap[name]}
+                              alt={name}
+                              fill
+                              unoptimized
+                              className="object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="h-10 w-10 shrink-0 rounded-lg border border-dashed border-[var(--color-border)]" />
+                        )}
+                        <span className="w-40 shrink-0 truncate text-xs text-[var(--color-dark-green)]">
+                          {name}
+                        </span>
+                        <input
+                          value={draft.photoMap[name] ?? ""}
+                          onChange={(e) =>
+                            updateDraft(draft.id, (d) => ({
+                              photoMap: { ...d.photoMap, [name]: e.target.value },
+                            }))
+                          }
+                          placeholder="Tempel link foto (Google Drive dll.)"
+                          className={`${inputClass} flex-1`}
+                        />
+                        <label className="cursor-pointer rounded-full bg-[var(--color-dark-green)] px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-[var(--color-beige)]">
+                          {uploadingPhotoFor?.draftId === draft.id &&
+                          uploadingPhotoFor.name === name
+                            ? "Mengunggah..."
+                            : "Unggah"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            disabled={
+                              !slug ||
+                              (uploadingPhotoFor?.draftId === draft.id &&
+                                uploadingPhotoFor.name === name)
+                            }
+                            onChange={(e) =>
+                              handlePhotoFileChange(draft.id, name, e.target.files?.[0] ?? null)
+                            }
+                          />
+                        </label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-        )}
-      </div>
+          </details>
+        );
+      })}
 
       <Field label="Link File Peta Hasil Layout GIS (opsional)" htmlFor="downloadUrl">
         <input

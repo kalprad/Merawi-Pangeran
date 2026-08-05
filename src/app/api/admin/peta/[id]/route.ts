@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getMapLayers, saveMapLayers } from "@/lib/data";
+import { normalizeSublayers } from "@/lib/mapValidation";
 
 export async function PUT(
   request: Request,
@@ -7,12 +8,15 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { title, geojsonUrls, fields, categories, photo, downloadUrl, order } =
-    body ?? {};
+  const { title, sublayers: rawSublayers, downloadUrl, order } = body ?? {};
 
-  if (!title || !Array.isArray(geojsonUrls) || geojsonUrls.length === 0 || !fields?.name) {
+  const sublayers = normalizeSublayers(rawSublayers);
+  if (!title || !sublayers) {
     return NextResponse.json(
-      { error: "Judul, minimal satu GeoJSON, dan properti nama fitur wajib diisi." },
+      {
+        error:
+          "Judul, minimal satu sub-layer GeoJSON, dan properti nama fitur tiap sub-layer wajib diisi.",
+      },
       { status: 400 },
     );
   }
@@ -26,10 +30,7 @@ export async function PUT(
   layers[index] = {
     ...layers[index],
     title,
-    geojsonUrls,
-    fields,
-    categories: Array.isArray(categories) ? categories : [],
-    photo: photo ?? { mode: "none" },
+    sublayers,
     downloadUrl: downloadUrl || undefined,
     order: typeof order === "number" ? order : layers[index].order,
   };

@@ -6,6 +6,7 @@ import type {
   Materi,
   MapLayer,
   ResolvedMapLayer,
+  ResolvedMapSubLayer,
   Settings,
   TeamMember,
   TutorialVideo,
@@ -162,31 +163,32 @@ export async function saveMapLayers(layers: MapLayer[]): Promise<void> {
 }
 
 /**
- * Ambil semua jenis peta lengkap dengan isi GeoJSON-nya, siap dirender.
- * Satu jenis peta bisa merujuk ke beberapa file GeoJSON sekaligus --
- * semua fitur dari file-file itu digabung jadi satu FeatureCollection.
- * Kalau salah satu file gagal dibaca (misalnya sudah terhapus/tidak bisa
- * diakses), file itu saja yang dilewati supaya satu sumber yang rusak
- * tidak membuat seluruh jenis peta (atau seluruh halaman) error.
+ * Ambil semua jenis peta lengkap dengan isi GeoJSON tiap sub-layer-nya,
+ * siap dirender. Tiap sub-layer (satu file GeoJSON) diresolusi secara
+ * independen -- kalau satu sub-layer gagal dibaca (misalnya file terhapus
+ * atau tidak bisa diakses), sub-layer itu tetap muncul di hasil tapi dengan
+ * geojson kosong, supaya satu sumber yang rusak tidak menyembunyikan
+ * sub-layer lain (atau seluruh jenis peta) begitu saja.
  */
 export async function getResolvedMapLayers(): Promise<ResolvedMapLayer[]> {
   const layers = await getMapLayers();
   return Promise.all(
     layers.map(async (layer): Promise<ResolvedMapLayer> => {
-      const sourceResults = await Promise.allSettled(
-        layer.geojsonUrls.map((url) => readGeoJsonSource<FeatureCollection>(url)),
+      const sublayers = await Promise.all(
+        layer.sublayers.map(async (sub): Promise<ResolvedMapSubLayer> => {
+          try {
+            const geojson = await readGeoJsonSource<FeatureCollection>(sub.geojsonUrl);
+            return { ...sub, geojson };
+          } catch (err) {
+            console.error(
+              `Gagal memuat GeoJSON sub-layer "${sub.name}" pada jenis peta "${layer.title}":`,
+              err,
+            );
+            return { ...sub, geojson: { type: "FeatureCollection", features: [] } };
+          }
+        }),
       );
-
-      const features = sourceResults.flatMap((result) => {
-        if (result.status === "fulfilled") return result.value.features;
-        console.error(
-          `Gagal memuat salah satu GeoJSON untuk jenis peta "${layer.title}":`,
-          result.reason,
-        );
-        return [];
-      });
-
-      return { ...layer, geojson: { type: "FeatureCollection", features } };
+      return { ...layer, sublayers };
     }),
   );
 }

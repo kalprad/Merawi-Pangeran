@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getMapLayers, saveMapLayers } from "@/lib/data";
+import { normalizeSublayers } from "@/lib/mapValidation";
 import type { MapLayer } from "@/lib/types";
 
 function uniqueSlug(desired: string, existing: MapLayer[]): string {
@@ -17,12 +18,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { title, slug, geojsonUrls, fields, categories, photo, downloadUrl, order } =
-    body ?? {};
+  const { title, slug, sublayers: rawSublayers, downloadUrl, order } = body ?? {};
 
-  if (!title || !Array.isArray(geojsonUrls) || geojsonUrls.length === 0 || !fields?.name) {
+  const sublayers = normalizeSublayers(rawSublayers);
+  if (!title || !sublayers) {
     return NextResponse.json(
-      { error: "Judul, minimal satu GeoJSON, dan properti nama fitur wajib diisi." },
+      {
+        error:
+          "Judul, minimal satu sub-layer GeoJSON, dan properti nama fitur tiap sub-layer wajib diisi.",
+      },
       { status: 400 },
     );
   }
@@ -32,10 +36,7 @@ export async function POST(request: Request) {
     id: crypto.randomUUID(),
     slug: uniqueSlug(String(slug || title), layers),
     title,
-    geojsonUrls,
-    fields,
-    categories: Array.isArray(categories) ? categories : [],
-    photo: photo ?? { mode: "none" },
+    sublayers,
     downloadUrl: downloadUrl || undefined,
     order: typeof order === "number" ? order : layers.length + 1,
   };

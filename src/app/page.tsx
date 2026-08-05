@@ -21,7 +21,8 @@ export default async function Home() {
   ]);
   const latestPosts = posts.slice(0, 3);
   const mapPointCount = mapLayers.reduce(
-    (total, layer) => total + layer.geojson.features.length,
+    (total, layer) =>
+      total + layer.sublayers.reduce((n, sl) => n + sl.geojson.features.length, 0),
     0,
   );
 

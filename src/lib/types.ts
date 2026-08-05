@@ -129,18 +129,41 @@ export type MapLayerPhotoConfig =
   | { mode: "map"; photoMap: Record<string, string> }
   | { mode: "property"; property: string };
 
+/**
+ * Satu file GeoJSON yang diunggah, dikonfigurasi sendiri-sendiri layaknya
+ * "layer" pada software GIS (QGIS dkk.) -- punya pemetaan properti, legenda,
+ * dan konfigurasi foto masing-masing, terlepas dari sub-layer lain dalam
+ * satu jenis peta yang sama.
+ */
+export type MapSubLayer = {
+  id: string;
+  geojsonUrl: string;
+  /** Nama tampilan di panel layer, default diturunkan dari nama file. */
+  name: string;
+  fields: MapLayerFieldMapping;
+  categories: MapLayerCategory[];
+  photo: MapLayerPhotoConfig;
+  /** Status tampil default saat peta pertama dibuka. */
+  visible: boolean;
+};
+
 export type MapLayer = {
   id: string;
   slug: string;
   title: string;
-  geojsonUrls: string[];
-  fields: MapLayerFieldMapping;
-  categories: MapLayerCategory[];
-  photo: MapLayerPhotoConfig;
+  /**
+   * Urutan array = urutan panel & urutan tumpukan render (indeks 0 = paling
+   * atas panel = paling atas tumpukan peta), mirip panel layer software GIS.
+   */
+  sublayers: MapSubLayer[];
   downloadUrl?: string;
   order: number;
 };
 
-export type ResolvedMapLayer = MapLayer & {
+export type ResolvedMapSubLayer = MapSubLayer & {
   geojson: FeatureCollection;
+};
+
+export type ResolvedMapLayer = Omit<MapLayer, "sublayers"> & {
+  sublayers: ResolvedMapSubLayer[];
 };

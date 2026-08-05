@@ -5,20 +5,7 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, GripVertical, UploadCloud } from "lucide-react";
 import type { MapLayer } from "@/lib/types";
 import { slugify } from "@/lib/slugify";
-
-const NAME_PROPERTY_HINTS = ["nama", "name", "namobj", "judul", "title", "label"];
-
-function guessNameProperty(properties: Record<string, unknown>): string {
-  const keys = Object.keys(properties);
-  const hinted = keys.find((k) => NAME_PROPERTY_HINTS.includes(k.toLowerCase()));
-  if (hinted) return hinted;
-  const firstString = keys.find((k) => typeof properties[k] === "string");
-  return firstString ?? keys[0] ?? "";
-}
-
-function stripExtension(fileName: string): string {
-  return fileName.replace(/\.[^./\\]+$/, "").trim();
-}
+import { guessNameProperty, stripExtension } from "@/lib/mapImport";
 
 type ImportResult = { ok: true; title: string } | { ok: false; name: string; error: string };
 
@@ -55,10 +42,17 @@ async function importGeojsonFile(file: File): Promise<ImportResult> {
       body: JSON.stringify({
         title,
         slug,
-        geojsonUrls: [uploadData.url],
-        fields: { name: nameProperty },
-        categories: [],
-        photo: { mode: "none" },
+        sublayers: [
+          {
+            id: crypto.randomUUID(),
+            geojsonUrl: uploadData.url,
+            name: title,
+            fields: { name: nameProperty },
+            categories: [],
+            photo: { mode: "none" },
+            visible: true,
+          },
+        ],
       }),
     });
     const createData = await createRes.json().catch(() => ({}));
@@ -300,7 +294,8 @@ export default function AdminPetaPage() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold tracking-wide text-[var(--color-midnight-teal)] uppercase">
-                    {layer.categories.length} kategori
+                    {layer.sublayers.length} sub-layer ·{" "}
+                    {layer.sublayers.reduce((n, sl) => n + sl.categories.length, 0)} kategori
                   </p>
                   <p className="truncate font-medium text-[var(--color-dark-green)]">
                     {layer.title}
