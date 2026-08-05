@@ -318,14 +318,26 @@
     ],
     "fields": {
       "name": "KETERANGAN",
-      "category": "Nama_DI",
+      "category": "NAMA_DI",
       "info": []
     },
     "categories": [
       {
-        "value": "DI Dawuhan Bd",
-        "label": "DI Dawuhan Bd",
+        "value": "DI Siblender",
+        "label": "DI Siblender",
         "color": "#C9793A",
+        "icon": "map-pin"
+      },
+      {
+        "value": "DI Keji Panjang",
+        "label": "DI Keji Panjang",
+        "color": "#105666",
+        "icon": "map-pin"
+      },
+      {
+        "value": "DI Gintungan Bd",
+        "label": "DI Gintungan Bd",
+        "color": "#6C5B9E",
         "icon": "map-pin"
       },
       {
@@ -335,9 +347,27 @@
         "icon": "map-pin"
       },
       {
+        "value": "DI Dawuhan Bd",
+        "label": "DI Dawuhan Bd",
+        "color": "#C9793A",
+        "icon": "map-pin"
+      },
+      {
         "value": "DI Sipengkok A",
         "label": "DI Sipengkok A",
         "color": "#6C5B9E",
+        "icon": "map-pin"
+      },
+      {
+        "value": "DI Duren Selo",
+        "label": "DI Duren Selo",
+        "color": "#4a5a3f",
+        "icon": "map-pin"
+      },
+      {
+        "value": "DI Kaliluruk",
+        "label": "DI Kaliluruk",
+        "color": "#0a3323",
         "icon": "map-pin"
       }
     ],
