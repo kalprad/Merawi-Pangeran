@@ -326,49 +326,57 @@
         "value": "25",
         "label": "25",
         "color": "#C9793A",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "64",
         "label": "64",
         "color": "#105666",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "39",
         "label": "39",
         "color": "#6C5B9E",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "12",
         "label": "12",
         "color": "#839958",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "83",
         "label": "83",
         "color": "#D3968C",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "41",
         "label": "41",
         "color": "#B3423A",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "15",
         "label": "15",
         "color": "#4a5a3f",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       },
       {
         "value": "28",
         "label": "28",
         "color": "#0a3323",
-        "icon": "map-pin"
+        "icon": "map-pin",
+        "dashArray": "8,6"
       }
     ],
     "photo": {
