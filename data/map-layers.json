@@ -442,7 +442,7 @@
             "color": "#C9793A",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Keji Panjang",
@@ -450,7 +450,7 @@
             "color": "#105666",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Gintungan Bd",
@@ -458,7 +458,7 @@
             "color": "#6C5B9E",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Sibening Bd",
@@ -466,7 +466,7 @@
             "color": "#839958",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Dawuhan Bd",
@@ -474,7 +474,7 @@
             "color": "#D3968C",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Sipengkok A",
@@ -482,14 +482,14 @@
             "color": "#B3423A",
             "icon": "droplet",
             "weight": 5,
-            "dashArray": "8,6"
+            "dashArray": ""
           },
           {
             "value": "DI Duren Selo",
             "label": "Saluran DI Duren Selo",
             "color": "#4a5a3f",
             "icon": "droplet",
-            "dashArray": "8,6",
+            "dashArray": "",
             "weight": 5
           },
           {
@@ -497,7 +497,7 @@
             "label": "Saluran DI Kaliluruk",
             "color": "#0a3323",
             "icon": "droplet",
-            "dashArray": "8,6",
+            "dashArray": "",
             "weight": 5
           }
         ],
@@ -526,54 +526,62 @@
             "label": "Sawah DI Siblender",
             "color": "#C9793A",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Keji Panjang",
             "label": "Sawah DI Keji Panjang",
             "color": "#105666",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Gintungan Bd",
             "label": "Sawah DI Gintungan Bd",
             "color": "#6C5B9E",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Sibening Bd",
             "label": "Sawah DI Sibening Bd",
             "color": "#839958",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Dawuhan Bd",
             "label": "Sawah DI Dawuhan Bd",
             "color": "#D3968C",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Sipengkok A",
             "label": "Sawah DI Sipengkok A",
             "color": "#B3423A",
             "icon": "map-pin",
-            "weight": 2
+            "weight": 2,
+            "dashArray": "8,6"
           },
           {
             "value": "DI Duren Selo",
             "label": "Sawah DI Duren Selo",
             "color": "#4a5a3f",
-            "icon": "map-pin"
+            "icon": "map-pin",
+            "dashArray": "8,6"
           },
           {
             "value": "DI Kaliluruk",
             "label": "Sawah DI Kaliluruk",
             "color": "#0a3323",
-            "icon": "map-pin"
+            "icon": "map-pin",
+            "dashArray": "8,6"
           }
         ],
         "photo": {
