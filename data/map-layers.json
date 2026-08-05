@@ -318,65 +318,27 @@
     ],
     "fields": {
       "name": "KETERANGAN",
-      "category": "LUAS_HA",
+      "category": "Nama_DI",
       "info": []
     },
     "categories": [
       {
-        "value": "25",
-        "label": "25",
+        "value": "DI Dawuhan Bd",
+        "label": "DI Dawuhan Bd",
         "color": "#C9793A",
-        "icon": "map-pin",
-        "dashArray": "8,6"
+        "icon": "map-pin"
       },
       {
-        "value": "64",
-        "label": "64",
+        "value": "DI Sibening Bd",
+        "label": "DI Sibening Bd",
         "color": "#105666",
-        "icon": "map-pin",
-        "dashArray": "8,6"
+        "icon": "map-pin"
       },
       {
-        "value": "39",
-        "label": "39",
+        "value": "DI Sipengkok A",
+        "label": "DI Sipengkok A",
         "color": "#6C5B9E",
-        "icon": "map-pin",
-        "dashArray": "8,6"
-      },
-      {
-        "value": "12",
-        "label": "12",
-        "color": "#839958",
-        "icon": "map-pin",
-        "dashArray": "8,6"
-      },
-      {
-        "value": "83",
-        "label": "83",
-        "color": "#D3968C",
-        "icon": "map-pin",
-        "dashArray": "8,6"
-      },
-      {
-        "value": "41",
-        "label": "41",
-        "color": "#B3423A",
-        "icon": "map-pin",
-        "dashArray": "8,6"
-      },
-      {
-        "value": "15",
-        "label": "15",
-        "color": "#4a5a3f",
-        "icon": "map-pin",
-        "dashArray": "8,6"
-      },
-      {
-        "value": "28",
-        "label": "28",
-        "color": "#0a3323",
-        "icon": "map-pin",
-        "dashArray": "8,6"
+        "icon": "map-pin"
       }
     ],
     "photo": {
