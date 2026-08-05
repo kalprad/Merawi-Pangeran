@@ -440,7 +440,7 @@
             "value": "DI Siblender",
             "label": "Saluran DI Siblender",
             "color": "#C9793A",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -448,7 +448,7 @@
             "value": "DI Keji Panjang",
             "label": "Saluran DI Keji Panjang",
             "color": "#105666",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -456,7 +456,7 @@
             "value": "DI Gintungan Bd",
             "label": "Saluran DI Gintungan Bd",
             "color": "#6C5B9E",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -464,7 +464,7 @@
             "value": "DI Sibening Bd",
             "label": "Saluran DI Sibening Bd",
             "color": "#839958",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -472,7 +472,7 @@
             "value": "DI Dawuhan Bd",
             "label": "Saluran DI Dawuhan Bd",
             "color": "#D3968C",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -480,7 +480,7 @@
             "value": "DI Sipengkok A",
             "label": "Saluran DI Sipengkok A",
             "color": "#B3423A",
-            "icon": "map-pin",
+            "icon": "droplet",
             "weight": 5,
             "dashArray": "8,6"
           },
@@ -488,15 +488,17 @@
             "value": "DI Duren Selo",
             "label": "Saluran DI Duren Selo",
             "color": "#4a5a3f",
-            "icon": "map-pin",
-            "dashArray": "8,6"
+            "icon": "droplet",
+            "dashArray": "8,6",
+            "weight": 5
           },
           {
             "value": "DI Kaliluruk",
             "label": "Saluran DI Kaliluruk",
             "color": "#0a3323",
-            "icon": "map-pin",
-            "dashArray": "8,6"
+            "icon": "droplet",
+            "dashArray": "8,6",
+            "weight": 5
           }
         ],
         "photo": {
