@@ -493,7 +493,7 @@
           },
           {
             "value": "DI Kaliluruk",
-            "label": "DI Kaliluruk",
+            "label": "Saluran DI Kaliluruk",
             "color": "#0a3323",
             "icon": "map-pin",
             "dashArray": "8,6"
@@ -521,55 +521,55 @@
         "categories": [
           {
             "value": "DI Siblender",
-            "label": "DI Siblender",
+            "label": "Sawah DI Siblender",
             "color": "#C9793A",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Keji Panjang",
-            "label": "DI Keji Panjang",
+            "label": "Sawah DI Keji Panjang",
             "color": "#105666",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Gintungan Bd",
-            "label": "DI Gintungan Bd",
+            "label": "Sawah DI Gintungan Bd",
             "color": "#6C5B9E",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Sibening Bd",
-            "label": "DI Sibening Bd",
+            "label": "Sawah DI Sibening Bd",
             "color": "#839958",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Dawuhan Bd",
-            "label": "DI Dawuhan Bd",
+            "label": "Sawah DI Dawuhan Bd",
             "color": "#D3968C",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Sipengkok A",
-            "label": "DI Sipengkok A",
+            "label": "Sawah DI Sipengkok A",
             "color": "#B3423A",
             "icon": "map-pin",
             "weight": 2
           },
           {
             "value": "DI Duren Selo",
-            "label": "DI Duren Selo",
+            "label": "Sawah DI Duren Selo",
             "color": "#4a5a3f",
             "icon": "map-pin"
           },
           {
             "value": "DI Kaliluruk",
-            "label": "DI Kaliluruk",
+            "label": "Sawah DI Kaliluruk",
             "color": "#0a3323",
             "icon": "map-pin"
           }
