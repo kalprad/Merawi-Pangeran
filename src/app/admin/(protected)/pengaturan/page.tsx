@@ -22,6 +22,7 @@ const emptyReleaseCountdown = { enabled: false, releaseAt: "", title: "", messag
 export default function PengaturanPage() {
   const [siBeningUrl, setSiBeningUrl] = useState("");
   const [galleryFolderUrl, setGalleryFolderUrl] = useState("");
+  const [profileVideoUrl, setProfileVideoUrl] = useState("");
   const [featureGuideUrls, setFeatureGuideUrls] =
     useState<Record<FeatureCategory, string>>(emptyGuideUrls);
   const [releaseCountdown, setReleaseCountdown] = useState(emptyReleaseCountdown);
@@ -36,6 +37,7 @@ export default function PengaturanPage() {
       .then((data) => {
         setSiBeningUrl(data.siBeningUrl ?? "");
         setGalleryFolderUrl(data.galleryFolderUrl ?? "");
+        setProfileVideoUrl(data.profileVideoUrl ?? "");
         setFeatureGuideUrls({ ...emptyGuideUrls, ...data.featureGuideUrls });
         setReleaseCountdown({ ...emptyReleaseCountdown, ...data.releaseCountdown });
         setLoading(false);
@@ -60,6 +62,7 @@ export default function PengaturanPage() {
           galleryFolderUrl,
           featureGuideUrls,
           releaseCountdown,
+          profileVideoUrl,
         }),
       });
       if (!res.ok) {
@@ -125,6 +128,27 @@ export default function PengaturanPage() {
             foto dari folder ini secara otomatis — tidak perlu unggah ulang ke
             situs. Perlu env var <code>GOOGLE_DRIVE_API_KEY</code> di server
             (lihat README).
+          </p>
+
+          <label
+            htmlFor="profileVideoUrl"
+            className="block pt-4 text-sm font-medium text-[var(--color-dark-green)]"
+          >
+            Link Video Profil Desa (Google Drive/YouTube)
+          </label>
+          <input
+            id="profileVideoUrl"
+            type="url"
+            value={profileVideoUrl}
+            onChange={(e) => setProfileVideoUrl(e.target.value)}
+            placeholder="https://drive.google.com/file/d/... atau https://youtube.com/watch?v=..."
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm focus:border-[var(--color-midnight-teal)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]"
+          />
+          <p className="text-xs text-[var(--color-muted-foreground)]">
+            Video akan ditampilkan di beranda. Untuk Google Drive, pastikan
+            file dibagikan sebagai &ldquo;Siapa saja yang memiliki
+            link&rdquo;. Kosongkan kalau videonya belum siap — beranda akan
+            menampilkan placeholder &ldquo;Segera Hadir&rdquo;.
           </p>
 
           <div className="pt-4">

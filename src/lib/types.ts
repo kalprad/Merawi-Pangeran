@@ -38,6 +38,8 @@ export type Settings = {
   galleryFolderUrl?: string;
   featureGuideUrls?: Record<FeatureCategory, string>;
   releaseCountdown?: ReleaseCountdownSettings;
+  /** Link video profil desa (Google Drive atau YouTube) untuk beranda. */
+  profileVideoUrl?: string;
 };
 
 export type TutorialVideo = {

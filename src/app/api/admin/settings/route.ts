@@ -11,7 +11,8 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   const body = await request.json();
-  const { siBeningUrl, galleryFolderUrl, featureGuideUrls, releaseCountdown } = body ?? {};
+  const { siBeningUrl, galleryFolderUrl, featureGuideUrls, releaseCountdown, profileVideoUrl } =
+    body ?? {};
 
   if (typeof siBeningUrl !== "string" || typeof galleryFolderUrl !== "string") {
     return NextResponse.json({ error: "Data tidak valid." }, { status: 400 });
@@ -45,6 +46,7 @@ export async function PUT(request: Request) {
     galleryFolderUrl,
     featureGuideUrls: normalizedGuideUrls,
     releaseCountdown: normalizedReleaseCountdown,
+    profileVideoUrl: typeof profileVideoUrl === "string" ? profileVideoUrl : "",
   };
   await saveSettings(settings);
   return NextResponse.json(settings);

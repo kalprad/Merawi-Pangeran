@@ -1,25 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Newspaper, BookOpen, Map, Images, Laptop, ArrowRight } from "lucide-react";
+import { Newspaper, BookOpen, Map, Images, Laptop, ArrowRight, Play } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import SectionHeading from "@/components/SectionHeading";
 import SakuraDecor from "@/components/SakuraDecor";
 import CategoryTags from "@/components/CategoryTags";
 import Reveal from "@/components/Reveal";
 import Mascot from "@/components/Mascot";
-import { getPosts, getMateri, getResolvedMapLayers } from "@/lib/data";
+import { getPosts, getMateri, getResolvedMapLayers, getSettings } from "@/lib/data";
+import { videoEmbedUrl } from "@/lib/google-drive";
 
 // Selalu ambil data terbaru tiap kali halaman dibuka (bukan versi lama yang
 // tersimpan), supaya berita/materi baru dari panel admin langsung muncul.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [posts, materi, mapLayers] = await Promise.all([
+  const [posts, materi, mapLayers, settings] = await Promise.all([
     getPosts(),
     getMateri(),
     getResolvedMapLayers(),
+    getSettings(),
   ]);
   const latestPosts = posts.slice(0, 3);
+  const profileVideoEmbedUrl = settings.profileVideoUrl
+    ? videoEmbedUrl(settings.profileVideoUrl)
+    : null;
   const mapPointCount = mapLayers.reduce(
     (total, layer) =>
       total + layer.sublayers.reduce((n, sl) => n + sl.geojson.features.length, 0),
@@ -111,6 +116,44 @@ export default async function Home() {
               </p>
             </div>
           ))}
+        </Reveal>
+      </section>
+
+      {/* PROFIL DESA VIDEO */}
+      <section className="mx-auto max-w-5xl px-4 pt-24 sm:px-6 lg:px-8">
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="Profil Desa"
+            title="Kenali Desa Jetis lebih dekat"
+            description="Video profil singkat yang merangkum potensi, kondisi, dan kehidupan warga Desa Jetis."
+          />
+        </Reveal>
+        <Reveal delay={100} className="glass-card mt-10 overflow-hidden rounded-3xl">
+          {profileVideoEmbedUrl ? (
+            <div className="aspect-video w-full">
+              <iframe
+                src={profileVideoEmbedUrl}
+                title="Video Profil Desa Jetis"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            </div>
+          ) : (
+            <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 bg-[var(--color-dark-green)]/5 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-dark-green)] text-[var(--color-beige)]">
+                <Play size={22} className="ml-0.5" aria-hidden="true" />
+              </div>
+              <p className="font-display text-lg text-[var(--color-dark-green)]">
+                Video Profil Desa Segera Hadir
+              </p>
+              <p className="max-w-sm text-sm text-[var(--color-muted-foreground)]">
+                Video akan ditampilkan di sini begitu tersedia di Google
+                Drive/YouTube.
+              </p>
+            </div>
+          )}
         </Reveal>
       </section>
 

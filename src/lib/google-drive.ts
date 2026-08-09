@@ -65,6 +65,42 @@ export function driveEmbedUrl(driveUrl: string): string | null {
   return id ? `https://drive.google.com/file/d/${id}/preview` : null;
 }
 
+/**
+ * Ambil ID video dari berbagai bentuk link YouTube, misalnya:
+ * - https://www.youtube.com/watch?v=ABC123
+ * - https://youtu.be/ABC123
+ * - https://www.youtube.com/embed/ABC123
+ * - https://www.youtube.com/shorts/ABC123
+ */
+export function extractYoutubeId(input?: string | null): string | null {
+  if (!input) return null;
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /[?&]v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of patterns) {
+    const match = trimmed.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+/**
+ * Ubah link Google Drive atau YouTube (bentuk apa pun yang mungkin ditempel
+ * admin) menjadi URL embed <iframe>. Mengembalikan null kalau linknya tidak
+ * dikenali sebagai salah satu dari keduanya.
+ */
+export function videoEmbedUrl(url: string): string | null {
+  const youtubeId = extractYoutubeId(url);
+  if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}`;
+  return driveEmbedUrl(url);
+}
+
 export async function getDriveGallery(
   folderUrl?: string | null,
 ): Promise<DriveGalleryResult> {
